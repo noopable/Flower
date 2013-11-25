@@ -1,0 +1,7 @@
+<phpunit bootstrap="./Bootstrap.php" colors="false">
+    <testsuites>
+        <testsuite name="Flower Module Suite">
+            <directory>./FlowerTest</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

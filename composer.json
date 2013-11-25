@@ -1,0 +1,39 @@
+{
+    "name": "noopable/flower",
+    "description": "base module for ZF2 Application",
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2"
+    ],
+    "authors": [
+        {
+            "name": "Tomoaki Kosugi",
+            "email": "kipspro@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.10",
+        "zendframework/zend-config": "dev-master",
+        "zendframework/zend-eventmanager": "dev-master",
+        "zendframework/zend-db": "dev-master",
+        "zendframework/zend-di": "dev-master",
+        "zendframework/zend-form": "dev-master",
+        "zendframework/zend-mail": "dev-master",
+        "zendframework/zend-mvc": "dev-master",
+        "zendframework/zend-permissions-acl": "dev-master",
+        "zendframework/zend-session": "dev-master",
+        "zendframework/zend-servicemanager": "dev-master",
+        "zendframework/zend-stdlib": "dev-master",
+        "zendframework/zend-view": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "Flower\\": "src/",
+            "FlowerTest\\": "tests/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}

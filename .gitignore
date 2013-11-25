@@ -1,0 +1,14 @@
+nbproject
+
+.buildpath
+.project
+.settings/
+.DS_Store
+vendor
+data/*
+!data/cache
+data/cache/*
+!data/cache/file
+data/cache/file/*
+!data/cache/file/.placeholder
+!data/fprg
