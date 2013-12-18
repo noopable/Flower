@@ -1,5 +1,5 @@
 <?php
-namespace Flower\View;
+namespace Flower\View\Pane;
 /*
  *
  *
@@ -7,7 +7,6 @@ namespace Flower\View;
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 use Zend\View\Helper\AbstractHelper;
-use Zend\View\Renderer\RendererInterface as Renderer;
 
 use RecursiveIterator;
 
@@ -29,9 +28,9 @@ class PaneHelper extends AbstractHelper
 
     public $defaultContent = 'content';
 
-    public $paneRenderer = 'Flower\View\PaneRenderer';
+    public $paneRenderer = 'Flower\View\Pane\PaneRenderer';
 
-    public $pane = 'Flower\View\Pane';
+    public $pane = 'Flower\View\Pane\Pane';
 
     public function abstractFactoryPaneRenderer(RecursiveIterator $pane)
     {

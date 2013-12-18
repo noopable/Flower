@@ -1,5 +1,5 @@
 <?php
-namespace Flower\View;
+namespace Flower\View\Pane;
 /*
  *
  *
