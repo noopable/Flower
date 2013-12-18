@@ -47,7 +47,7 @@ return array(
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'pane' => 'Flower\View\PaneHelper',
+            'pane' => 'Flower\View\Pane\PaneHelper',
             'npMenu' => 'Flower\View\Navigation\NpMenu',
             'formPreview' => 'Flower\Form\View\FormPreview',
             'form-element' => 'Flower\Form\View\FormElement',
