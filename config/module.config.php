@@ -46,8 +46,11 @@ return array(
         'thumbnail-filter' => 'Flower_ImagineFilter',
     ),
     'view_helpers' => array(
+        'factories' => array(
+            'pane' => 'Flower\View\Pane\HelperFactory',
+        ),
         'invokables' => array(
-            'pane' => 'Flower\View\Pane\PaneHelper',
+            //'pane' => 'Flower\View\Pane\PaneHelper',
             'npMenu' => 'Flower\View\Navigation\NpMenu',
             'formPreview' => 'Flower\Form\View\FormPreview',
             'form-element' => 'Flower\Form\View\FormElement',
