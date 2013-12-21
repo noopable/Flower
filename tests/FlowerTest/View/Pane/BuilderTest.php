@@ -67,6 +67,21 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         );
     }
     
+    public function testAddHtmlClass()
+    {
+        $reflection = new \ReflectionClass('Flower\View\Pane\Builder');
+        $method = $reflection->getMethod('addHtmlClass');
+        $method->setAccessible(true);
+        $attributes = array();
+        
+        $method->invokeArgs($this->object, array('foo', &$attributes));
+        $this->assertEquals('foo', $attributes['class']);
+        
+        //invoke twice
+        $method->invokeArgs($this->object, array('bar', &$attributes));
+        $this->assertEquals('foo bar', $attributes['class']);
+    }
+    
     public function testSizeToClass()
     {
         
