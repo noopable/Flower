@@ -117,18 +117,13 @@ class PaneRenderer extends RecursiveIteratorIterator
         }
         else {
             echo get_class($var);
-            //var_dump($var);
         }
     }
 
     public function __toString()
     {
         ob_start();
-        try {
-            foreach($this as $entry) {}
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-        }
+        foreach($this as $entry) {}
         return ob_get_clean();
     }
 }

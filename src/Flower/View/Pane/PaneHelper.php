@@ -29,8 +29,8 @@ class PaneHelper extends AbstractHelper
     public $defaultContent = 'content';
 
     public $paneRenderer = 'Flower\View\Pane\PaneRenderer';
-
-    public $pane = 'Flower\View\Pane\Pane';
+    
+    protected $builder;
 
     public function abstractFactoryPaneRenderer(RecursiveIterator $pane)
     {
@@ -42,9 +42,7 @@ class PaneHelper extends AbstractHelper
 
     public function paneFactory(array $array)
     {
-        $pane = new $this->pane;
-        $pane->build($array);
-        return $pane;
+        return $this->getBuilder()->build($array);
     }
     /**
      * Renders a template fragment within a variable scope distinct from the
@@ -79,7 +77,7 @@ class PaneHelper extends AbstractHelper
             $pane = $this->paneFactory($pane);
         }
 
-        if (!$pane instanceof RecursiveIterator) {
+        if (!$pane instanceof PaneInterface) {
             if (null === $default) {
                 $default = $this->getView()->get($this->defaultContent);
             }
@@ -119,5 +117,21 @@ class PaneHelper extends AbstractHelper
     public function getObjectKey()
     {
         return $this->objectKey;
+    }
+    
+    public function setBuilder(Builder $builder = null)
+    {
+        if (null === $builder) {
+            $builder = new Builder;
+        }
+        $this->builder = $builder;
+    }
+    
+    public function getBuilder()
+    {
+        if (!isset($this->builder)) {
+            $this->setBuilder();
+        }
+        return $this->builder;
     }
 }
