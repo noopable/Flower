@@ -84,6 +84,10 @@ class RecursivePriorityQueueTest extends \PHPUnit_Framework_TestCase {
         $child2 = new RecursivePriorityQueue;
         $data  = 'foo';
         $child->insert('bar');
+        
+        //何もinsertしていない
+        $this->assertFalse($this->object->hasChildren());
+        
         $this->object->insert($child);
         $this->object->insert($child2);
         $this->object->insert($data);
