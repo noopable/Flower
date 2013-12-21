@@ -8,7 +8,7 @@ namespace Flower\View\Pane;
  */
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-
+use Zend\View\HelperPluginManager;
 
 
 /**
@@ -28,7 +28,9 @@ class HelperFactory implements FactoryInterface  {
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        
+        if ($serviceLocator instanceof HelperPluginManager) {
+            $serviceLocator = $serviceLocator->getServiceLocator();
+        }
         $config = $serviceLocator->get('Config');
         if (isset($config[$this->configKey])) {
             $config = $config[$this->configKey];
