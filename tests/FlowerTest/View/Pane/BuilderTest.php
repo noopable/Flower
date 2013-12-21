@@ -66,4 +66,24 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
           'This test has not been implemented yet.'
         );
     }
+    
+    public function testSizeToClass()
+    {
+        
+        $reflection = new \ReflectionClass('Flower\View\Pane\Builder');
+        $method = $reflection->getMethod('sizeToClass');
+        $method->setAccessible(true);
+        $property = $reflection->getProperty('sizeToClassFunction');
+        $property->setAccessible(true);
+        
+        //default action  tw bootstrap 2
+        $string1 = $method->invokeArgs($this->object, array(1));
+        $this->assertEquals('span1', $string1);
+        
+        //custom function
+        $property->setValue($this->object, function ($size) {return (string) ($size * 2);} );
+        $string2 = $method->invokeArgs($this->object, array(2));
+        $this->assertEquals('4', $string2);
+    }
+            
 }
