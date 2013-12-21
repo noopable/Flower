@@ -169,13 +169,15 @@ class Builder {
      */
     protected function addHtmlClass($class, array &$attributes)
     {
-        if (!isset($attributes['class'])) {
-            $attributes['class'] = '';
-        }
         $aClass = explode(' ', $class);
         array_map(array($this->getEscaper(), 'escapeHtmlAttr'), $aClass);
         $class = implode(' ', $aClass);
-        $attributes['class'] .= $class ;
+        
+        if (!isset($attributes['class']) || !strlen($attributes['class'])) {
+            $attributes['class'] = $class;
+        } else {
+            $attributes['class'] .= ' ' . $class;
+        }
     }
     
     /**
