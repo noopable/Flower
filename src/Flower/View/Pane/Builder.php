@@ -189,7 +189,7 @@ class Builder {
     {
 
         if (is_callable($this->sizeToClassFunction)) {
-            $class = $this->sizeToClassFunction($size);
+            $class = call_user_func($this->sizeToClassFunction, $size);
         } else {
             //default for twitter bootsrap 2
             // convert to small decimal string
