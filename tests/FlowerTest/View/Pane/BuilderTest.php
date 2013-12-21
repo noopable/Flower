@@ -30,30 +30,6 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Builder::getRoot
-     * @todo   Implement testGetRoot().
-     */
-    public function testGetRoot()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Flower\View\Pane\Builder::setRoot
-     * @todo   Implement testSetRoot().
-     */
-    public function testSetRoot()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
      * @covers Flower\View\Pane\Builder::setPaneClass
      * @todo   Implement testSetPaneClass().
      */
