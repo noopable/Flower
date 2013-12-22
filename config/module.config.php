@@ -55,6 +55,7 @@ return array(
             'formPreview' => 'Flower\Form\View\FormPreview',
             'form-element' => 'Flower\Form\View\FormElement',
             'form-file' => 'Flower\FilePostRedirectGet\View\FormFile',
+            'bodyScript' => 'Flower\View\BodyScript',
         ),
     ),
 );
