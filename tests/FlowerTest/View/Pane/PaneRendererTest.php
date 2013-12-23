@@ -153,6 +153,22 @@ EOD;
         $paneRenderer = new PaneRenderer($pane);
         $this->assertXmlStringEqualsXmlString($expected, (string) $paneRenderer, 'checking var = "Null"');
     }
+    
+    public function testAttributeNameOnlyRendering()
+    {
+        $builder =new Builder;
+        $expected = str_replace(array("\r\n","\n","\r"), '', 
+'<!-- begin PaneRenderer -->
+<div ng-view>
+</div>
+<!-- end PaneRenderer -->'
+);
+        
+        $pane = $builder->build(array('attributes' => ['ng-view' => null]));
+        $paneRenderer = new PaneRenderer($pane);
+        $actual = str_replace(array("\r\n","\n","\r"), '', (string) $paneRenderer);
+        $this->assertEquals($expected, $actual);
+    }
     /**
      * @covers Flower\View\PaneRenderer::setVars
      * @todo   Implement testSetVars().

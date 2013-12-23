@@ -136,7 +136,11 @@ class Builder {
             $attributeString = '';
 
             foreach($attributes as $name => $attribute) {
-                $attributeString .= ' ' . $name . '=\'' . trim($attribute) . '\'';
+                if (is_string($attribute) || is_numeric($attribute)) {
+                    $attributeString .= ' ' . $name . '=\'' . trim($attribute) . '\'';
+                } elseif (!$attribute) {
+                    $attributeString .= ' ' . $name;
+                }
             }
             if (strlen($attributeString)) {
                 $current->begin = sprintf('<%s%s>', $current->tag, $attributeString) . PHP_EOL;
