@@ -135,6 +135,24 @@ EOD;
         $this->assertXmlStringEqualsXmlString($expected, (string) $paneRenderer);
     }
     
+    public function testMustNotRenderNoVar()
+    {
+        $builder =new Builder;
+        $expected = 
+'<!-- begin PaneRenderer -->
+<div>
+</div>
+<!-- end PaneRenderer -->';
+        $pane = $builder->build(array('var' => false));
+        $paneRenderer = new PaneRenderer($pane);
+        $this->assertXmlStringEqualsXmlString($expected, (string) $paneRenderer, 'checking var = false');
+        $pane = $builder->build(array('var' => null));
+        $paneRenderer = new PaneRenderer($pane);
+        $this->assertXmlStringEqualsXmlString($expected, (string) $paneRenderer, 'checking var = null');
+        $pane = $builder->build(array('var' => 'Null'));
+        $paneRenderer = new PaneRenderer($pane);
+        $this->assertXmlStringEqualsXmlString($expected, (string) $paneRenderer, 'checking var = "Null"');
+    }
     /**
      * @covers Flower\View\PaneRenderer::setVars
      * @todo   Implement testSetVars().

@@ -79,6 +79,8 @@ class Builder {
                 case "var":
                     if ($v instanceof \Closure || is_string($v)) {
                         $current->$k = $v;
+                    } else {
+                        $current->$k = false;
                     }
                     break;
                 case "id":

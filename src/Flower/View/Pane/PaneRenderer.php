@@ -95,6 +95,13 @@ class PaneRenderer extends RecursiveIteratorIterator
         $innerIndent = $indent . $this->_indent;
         $var = parent::current()->var;
 
+        if (!$var) {
+            echo $indent . parent::current()->begin;
+            echo $innerIndent . "<!-- var is omitted -->\n";
+            echo $indent . parent::current()->end;
+            return null;
+        }
+        
         if (is_string($var)) {
             echo $indent . "<!-- start content $var -->\n";
             echo $indent . parent::current()->begin;
