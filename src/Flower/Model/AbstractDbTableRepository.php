@@ -8,7 +8,7 @@ namespace Flower\Model;
  */
 use Flower\Resource\AbstractResource;
 use Flower\Model\AbstractEntity;
-use Flower\Exception;
+use Flower\Model\Exception;
 
 use Zend\Db\TableGateway\TableGatewayInterface;
 use Zend\Db\TableGateway\AbstractTableGateway;
@@ -251,11 +251,15 @@ abstract class AbstractDbTableRepository extends AbstractResource
 
         if (count($identifier) === count($w) && !$forceInsert) {
             return $this->dao->update($set, $w);
-            //return $this->update($set, $w);
         }
         else {
-            return $this->dao->insert($set + $w);
-            //return $this->insert($set + $w);
+            $aInsert = $set + $w;
+            if (count($aInsert) === 0) {
+                $ei = new Exception\InvalidArgumentException('insert detected but no columns');
+                $er = new Exception\RuntimeException('Invalid configuration of columns? ', 0, $ei);
+                throw $er;
+            }
+            return $this->dao->insert($aInsert);
         }
 
     }
