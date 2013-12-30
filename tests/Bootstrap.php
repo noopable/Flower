@@ -72,12 +72,16 @@ class Bootstrap
         $vendorPath = static::findParentPath('vendor');
 
         if (false === $vendorPath) {
-            // vendor/noopable/Flower/tests
+            // */noopable/__NAMESPACE__/tests
             $vendorPath = dirname(dirname(dirname(__DIR__)));
         }
         //we have composer autoloader?
         if (is_readable($vendorPath . '/autoload.php')) {
             $loader = require_once $vendorPath . '/autoload.php';
+            error_log('composer loaded');
+        } else {
+            //for testing only but if this was installed with git submodule .hmm...
+            require_once(realpath(dirname(__DIR__) . '/Module.php'));
         }
 
         if (! class_exists('Zend\Loader\StandardAutoloader')) {
@@ -102,11 +106,10 @@ class Bootstrap
                 $loader->add('Zend\\', $zf2Path . '/Zend');
             } else {
                 require_once $zf2Path . '/Zend/Loader/AutoloaderFactory.php';
-                require_once $zf2Path . '/Zend/Loader/StandardAutoloader.php';
             }
             
-            if (! class_exists('Zend\Loader\StandardAutoloader')) {
-                throw new RuntimeException('faild to load zf2 StandardAutoloader from ' . $zf2Path );
+            if (! class_exists('Zend\Loader\AutoloaderFactory')) {
+                throw new RuntimeException('faild to load zf2 AutoloaderFactory from ' . $zf2Path );
             }
 
         }
