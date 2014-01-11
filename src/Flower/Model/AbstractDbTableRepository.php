@@ -90,6 +90,16 @@ abstract class AbstractDbTableRepository extends AbstractResource
         }
 
         if ($columns = $this->getOption('columns', false)) {
+            /**
+             * @see http://framework.zend.com/manual/2.0/en/modules/zend.db.sql.html#columns
+             * // as array of names
+                    $select->columns(array('foo', 'bar'));
+
+                    // as an associative array with aliases as the keys:
+                    // produces 'bar' AS 'foo', 'bax' AS 'baz'
+
+                    $select->columns(array('foo' => 'bar', 'baz' => 'bax'));
+             */
             $this->select->columns($columns);
         }
 
