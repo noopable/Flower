@@ -5,6 +5,10 @@ return array(
             'Flower_File_Adapter' => 'Flower\File\Service\FileServiceFactoryFromConfig',
             'Flower\FormPostRedirectGet\Plugin\FilePostRedirectGet' => 'Flower\FilePostRedirectGet\Service\Factory',
             'Flower_ImagineFilter' => 'Flower\Imagine\Filter\FilterFactory',
+            'Flower_Resource_Manager'
+                => 'Flower\Resource\ResourceManagerFactory',
+            'Flower_Resources'
+                => 'Flower\Resource\ResourcePluginManagerFactory',
         ),
     ),
     'controllers' => array(
@@ -34,6 +38,34 @@ return array(
         ),
         'cache_spec_options' => array(
             'cache_path' => __DIR__ . '/../data/cache/file',
+        ),
+    ),
+    'flower_resource_manager' => array(
+        'resource_plugin_manager' => 'Flower_Resources',
+        //reserve configuration 
+        /**
+         * class => マネージャークラスを換装できる
+         * その他はResource\Manager\Config経由でconfigureされるオプション
+         * 
+         */
+        //@see http://framework.zend.com/manual/2.2/en/modules/zend.cache.storage.adapter.html
+        'cache_storage' => array(
+            'adapter' => array(
+                'name'    => 'filesystem',
+                'options' => array(
+                    'namespace' => 'zfcache_resource_manager',
+                    'cache_dir' => dirname(__DIR__) . '/data/resource',
+                    'dir_level' => 2,
+                ),
+            ),
+            'plugins' => array(
+                'exception_handler' => array('throw_exceptions' => true),
+            ),
+        ),
+    ),
+    'flower_resources' => array(
+        'invokables' => array(
+            'generic' => 'Flower\Resource\ResourceClass\Resource',
         ),
     ),
     'controller_plugins' => array(

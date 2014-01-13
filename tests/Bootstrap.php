@@ -137,6 +137,15 @@ class Bootstrap
         }
         return realpath($dir . '/' . $path);
     }
+    
+    public static function getTestRootDir()
+    {
+        static $dir;
+        if (! isset($dir)) {
+            $dir = __DIR__;
+        }
+        return $dir;
+    }
 }
 
 

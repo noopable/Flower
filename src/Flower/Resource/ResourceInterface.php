@@ -8,6 +8,10 @@ namespace Flower\Resource;
  */
 use Zend\Permissions\Acl;
 
+/**
+ * リソース管理の旧版
+ * ※ ただし、pageモジュールで使用しているので、Pageモジュールのリファクタリングを優先してください。
+ */
 interface ResourceInterface extends Acl\Resource\ResourceInterface
 {
     public function getResourceClass();

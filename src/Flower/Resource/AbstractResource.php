@@ -9,7 +9,8 @@ namespace Flower\Resource;
  */
 use Zend\Stdlib\ArrayUtils;
 /**
-
+ *  リソース管理の旧版
+ * ※ ただし、pageモジュールで使用しているので、Pageモジュールのリファクタリングを優先してください。
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  *
