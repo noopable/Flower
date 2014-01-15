@@ -1,11 +1,18 @@
 <?php
-/*
+
+/**
  *
  *
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
-namespace Flower\ServiceLayer\Exception;
-interface ExceptionInterface
-{
+
+namespace Flower\ServiceLayer;
+
+/**
+ *
+ * @author tomoaki
+ */
+interface ServiceLayerInterface {
+    //no methods
 }
