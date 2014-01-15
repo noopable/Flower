@@ -9,6 +9,8 @@
 namespace Flower\AccessControl;
 
 use Flower\AccessControl\Exception\RuntimeException;
+use Flower\AccessControl\AclAwareInterface;
+use Flower\AccessControl\RoleAwareInterface;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
