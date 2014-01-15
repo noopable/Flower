@@ -1,8 +1,10 @@
 <?php
 
-/*
- * Here comes the text of your license
- * Each line should be prefixed with  * 
+/**
+ *
+ *
+ * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
+ * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 namespace Flower\Resource\ResourceClass;
 /**
@@ -54,7 +56,7 @@ class Object extends Resource {
         if (!is_object($data)) {
             throw new RuntimeException(__METHOD__ . ' param should be object or serialized object');
         }
-        return $this->data;
+        $this->data = $data;
     }
 
     /**
