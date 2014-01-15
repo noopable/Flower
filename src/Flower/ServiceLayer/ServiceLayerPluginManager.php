@@ -13,6 +13,15 @@ class ServiceLayerPluginManager extends AbstractPluginManager
     protected $wrappers;
     
     /**
+     * クラスを配置する namespace as prefix
+     * 他の場所のクラスを使いたいときは、直接getで取得するか、
+     * 同じnamespaceにプロキシを配置する。
+     * 
+     * @var string 
+     */
+    protected $pluginNameSpace;
+    
+    /**
      * Retrieve a service from the manager by name
      *
      * Allows passing an array of options to use when creating the instance.
@@ -26,6 +35,13 @@ class ServiceLayerPluginManager extends AbstractPluginManager
      */
     public function get($name, $options = array(), $usePeeringServiceManagers = true, $underAccessControl = false)
     {
+        if (isset($this->pluginNameSpace)) {
+            // Allow specifying a class name directly; registers as an invokable class
+            if (!$this->has($name) && $this->autoAddInvokableClass) {
+                $this->autoAddInvokableClassByNamespace($name);
+            }
+        }
+
         try {
             $instance = parent::get($name, $options, $usePeeringServiceManagers);
         } catch (RuntimeException $ex) {
@@ -74,6 +90,33 @@ class ServiceLayerPluginManager extends AbstractPluginManager
             $this->wrappers = array();
         }
         $this->wrappers[] = $wrapper;
+    }
+
+    public function setPluginNameSpace($pluginNameSpace)
+    {
+        $this->pluginNameSpace = (string) $pluginNameSpace;
+    }
+    
+    public function getPluginNameSpace()
+    {
+        return $this->pluginNameSpace;
+    }
+    /**
+     * 
+     * @param string $name
+     */
+    public function autoAddInvokableClassByNamespace($name)
+    {
+        if (!isset($this->pluginNameSpace)) {
+            return;
+        }
+        
+        if (($pluginNameSpace = $this->getPluginNameSpace()) && (strpos($pluginNameSpace, $name) !== 0)) {
+            $class = rtrim($pluginNameSpace, '\\') . '\\' . ucfirst($name);
+            if (class_exists($class)) {
+                $this->setInvokableClass($name, $class);
+            }
+        }
     }
 
 }

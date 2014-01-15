@@ -78,4 +78,43 @@ class ServiceLayerPluginManagerTest extends \PHPUnit_Framework_TestCase
         $this->object->addServiceWrapper($wrapper);
         $this->assertSame($wrapper, TestTool::getPropertyValue($this->object, 'wrappers')[0]);
     }
+
+    /**
+     * @covers Flower\ServiceLayer\ServiceLayerPluginManager::setPluginNameSpace
+     */
+    public function testSetPluginNameSpace()
+    {
+        $namespace = __NAMESPACE__;
+        $this->object->setPluginNameSpace($namespace);
+        $this->assertEquals($namespace, TestTool::getPropertyValue($this->object, 'pluginNameSpace'));
+    }
+
+    /**
+     * @depends testSetPluginNameSpace
+     * @covers Flower\ServiceLayer\ServiceLayerPluginManager::getPluginNameSpace
+     */
+    public function testGetPluginNameSpace()
+    {
+        $namespace = __NAMESPACE__;
+        $this->object->setPluginNameSpace($namespace);
+        $this->assertEquals($namespace, $this->object->getPluginNameSpace());
+    }
+
+    /**
+     * @covers Flower\ServiceLayer\ServiceLayerPluginManager::autoAddInvokableClassByNamespace
+     */
+    public function testAutoAddInvokableClassByNamespace()
+    {
+        $origInvokables = TestTool::getPropertyValue($this->object, 'invokableClasses');
+        $this->assertEquals(array(), $origInvokables);
+        //no namespace pass through
+        $this->object->autoAddInvokableClassByNamespace('serviceForTest');
+        $this->assertEquals(array(), TestTool::getPropertyValue($this->object, 'invokableClasses'));
+        
+        //クラスの実在をチェックされるのでMockは使えません。
+        $namespace = __NAMESPACE__ . '\TestAsset';
+        $this->object->setPluginNameSpace($namespace);
+        $this->object->autoAddInvokableClassByNamespace('serviceForTest');
+        $this->assertArrayHasKey(strtolower('serviceForTest'), TestTool::getPropertyValue($this->object, 'invokableClasses'));
+    }
 }
