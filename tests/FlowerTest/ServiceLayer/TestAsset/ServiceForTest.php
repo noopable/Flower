@@ -15,4 +15,9 @@ use Flower\ServiceLayer\AbstractService;
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
 class ServiceForTest extends AbstractService {
+    
+    public function __call($name, $arguments)
+    {
+        return array('name' => $name, 'arguments' => $arguments);
+    }
 }
