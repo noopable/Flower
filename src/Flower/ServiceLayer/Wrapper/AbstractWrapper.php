@@ -118,11 +118,13 @@ abstract class AbstractWrapper {
             return $instance;
         }
         
-        if (! isset($this->proxyFactory)) {
+        $proxyFactory = $this->getProxyFactory();
+        
+        if (! $proxyFactory instanceof ProxyFactoryInterface) {
             return $instance;
         }
         
-        return $this->proxyFactory->factory($instance);
+        return $proxyFactory->factory($instance);
     }
  
 }
