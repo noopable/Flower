@@ -39,7 +39,7 @@ class ServiceLayerPluginManagerTest extends \PHPUnit_Framework_TestCase
         $service = $this->getMock('Flower\ServiceLayer\ServiceLayerInterface');
         $this->object->setService('foo', $service);
         $wrapped = new \ArrayObject(array($service));
-        $wrapper = $this->getMock('stdClass', array('wrap'));
+        $wrapper = $this->getMock('Flower\ServiceLayer\Wrapper\ServiceWrapperInterface', array('wrap'));
         $wrapper->expects($this->once())
                 ->method('wrap')
                 ->with($service)
@@ -74,7 +74,7 @@ class ServiceLayerPluginManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddServiceWrapper()
     {
-        $wrapper = new \stdClass;
+        $wrapper = $this->getMock('Flower\ServiceLayer\Wrapper\ServiceWrapperInterface');
         $this->object->addServiceWrapper($wrapper);
         $this->assertSame($wrapper, TestTool::getPropertyValue($this->object, 'wrappers')[0]);
     }

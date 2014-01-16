@@ -3,6 +3,7 @@
 namespace Flower\ServiceLayer;
 
 use Flower\ServiceLayer\Exception\RuntimeException;
+use Flower\ServiceLayer\Wrapper\ServiceWrapperInterface;
 use Zend\ServiceManager\AbstractPluginManager;
 
 class ServiceLayerPluginManager extends AbstractPluginManager
@@ -82,7 +83,7 @@ class ServiceLayerPluginManager extends AbstractPluginManager
         ));
     }
     
-    public function addServiceWrapper($wrapper, $priority = 1)
+    public function addServiceWrapper(ServiceWrapperInterface $wrapper, $priority = 1)
     {
         //@todo priorityQueue?
         if (!isset($this->wrappers)) {

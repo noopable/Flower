@@ -10,6 +10,7 @@ namespace Flower\AccessControl;
 
 use Flower\AccessControl\Exception\RuntimeException;
 use Flower\AccessControl\RoleMapper\RoleContainer;
+use Flower\ServiceLayer\Wrapper\ServiceWrapperInterface;
 
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Role\RoleInterface;
@@ -19,7 +20,7 @@ use Zend\Authentication\Adapter\DbTable\AbstractAdapter as DbTableAdapter;
  *
  * @author tomoaki
  */
-class AccessControlService {
+class AccessControlService implements ServiceWrapperInterface{
     use ACSSetterGetterTrait;
 
     /**
