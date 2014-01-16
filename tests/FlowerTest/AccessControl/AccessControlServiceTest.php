@@ -394,7 +394,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
     {
         $underAccessControls = array('Publish', 'CRUD');
         $this->object->setUnderAccessControls($underAccessControls);
-        $this->assertEquals(array('Publish' => 'Publish', 'CRUD' => 'CRUD'), TestTool::getPropertyValue($this->object, 'underAccessControls'));
+        $this->assertEquals(array('publish' => 'publish', 'crud' => 'crud'), TestTool::getPropertyValue($this->object, 'underAccessControls'));
     }
 
     /**
@@ -405,7 +405,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
     {
         $underAccessControls = array('Publish', 'CRUD');
         $this->object->setUnderAccessControls($underAccessControls);
-        $this->assertEquals(array('Publish' => 'Publish', 'CRUD' => 'CRUD'), $this->object->getUnderAccessControls());
+        $this->assertEquals(array('publish' => 'publish', 'crud' => 'crud'), $this->object->getUnderAccessControls());
     }
 
     /**
@@ -429,7 +429,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $underAccessControls = array('Publish', 'CRUD');
         $this->object->setUnderAccessControls($underAccessControls);
         $this->object->addUnderAccessControl('edit');
-        $this->assertEquals(array('Publish' => 'Publish', 'CRUD' => 'CRUD', 'edit' => 'edit'), $this->object->getUnderAccessControls());
+        $this->assertEquals(array('publish' => 'publish', 'crud' => 'crud', 'edit' => 'edit'), $this->object->getUnderAccessControls());
     }
 
     /**

@@ -128,16 +128,19 @@ trait ACSSetterGetterTrait {
     
     public function isUnderAccessControl($name)
     {
+        $name = strtolower($name);
         return isset($this->underAccessControls[$name]);
     }
     
     public function addUnderAccessControl($name)
     {
+        $name = strtolower($name);
         $this->underAccessControls[$name] = $name;
     }
     
     public function removeUnderAccessControl($name)
     {
+        $name = strtolower($name);
         if (isset($this->underAccessControls[$name])) { 
             unset($this->underAccessControls[$name]);
         }

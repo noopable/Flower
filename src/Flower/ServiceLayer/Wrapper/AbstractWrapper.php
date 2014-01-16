@@ -66,6 +66,7 @@ abstract class AbstractWrapper implements ServiceWrapperInterface {
         if (!is_string($name)) {
             throw RuntimeException('set wrap target name');
         }
+        $name = strtolower($name);
         
         $this->wrapTargets[$name] = $name;
         return $this->wrapTargets;
@@ -78,6 +79,7 @@ abstract class AbstractWrapper implements ServiceWrapperInterface {
      */
     public function removeWrapTarget($name)
     {
+        $name = strtolower($name);
         if (isset($this->wrapTargets[$name])) {
             unset($this->wrapTargets[$name]);
         }
@@ -100,6 +102,7 @@ abstract class AbstractWrapper implements ServiceWrapperInterface {
      */
     public function isWrapTarget($name)
     {
+        $name = strtolower($name);
         return isset($this->wrapTargets[$name]);
     }
     
