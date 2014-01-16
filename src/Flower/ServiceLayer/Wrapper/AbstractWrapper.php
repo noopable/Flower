@@ -105,15 +105,12 @@ abstract class AbstractWrapper {
     
     /**
      * 
-     * @param $instance
      * @param type $name
+     * @param $instance
      * @return type
      */
-    public function wrap($instance, $name = null)
+    public function wrap($name,$instance)
     {
-        if (null === $name) {
-            $name = get_class($instance);
-        }
         if (!$this->isWrapTarget($name)) {
             return $instance;
         }

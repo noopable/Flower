@@ -58,7 +58,7 @@ class ServiceLayerPluginManager extends AbstractPluginManager
         
         if (isset($this->wrappers)) {
             foreach ($this->wrappers as $wrapper) {
-                $instance = $wrapper->wrap($instance, $name);
+                $instance = $wrapper->wrap($name, $instance);
             }
         }
         

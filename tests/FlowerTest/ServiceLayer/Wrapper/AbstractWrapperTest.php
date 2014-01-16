@@ -109,7 +109,8 @@ class AbstractWrapperTest extends \PHPUnit_Framework_TestCase
     public function testWrapNoConfig()
     {
         $service = new \FlowerTest\ServiceLayer\TestAsset\ServiceForTest;
-        $this->assertSame($service, $this->object->wrap($service));
+        $name = 'foo';
+        $this->assertSame($service, $this->object->wrap($name, $service));
     }
     
     /**
@@ -126,7 +127,7 @@ class AbstractWrapperTest extends \PHPUnit_Framework_TestCase
                 ->with($this->equalTo($service))
                 ->will($this->returnValue($wrapped));
         $this->object->setProxyFactory($factory);
-        $res = $this->object->wrap($service, 'foo');
+        $res = $this->object->wrap('foo', $service);
         $this->assertSame($wrapped, $res);
     }
     
@@ -137,7 +138,7 @@ class AbstractWrapperTest extends \PHPUnit_Framework_TestCase
     {
         $service = new \FlowerTest\ServiceLayer\TestAsset\ServiceForTest;
         $this->object->setWrapTargets(array('foo', 'bar'));
-        $this->assertSame($service, $this->object->wrap($service, 'foo'));
+        $this->assertSame($service, $this->object->wrap('foo', $service));
     }
     
     /**
@@ -150,7 +151,7 @@ class AbstractWrapperTest extends \PHPUnit_Framework_TestCase
         $factory->expects($this->never())
                 ->method('factory');
         $this->object->setProxyFactory($factory);
-        $res = $this->object->wrap($service, 'foo');
+        $res = $this->object->wrap('foo', $service);
         $this->assertSame($service, $res);
     }
 }

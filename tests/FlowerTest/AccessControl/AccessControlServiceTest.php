@@ -190,7 +190,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($response));
         $this->object->setUnderAccessControls($underControls);
         $this->object->setAccessControlWrapper($wrapper);
-        $res = $this->object->wrap($service);
+        $res = $this->object->wrap('stdClass', $service);
         $this->assertSame($response, $res);
     }
     
@@ -200,7 +200,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $wrapper = $this->getMock('Flower\AccessControl\AccessControlWrapper');
         $wrapper->expects($this->never())->method('wrap');
         $this->object->setAccessControlWrapper($wrapper);
-        $res = $this->object->wrap($service);
+        $res = $this->object->wrap('foo', $service);
         $this->assertSame($service, $res);
     }
 

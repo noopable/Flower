@@ -43,7 +43,7 @@ class ServiceLayerPluginManagerTest extends \PHPUnit_Framework_TestCase
         $wrapper = $this->getMock('Flower\ServiceLayer\Wrapper\ServiceWrapperInterface', array('wrap'));
         $wrapper->expects($this->once())
                 ->method('wrap')
-                ->with($service)
+                ->with('foo', $service)
                 ->will($this->returnValue($wrapped));
         $this->object->addServiceWrapper($wrapper);
         $res = $this->object->get('foo');

@@ -19,5 +19,5 @@ interface ServiceWrapperInterface {
      * @param string|null $name
      * @return object
      */
-    public function wrap($instance, $name = null);
+    public function wrap($name, $instance);
 }

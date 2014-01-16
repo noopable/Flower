@@ -157,11 +157,8 @@ class AccessControlService implements ServiceWrapperInterface{
         }
     }
     
-    public function wrap($instance, $name = null)
+    public function wrap($name, $instance)
     {
-        if (null === $name) {
-            $name = get_class($instance);
-        }
         if (!$this->isUnderAccessControl($name)) {
             return $instance;
         }
