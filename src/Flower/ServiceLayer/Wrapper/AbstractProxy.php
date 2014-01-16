@@ -8,12 +8,13 @@
 
 namespace Flower\ServiceLayer\Wrapper;
 
+use Flower\ServiceLayer\ServiceLayerInterface;
 /**
  * Description of AbstractProxy
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-abstract class AbstractProxy {
+abstract class AbstractProxy implements ServiceLayerInterface {
     
     protected $innerObject;
     
