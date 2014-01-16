@@ -14,7 +14,7 @@ use Flower\ServiceLayer\Exception\RuntimeException;
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-abstract class AbstractWrapper {
+abstract class AbstractWrapper implements ServiceWrapperInterface {
     
     protected $proxyFactory;
     
