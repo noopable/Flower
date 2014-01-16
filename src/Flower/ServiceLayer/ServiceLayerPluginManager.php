@@ -4,14 +4,20 @@ namespace Flower\ServiceLayer;
 
 use Flower\ServiceLayer\Exception\RuntimeException;
 use Flower\ServiceLayer\Wrapper\ServiceWrapperInterface;
+use Zend\EventManager\EventManager;
+use Zend\EventManager\EventManagerAwareInterface;
+use Zend\EventManager\EventManagerInterface;
 use Zend\ServiceManager\AbstractPluginManager;
 
 class ServiceLayerPluginManager extends AbstractPluginManager
+    implements EventManagerAwareInterface
 {
 
     protected $config;
     
     protected $wrappers;
+    
+    protected $events;
     
     /**
      * クラスを配置する namespace as prefix
@@ -120,4 +126,30 @@ class ServiceLayerPluginManager extends AbstractPluginManager
         }
     }
 
+    /**
+     * Set the event manager instance used by this context
+     *
+     * @param  EventManagerInterface $events
+     * @return AbstractController
+     */
+    public function setEventManager(EventManagerInterface $events)
+    {
+        $this->events = $events;
+        return $this;
+    }
+    
+    /**
+     * Retrieve the event manager
+     *
+     * Lazy-loads an EventManager instance if none registered.
+     *
+     * @return EventManagerInterface
+     */
+    public function getEventManager()
+    {
+        if (!$this->events instanceof EventManagerInterface) {
+            $this->setEventManager(new EventManager());
+        }
+        return $this->events;
+    }
 }
