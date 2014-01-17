@@ -43,6 +43,10 @@ class GatewayFunctionalTest extends \PHPUnit_Framework_TestCase
             ),
         );
     protected $level1_level2 = array (
+            /**
+             * commonに注目すると、
+             * level1.iniで指定してある値をlevel1/level2.iniで上書きしていることがわかる
+             */
             'common' => array (
                 'foo' => 'baz',
                 'bar' => 'dummy',
@@ -235,7 +239,7 @@ class GatewayFunctionalTest extends \PHPUnit_Framework_TestCase
      * 
      * @covers Flower\File\Gateway\Gateway::resolve
      */
-    public function testResolveWidthEvent()
+    public function testResolveWithEvent()
     {
         $event = $this->object->getEvent('sample');
         $events = $this->object->getEventManager();
@@ -289,6 +293,10 @@ class GatewayFunctionalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($fileData, $data);
     }
     
+    /**
+     * multiという名前のmulti.ini multi.jsonを読み込んでマージしている
+     * 
+     */
     public function testMultiRead()
     {
         $data = $this->object->read('multi');
@@ -310,12 +318,25 @@ class GatewayFunctionalTest extends \PHPUnit_Framework_TestCase
         $this->assertFileNotExists($cacheFile);
     }
 
+    /**
+     * 階層指定した読み込みでは、親ディレクトリの設定を読んで、
+     * 子ディレクトリで読んだ内容をマージしている。
+     * level1.ini
+     * level1/level2.ini
+     * の順
+     */
     public function testHierarchicalRead()
     {
         $data = $this->object->read('level1/level2');
         $this->assertEquals($this->level1_level2, $data);
     }
     
+    /**
+     * 階層型のデータは、各階層でマージされた内容を
+     * 各階層にキャッシュする。
+     * これにより複雑な設定ファイルでも自動的にマージされるようになる。
+     * 
+     */
     public function testHierarchicalMadeCache()
     {
         $this->object->read('level1/level2');
