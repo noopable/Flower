@@ -81,7 +81,7 @@ class RepositoryPluginManager extends AbstractPluginManager
      */
     public function autoAddInvokableClassByNamespace($name)
     {
-        if (!isset($this->pluginNameSpace) && $this->autoAddInvokableClass) {
+        if (!isset($this->pluginNameSpace) || !$this->autoAddInvokableClass) {
             return;
         }
         

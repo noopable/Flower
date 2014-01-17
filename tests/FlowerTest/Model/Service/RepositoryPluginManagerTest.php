@@ -93,13 +93,71 @@ class RepositoryPluginManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Flower\Model\Service\RepositoryPluginManager::get
-     * @todo   Implement testGet().
+     * @expectedException Zend\ServiceManager\Exception\ServiceNotFoundException
+     */
+    public function testGetWithoutConfiguration()
+    {
+        $repository = $this->object->get('FlowerTest\Model\Service\TestAsset\ConcreteRepository');
+    }
+    
+    /**
+     * @covers Flower\Model\Service\RepositoryPluginManager::get
      */
     public function testGet()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->object->setInvokableClass('concrete', 'FlowerTest\Model\Service\TestAsset\ConcreteRepository');
+        $repository = $this->object->get('concrete');
+        $this->assertInstanceOf('FlowerTest\Model\Service\TestAsset\ConcreteRepository', $repository);
+    }
+    
+    /**
+     * 
+     * @expectedException Zend\ServiceManager\Exception\ServiceNotFoundException
+     */
+    public function testGetWithNameWithoutAutoAddOption()
+    {
+        $this->object->setPluginNameSpace('FlowerTest\Model\Service\TestAsset');
+        $repository = $this->object->get('ConcreteRepository');
+        $this->assertInstanceOf('FlowerTest\Model\Service\TestAsset\ConcreteRepository', $repository);
+    }
+    
+    public function testGetWithNameWithAutoAddOption()
+    {
+        $this->object->setPluginNameSpace('FlowerTest\Model\Service\TestAsset');
+        $ref = new \ReflectionObject($this->object);
+        $prop = $ref->getProperty('autoAddInvokableClass');
+        $prop->setAccessible(true);
+        //autoAddInvokableClass = true has namespace add Invokable;
+        $prop->setValue($this->object, true);
+        
+        $repository = $this->object->get('ConcreteRepository');
+        $this->assertInstanceOf('FlowerTest\Model\Service\TestAsset\ConcreteRepository', $repository);
+    }
+    /**
+     * @covers Flower\Model\Service\RepositoryPluginManager::autoAddInvokableClassByNamespace
+     */
+    public function testAutoAddInvokableClassByNamespace()
+    {
+        //autoAddInvokableClass default false 
+        $this->assertEquals(false, TestTool::getPropertyValue($this->object, 'autoAddInvokableClass'));
+        $this->assertEquals(array(), TestTool::getPropertyValue($this->object, 'invokableClasses'));
+        
+        
+        $this->object->autoAddInvokableClassByNamespace('RepositoryPluginManagerTest');
+        //autoAddInvokableClass === false and no namespace  => no action
+        $this->assertEquals(array(), TestTool::getPropertyValue($this->object, 'invokableClasses'));
+        
+        $this->object->setPluginNameSpace('FlowerTest\Model\Service');
+        $this->object->autoAddInvokableClassByNamespace('RepositoryPluginManagerTest');
+        //autoAddInvokableClass === false and has namespace  => no action
+        $this->assertEquals(array(), TestTool::getPropertyValue($this->object, 'invokableClasses'));
+        
+        $ref = new \ReflectionObject($this->object);
+        $prop = $ref->getProperty('autoAddInvokableClass');
+        $prop->setAccessible(true);
+        //autoAddInvokableClass = true has namespace add Invokable;
+        $prop->setValue($this->object, true);
+        $this->object->autoAddInvokableClassByNamespace('RepositoryPluginManagerTest');
+        $this->assertEquals(array('repositorypluginmanagertest' => 'FlowerTest\Model\Service\RepositoryPluginManagerTest'), TestTool::getPropertyValue($this->object, 'invokableClasses'));
     }
 }
