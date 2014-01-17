@@ -53,6 +53,8 @@ class RepositoryPluginManager extends AbstractPluginManager
         return $this->pluginNameSpace;
     }
     /**
+     * autoAddするのではなく、byNameで明示的にネームスペース下のクラスにアクセスする
+     * 
      * Retrieve a service from the manager by name
      *
      * Allows passing an array of options to use when creating the instance.
@@ -71,6 +73,24 @@ class RepositoryPluginManager extends AbstractPluginManager
         }
         
         return $this->get($name, $options, $usePeeringServiceManagers);
+    }
+    
+    /**
+     * 
+     * @param string $name
+     */
+    public function autoAddInvokableClassByNamespace($name)
+    {
+        if (!isset($this->pluginNameSpace) && $this->autoAddInvokableClass) {
+            return;
+        }
+        
+        if (($pluginNameSpace = $this->getPluginNameSpace()) && (strpos($pluginNameSpace, $name) !== 0)) {
+            $class = rtrim($pluginNameSpace, '\\') . '\\' . ucfirst($name);
+            if (class_exists($class)) {
+                $this->setInvokableClass($name, $class);
+            }
+        }
     }
     
     /**
@@ -103,6 +123,12 @@ class RepositoryPluginManager extends AbstractPluginManager
      */
     public function get($name, $options = array(), $usePeeringServiceManagers = true)
     {
+        if (isset($this->pluginNameSpace)) {
+            // Allow specifying a class name directly; registers as an invokable class
+            if (!$this->has($name) && $this->autoAddInvokableClass) {
+                $this->autoAddInvokableClassByNamespace($name);
+            }
+        }
         try {
             //※DiAbstractFactory経由でインスタンスを取ろうとする場合、
             //名前ベースになるので、$optionsは実質的に意味がなくなる。
