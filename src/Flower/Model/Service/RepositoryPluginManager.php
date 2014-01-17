@@ -10,7 +10,7 @@ namespace Flower\Model\Service;
 use Zend\ServiceManager\AbstractPluginManager;
 
 use Flower\Model\RepositoryInterface;
-use Flower\Exception;
+use Flower\Model\Exception\RuntimeException;
 /**
  * Description of RepositoryPluginManager
  *
@@ -69,10 +69,6 @@ class RepositoryPluginManager extends AbstractPluginManager
         if (($pluginNameSpace = $this->getPluginNameSpace()) && (strpos($pluginNameSpace, $name) !== 0)) {
             $name = $pluginNameSpace . '\\' . $name;
         }
-        else {
-            echo "[[[[" . $name. "]]]]";
-            echo "[[[$pluginNameSpace ]]]";
-        }
         
         return $this->get($name, $options, $usePeeringServiceManagers);
     }
@@ -81,26 +77,17 @@ class RepositoryPluginManager extends AbstractPluginManager
      * 
      * @param \Flower\Model\RepositoryInterface $plugin
      * @return type
-     * @throws Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function validatePlugin($plugin) {
         if ($plugin instanceof RepositoryInterface) {
             // we're okay
             return;
         }
-try {
-
-        throw new Exception\RuntimeException(sprintf(
+        throw new RuntimeException(sprintf(
             'Plugin of type %s is invalid; must implement Flower\Model\RepositoryInterface',
             (is_object($plugin) ? get_class($plugin) : gettype($plugin))
         ));
-            
-}
-catch (\Exception $e) {
-    echo $e;
-
-    exit();
-}
     }
         /**
      * Retrieve a service from the manager by name
@@ -116,8 +103,6 @@ catch (\Exception $e) {
      */
     public function get($name, $options = array(), $usePeeringServiceManagers = true)
     {
-        $repository = null;
-        
         try {
             //※DiAbstractFactory経由でインスタンスを取ろうとする場合、
             //名前ベースになるので、$optionsは実質的に意味がなくなる。
@@ -136,16 +121,10 @@ catch (\Exception $e) {
                         break;
                     default:
                         throw $eTemp;
-                        break;
                 }
             } while($eTemp = $eTemp->getPrevious());
         }
-        catch (\Exception $e) {
-            //TODO: handle exception
-            //for debug
-            echo $e;
-            trigger_error($e->getMessage(), E_USER_ERROR);
-        }
-        return parent::get($name, $options, $usePeeringServiceManagers);
+        
+        return $repository;
     }
 }
