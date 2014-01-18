@@ -52,6 +52,9 @@ class AccessControlServiceFactory implements FactoryInterface {
         }
         
         if (!empty($config)) {
+            if (!isset($config['service_locator'])) {
+                $config['service_locator'] = $serviceLocator;
+            }
             $serviceConfig = new ServiceConfig($config);
             $serviceConfig->configure($service);
         }

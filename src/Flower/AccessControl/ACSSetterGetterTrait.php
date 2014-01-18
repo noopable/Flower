@@ -11,6 +11,7 @@ use Flower\AccessControl\AuthClient\IdenticalStorageInterface;
 use Flower\AccessControl\Exception\RuntimeException;
 use Flower\AccessControl\RoleMapper\RoleMapper;
 use Flower\AccessControl\RoleMapper\RoleMapperInterface;
+use Flower\Resource\Manager\ManagerInterface as ResourceManager;
 use Zend\Authentication\AuthenticationService;
 
 
@@ -61,6 +62,8 @@ trait ACSSetterGetterTrait {
     
     protected $aclScriptPath;
     
+    protected $resourceManager;
+    
     public function setAuthService(AuthenticationService $authService)
     {
         $this->authService = $authService;
@@ -92,6 +95,16 @@ trait ACSSetterGetterTrait {
     public function getResourceStorage()
     {
         return $this->resourceStorage;
+    }
+    
+    public function setResourceManager(ResourceManager $resourceManager)
+    {
+        $this->resourceManager = $resourceManager;
+    }
+    
+    public function getResourceManager()
+    {
+        return $this->resourceManager;
     }
     
     public function setAccessControlWrapper(AccessControlWrapper $accessControlWrapper)

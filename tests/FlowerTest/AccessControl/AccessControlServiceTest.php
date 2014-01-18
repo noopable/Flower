@@ -341,6 +341,26 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
+     * @covers Flower\AccessControl\AccessControlService::setResourceManager
+     */
+    public function testSetResourceManager()
+    {
+        $manager = $this->getMock('Flower\Resource\Manager\ManagerInterface');
+        $this->object->setResourceManager($manager);
+        $this->assertSame($manager, TestTool::getPropertyValue($this->object, 'resourceManager'));
+    }
+
+    /**
+     * @covers Flower\AccessControl\AccessControlService::getResourceManager
+     */
+    public function testGetResourceManager()
+    {
+        $manager = $this->getMock('Flower\Resource\Manager\ManagerInterface');
+        $this->object->setResourceManager($manager);
+        $this->assertSame($manager, $this->object->getResourceManager());
+    }
+    
+    /**
      * @covers Flower\AccessControl\AccessControlService::setAccessControlWrapper
      * @todo   Implement testSetAccessControlWrapper().
      */
