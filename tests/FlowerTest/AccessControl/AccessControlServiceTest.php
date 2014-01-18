@@ -274,7 +274,31 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setAuthService($authService);
         $this->object->getRole();
     }
-
+    
+    /**
+     * @covers Flower\AccessControl\AccessControlService::getCurrentClientData
+     */
+    public function testGetCurrentClientData()
+    {
+        $identity = 'foo';
+        $data = new \stdClass;
+        $authService = $this->getMock('Zend\Authentication\AuthenticationService');
+        $authService->expects($this->once())
+                ->method('getIdentity')
+                ->will($this->returnValue($identity));
+        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\IdenticalStorageInterface');
+        $resourceStorage->expects($this->once())
+                ->method('setIdentity')
+                ->with($this->equalTo($identity));
+        $resourceStorage->expects($this->once())
+                ->method('getCurrentClientData')
+                ->will($this->returnValue($data));
+        $this->object->setResourceStorage($resourceStorage);
+        $this->object->setAuthService($authService);
+        $res = $this->object->getCurrentClientData();
+        $this->assertSame($data, $res);
+    }
+    
     /**
      * @covers Flower\AccessControl\AccessControlService::setRoleMapper
      */
@@ -295,7 +319,27 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setRoleMapper($roleMapper);
         $this->assertSame($roleMapper, $this->object->getRoleMapper());
     }
+    
+    /**
+     * @covers Flower\AccessControl\AccessControlService::setResourceStorage
+     */
+    public function testSetResourceStorage()
+    {
+        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\IdenticalStorageInterface');
+        $this->object->setResourceStorage($resourceStorage);
+        $this->assertSame($resourceStorage, TestTool::getPropertyValue($this->object, 'resourceStorage'));
+    }
 
+    /**
+     * @covers Flower\AccessControl\AccessControlService::getResourceStorage
+     */
+    public function testGetResourceStorage()
+    {
+        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\IdenticalStorageInterface');
+        $this->object->setResourceStorage($resourceStorage);
+        $this->assertSame($resourceStorage, $this->object->getResourceStorage());
+    }
+    
     /**
      * @covers Flower\AccessControl\AccessControlService::setAccessControlWrapper
      * @todo   Implement testSetAccessControlWrapper().

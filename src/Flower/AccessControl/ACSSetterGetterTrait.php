@@ -7,6 +7,7 @@
  */
 namespace Flower\AccessControl;
 
+use Flower\AccessControl\AuthClient\IdenticalStorageInterface;
 use Flower\AccessControl\Exception\RuntimeException;
 use Flower\AccessControl\RoleMapper\RoleMapper;
 use Flower\AccessControl\RoleMapper\RoleMapperInterface;
@@ -26,6 +27,12 @@ trait ACSSetterGetterTrait {
      * @var RoleMapper
      */
     protected $roleMapper;
+    
+    /**
+     *
+     * @var IdenticalStorageInterface
+     */
+    protected $resourceStorage;
     
     /**
      *
@@ -75,6 +82,16 @@ trait ACSSetterGetterTrait {
             $this->roleMapper = new RoleMapper;
         }
         return $this->roleMapper;
+    }
+    
+    public function setResourceStorage(IdenticalStorageInterface $resourceStorage)
+    {
+        $this->resourceStorage = $resourceStorage;
+    }
+    
+    public function getResourceStorage()
+    {
+        return $this->resourceStorage;
     }
     
     public function setAccessControlWrapper(AccessControlWrapper $accessControlWrapper)

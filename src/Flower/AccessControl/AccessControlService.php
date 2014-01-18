@@ -121,6 +121,23 @@ class AccessControlService implements ServiceWrapperInterface{
         return $this->role;
     }
     
+    public function getCurrentClientData()
+    {
+        $resourceStorage = $this->getResourceStorage();
+        if (null === $resourceStorage) {
+            return null;
+        }
+        
+        $identity = $this->getAuthService()->getIdentity();
+        if (null === $identity) {
+            return null;
+        }
+        //be sure
+        $resourceStorage->setIdentity($identity);
+        
+        return $resourceStorage->getCurrentClientData();
+    }
+    
     public function setAcl(Acl $acl)
     {
         if (isset($this->role)) {
