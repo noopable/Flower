@@ -84,7 +84,7 @@ class RoleMapperTest extends \PHPUnit_Framework_TestCase
                 ->method('setIdentity')
                 ->with($this->equalTo($identity));
         $resourceStorage->expects($this->once())
-                ->method('read')
+                ->method('getCurrentClientData')
                 ->will($this->returnValue($rowResultObject));
         $role = $this->object->getRole($identity);
         $this->assertInstanceOf('Zend\Permissions\Acl\Role\RoleInterface', $role);
@@ -105,7 +105,7 @@ class RoleMapperTest extends \PHPUnit_Framework_TestCase
                 ->method('setIdentity')
                 ->with($this->equalTo($identity));
         $resourceStorage->expects($this->once())
-                ->method('read')
+                ->method('getCurrentClientData')
                 ->will($this->returnValue($rowResultObject));
         $role = $this->object->getRole($identity);
         $this->assertInstanceOf('Zend\Permissions\Acl\Role\RoleInterface', $role);

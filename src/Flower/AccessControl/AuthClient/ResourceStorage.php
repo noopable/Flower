@@ -11,7 +11,6 @@ namespace Flower\AccessControl\AuthClient;
 
 use Flower\AccessControl\AccessControlService;
 use Flower\Resource\Manager\ManagerInterface;
-use Flower\Resource\ResourceClass\ResourceInterface;
 
 /**
  * identity 以外に個別クライアント依存プロパティを保持しないようにしてください。
@@ -65,6 +64,23 @@ class ResourceStorage implements IdenticalStorageInterface {
         return $this->getBareBoneClientResource($this->identity)->getResourceId();
     }
     
+    public function getCurrentClientResource()
+    {
+        if (!isset($this->identity)) {
+            return;
+        }
+        return $this->getResourceManager()->get($this->getResourceId());
+    }
+    
+    public function getCurrentClientData()
+    {
+        $resource = $this->getCurrentClientResource();
+        if (! $resource instanceof AuthClientResource) {
+            return;
+        }
+        return $resource->getData();
+    }
+    
     public function getBareBoneClientResource($identity)
     {
         $resource = new AuthClientResource;
@@ -97,7 +113,9 @@ class ResourceStorage implements IdenticalStorageInterface {
    /**
     * 認証済み追加データを保存するクラス内で、
     * 認証済みデータが存在するかどうかを確認するメソッド
-    * 認証済みidentityを元にデータを取得するリソースストレージでは常にemptyです。
+    * 認証済みidentityを元にデータを取得するリソースストレージでは
+    * identityが設定されているかどうかが実質的な問題になりますが、
+    * Session Storageより上位に配置した場合は自動的にidentityを取得できる。
     * 
     * そのため認証バイパスは機能しません。セッションを利用してください。
     * 認証を永続化する目的の場合、clearも同時に使用してください。
@@ -109,11 +127,11 @@ class ResourceStorage implements IdenticalStorageInterface {
     public function isEmpty()
     {
         //This class feeds no authentication info
-        return true;
+        return !isset($this->identity);
     }
 
     /**
-     * ロールmapperはこのメソッドを使いたいでしょう。
+     * read - write compatibility read() returns identity
      * Returns the contents of storage
      *
      * Behavior is undefined when storage is empty.
@@ -123,13 +141,7 @@ class ResourceStorage implements IdenticalStorageInterface {
      */
     public function read()
     {
-        if (!isset($this->identity)) {
-            return;
-        }
-        $resource = $this->getResourceManager()->get($this->getResourceId());
-        if ($resource instanceof ResourceInterface) {
-            return $resource->getData();
-        }
+        return $this->identity;
     }
 
     /**
@@ -146,9 +158,11 @@ class ResourceStorage implements IdenticalStorageInterface {
         }
         /** @var \stdClass */
         $result = $this->service->getAuthResultRowObject($this->returnColumns, $this->omitColumns);
-        $resource = $this->getBareBoneClientResource($contents);
-        $resource->setData($result);
-        $this->getResourceManager()->saveResource($resource);
+        if (is_object($result)) {
+            $resource = $this->getBareBoneClientResource($contents);
+            $resource->setData($result);
+            $this->getResourceManager()->saveResource($resource);
+        }
     }
 
     /**

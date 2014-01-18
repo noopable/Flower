@@ -31,7 +31,7 @@ class RoleMapper implements RoleMapperInterface {
         
         $resourceStorage = $this->getResourceStorage();
         $resourceStorage->setIdentity($identity);
-        $data = $resourceStorage->read();
+        $data = $resourceStorage->getCurrentClientData();
         $roles = array(RoleMapperInterface::BUILT_IN_AUTHENTICATED_CLIENT);
         if (isset($data->role)) {
             if ($data->role instanceof RoleContainer) {

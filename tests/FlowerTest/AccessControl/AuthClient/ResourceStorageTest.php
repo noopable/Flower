@@ -111,7 +111,59 @@ class ResourceStorageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('authClient_7FFFFFFF', $this->object->getResourceId());
     }
 
+    /**
+     * @covers Flower\AccessControl\AuthClient\ResourceStorage::getCurrentClientResource
+     */
+    public function testGetCurrentClientResource()
+    {
+        $this->assertNull($this->object->getCurrentClientResource());
+        
+        $manager = $this->getMock('Flower\Resource\Manager\ManagerInterface');
+        $resource = $this->getMock('Flower\AccessControl\AuthClient\AuthClientResource');
+        
+        $this->assertInstanceOf('Flower\Resource\ResourceClass\ResourceInterface', $resource);
+        
+        $identity = 'foo';
+        $this->object->setIdentity($identity);
+        $resourceId = $this->object->getResourceId();
+        
+        $manager->expects($this->once())
+                ->method('get')
+                ->with($this->equalTo($resourceId))
+                ->will($this->returnValue($resource));
+        
+        $this->object->setResourceManager($manager);
+        $res = $this->object->getCurrentClientResource();
+        $this->assertSame($res, $resource);
+    }
 
+    /**
+     * @covers Flower\AccessControl\AuthClient\ResourceStorage::getCurrentClientData
+     */
+    public function testGetCurrentClientData()
+    {
+        $manager = $this->getMock('Flower\Resource\Manager\ManagerInterface');
+        $resource = $this->getMock('Flower\AccessControl\AuthClient\AuthClientResource');
+        
+        $this->assertInstanceOf('Flower\Resource\ResourceClass\ResourceInterface', $resource);
+        
+        $identity = 'foo';
+        $this->object->setIdentity($identity);
+        $resourceId = $this->object->getResourceId();
+        $data = new \stdClass;
+        $data->a = 'b';
+        
+        $resource->expects($this->once())
+                ->method('getData')
+                ->will($this->returnValue($data));
+        $manager->expects($this->once())
+                ->method('get')
+                ->with($this->equalTo($resourceId))
+                ->will($this->returnValue($resource));
+        
+        $this->object->setResourceManager($manager);
+        $this->assertSame($data, $this->object->getCurrentClientData());
+    }
 
     /**
      * @covers Flower\AccessControl\AuthClient\ResourceStorage::setResourceManager
@@ -166,6 +218,8 @@ class ResourceStorageTest extends \PHPUnit_Framework_TestCase
     public function testIsEmpty()
     {
         $this->assertTrue($this->object->isEmpty());
+        $this->object->setIdentity('foo');
+        $this->assertFalse($this->object->isEmpty());
     }
 
     /**
@@ -176,32 +230,17 @@ class ResourceStorageTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull($this->object->read());
         
-        $manager = $this->getMock('Flower\Resource\Manager\ManagerInterface');
-        $resource = $this->getMock('Flower\AccessControl\AuthClient\AuthClientResource');
-        
-        $this->assertInstanceOf('Flower\Resource\ResourceClass\ResourceInterface', $resource);
-        
         $identity = 'foo';
         $this->object->setIdentity($identity);
-        $resourceId = $this->object->getResourceId();
-        $data = new \stdClass;
-        $data->a = 'b';
-        
-        $resource->expects($this->once())
-                ->method('getData')
-                ->will($this->returnValue($data));
-        $manager->expects($this->once())
-                ->method('get')
-                ->with($this->equalTo($resourceId))
-                ->will($this->returnValue($resource));
-        
-        
-        $this->object->setResourceManager($manager);
-        $res = $this->object->read();
-        $this->assertEquals($data, $res);
+        $this->assertEquals($identity, $this->object->read());
     }
 
     /**
+     * StorageInterface::write will be called with the valid identity
+     *  when AuthenticationService::authenticate is success
+     * In this phase DbAdapter already has ResultRowObject.
+     *  Thus, We can get resultObject in the method write.  
+     * 
      * @covers Flower\AccessControl\AuthClient\ResourceStorage::write
      */
     public function testWrite()

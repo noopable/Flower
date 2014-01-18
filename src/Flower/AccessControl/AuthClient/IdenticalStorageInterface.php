@@ -16,4 +16,6 @@ use Zend\Authentication\Storage\StorageInterface as ZendStorage;
 interface IdenticalStorageInterface extends ZendStorage {
     public function setIdentity($identity);
     public function getIdentity();
+    
+    public function getCurrentClientData();
 }
