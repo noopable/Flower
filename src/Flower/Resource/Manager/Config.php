@@ -46,16 +46,15 @@ class Config {
         
         $manager->setConverter($converter);
         
-        if (isset($serviceLocator) && isset($converter) && method_exists($converter, 'setResourcePluginManager')) {
+        if (isset($serviceLocator) && isset($converter)) {
             //2階層以上のカスタマイズになると、DIが優位
             $resourcePluginService = isset($this->config['resource_plugin_manager'])
                                                 ? $this->config['resource_plugin_manager']
                                                 : $this->resourcePluginManagerServiceName;
             if ($serviceLocator->has($resourcePluginService)) {
                 $resourcePluginManager = $serviceLocator->get($resourcePluginService);
-                if ($resourcePluginManager instanceof ResourcePluginManager) {
-                    $converter->setResourcePluginManager($resourcePluginManager);
-                }
+                $manager->setResourcePluginManager($resourcePluginManager);
+                $converter->setResourcePluginManager($resourcePluginManager);
             }
         }
 

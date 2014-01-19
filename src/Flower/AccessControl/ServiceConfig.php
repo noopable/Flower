@@ -133,6 +133,14 @@ class ServiceConfig {
                 $service->setResourceManager($resourceManager);
             }
         }
+        
+        if (isset($this->config['resource_plugin_manager'])) {
+            $resourcePluginService = $this->config['resource_plugin_manager'];
+            if ($sl->has($resourcePluginService)) {
+                $resourcePluginManager = $sl->get($resourcePluginService);
+                $resourcePluginManager->setInvokableClass('authClient', 'Flower\AccessControl\AuthClient\AuthClientResource');
+            }
+        }
     }
     
     public function combineDependencies(AccessControlService $service)

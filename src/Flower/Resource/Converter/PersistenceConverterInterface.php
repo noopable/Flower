@@ -15,6 +15,7 @@ namespace Flower\Resource\Converter;
  * 
  */
 use Flower\Resource\ResourceClass\ResourceInterface;
+use Flower\Resource\ResourcePluginManager;
 /**
  *
  * ResourceProviderはエンティティそのものがリソースを提供できる場合の実装
@@ -69,5 +70,18 @@ interface PersistenceConverterInterface{
     public function setKeyPattern($keyPattern);
     
     public function getKeyPattern();
+    
+    /**
+     * 
+     * @param type ResourcePluginManager
+     */
+    public function setResourcePluginManager(ResourcePluginManager $pluginManager);
+    
+    /**
+     * 
+     * @return ResourcePluginManager;
+     */
+    public function getResourcePluginManager();
+    
     
 }

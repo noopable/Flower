@@ -1,4 +1,10 @@
 <?php
+/*
+ *
+ *
+ * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
+ * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
+ */
 namespace Flower\Resource;
 
 use Zend\ServiceManager\FactoryInterface;
@@ -9,7 +15,7 @@ use Flower\Resource\Manager\ManagerInterface;
 
 
 /**
- * Description of BlockPluginManagerFactory
+ * 
  *
  * @author tomoaki
  */
@@ -41,13 +47,12 @@ class ResourceManagerFactory implements FactoryInterface {
         
         if (!isset($service) || ! $service instanceof ManagerInterface) {
             $class = isset($config['class']) ? $config['class'] : 'Flower\Resource\Manager\StandardManager';
-            $config['service_locator'] = $serviceLocator;
-            //一定の複雑さやバリエーションが生じる可能性があるなら、DIによる構成を検討するべき。
-            //ここでは限定的に機能を構成する？
-            $managerConfig = new Config($config);
             $service = new $class;
-            $managerConfig->configure($service);
         }
+        
+        $config['service_locator'] = $serviceLocator;
+        $managerConfig = new Config($config);
+        $managerConfig->configure($service);
 
         return $service;
     }
