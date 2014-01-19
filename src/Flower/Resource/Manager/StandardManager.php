@@ -16,15 +16,21 @@ use Flower\Resource\Converter\PersistenceConverterInterface;
 use Flower\Resource\Mapper\Mapper;
 use Flower\Resource\Mapper\ResourceEntityMapperInterface;
 use Flower\Resource\ResourceProviderInterface;
-use Flower\Resource\ResourcePluginManager;
+use Flower\Resource\ResourcePluginManagerAwareInterface;
+use Flower\Resource\ResourcePluginManagerAwareTrait;
 
 /**
  * Description of ResourceManagerByResourceMapper
  *
  * @author tomoaki
  */
-class StandardManager implements BulkManagerInterface, ResourceEntityMapperInterface{
+class StandardManager 
+    implements 
+        BulkManagerInterface, 
+        ResourceEntityMapperInterface,
+        ResourcePluginManagerAwareInterface{
     use CacheStorageTrait;
+    use ResourcePluginManagerAwareTrait;
     
     /**
      *
@@ -274,21 +280,4 @@ class StandardManager implements BulkManagerInterface, ResourceEntityMapperInter
         return $this->getMapper()->setStrategies($strategies, $refresh);
     }
     
-    /**
-     * 
-     * @param type ResourcePluginManager
-     */
-    public function setResourcePluginManager(ResourcePluginManager $pluginManager)
-    {
-        $this->pluginManager = $pluginManager;
-    }
-    
-    /**
-     * 
-     * @return ResourcePluginManager|null;
-     */
-    public function getResourcePluginManager()
-    {
-        return $this->pluginManager;
-    }
 }

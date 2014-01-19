@@ -8,7 +8,7 @@
 namespace Flower\Resource\Manager;
 
 use Flower\Resource\Converter\DefaultConverter;
-use Flower\Resource\ResourcePluginManager;
+use Flower\Resource\ResourcePluginManagerAwareInterface;
 /**
  * Description of Config
  *
@@ -53,8 +53,12 @@ class Config {
                                                 : $this->resourcePluginManagerServiceName;
             if ($serviceLocator->has($resourcePluginService)) {
                 $resourcePluginManager = $serviceLocator->get($resourcePluginService);
-                $manager->setResourcePluginManager($resourcePluginManager);
-                $converter->setResourcePluginManager($resourcePluginManager);
+                if ($manager instanceof ResourcePluginManagerAwareInterface) {
+                    $manager->setResourcePluginManager($resourcePluginManager);
+                }
+                if ($converter instanceof ResourcePluginManagerAwareInterface) {
+                    $converter->setResourcePluginManager($resourcePluginManager);
+                }
             }
         }
 

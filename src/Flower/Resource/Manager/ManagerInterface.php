@@ -15,7 +15,6 @@ namespace Flower\Resource\Manager;
  * 
  */
 use Flower\Resource\ResourceClass\ResourceInterface;
-use Flower\Resource\ResourcePluginManager;
 /**
  *
  * ResourceProviderはエンティティそのものがリソースを提供できる場合の実装
@@ -35,15 +34,4 @@ interface ManagerInterface{
      */
     public function get($resourceId, $refresh = false);
 
-    /**
-     * 
-     * @param type ResourcePluginManager
-     */
-    public function setResourcePluginManager(ResourcePluginManager $pluginManager);
-    
-    /**
-     * 
-     * @return ResourcePluginManager;
-     */
-    public function getResourcePluginManager();
 }

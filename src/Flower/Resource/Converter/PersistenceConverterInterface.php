@@ -71,17 +71,4 @@ interface PersistenceConverterInterface{
     
     public function getKeyPattern();
     
-    /**
-     * 
-     * @param type ResourcePluginManager
-     */
-    public function setResourcePluginManager(ResourcePluginManager $pluginManager);
-    
-    /**
-     * 
-     * @return ResourcePluginManager;
-     */
-    public function getResourcePluginManager();
-    
-    
 }

@@ -13,13 +13,15 @@ use Flower\Resource\Exception\RuntimeException;
 use Flower\Resource\ResourceClass\Resource;
 use Flower\Resource\ResourceClass\ResourceInterface;
 use Flower\Resource\ResourcePluginManager;
+use Flower\Resource\ResourcePluginManagerAwareInterface;
+use Flower\Resource\ResourcePluginManagerAwareTrait;
 
 /**
  *
  * @author tomoaki
  */
-class DefaultConverter implements PersistenceConverterInterface{
-    
+class DefaultConverter implements PersistenceConverterInterface, ResourcePluginManagerAwareInterface{
+    use ResourcePluginManagerAwareTrait;
     /**
      *　resourceIDルールをここで規定することに問題はないか？
      * 運用時、リソースタイプ毎にリソースIDルールを取得してマージしたルールをセットすること。
