@@ -39,7 +39,7 @@ class AclLoader {
                 ob_end_clean();
             } catch (\Exception $ex) {
                 ob_end_clean();
-                throw new Exception\RuntimeException('can\'t load acl from ' . realpath($this->aclScript), 0,  $ex);
+                throw new Exception\RuntimeException('can\'t load acl from ' . realpath($this->__aclScript), 0,  $ex);
             }
         }
         $this->__isLoaded = true;
