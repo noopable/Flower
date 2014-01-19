@@ -11,6 +11,7 @@ namespace Flower\AccessControl;
 
 use Flower\AccessControl\AuthClient\IdenticalStorageInterface;
 use Flower\AccessControl\AuthClient\ResourceStorage;
+use Flower\AccessControl\RoleMapper\RoleMapperInterface;
 use Flower\Resource\Manager\ManagerInterface as ResourceManager;
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Storage\Chain;
@@ -139,7 +140,7 @@ class ServiceConfig {
         $authService = $service->getAuthService();
         $resourceStorage = $service->getResourceStorage();
         $resourceManager = $service->getResourceManager();
-        
+        $roleMapper = $service->getRoleMapper();
         /**
          * 依存で自動育成してよいものがあれば育成する
          */
@@ -148,7 +149,7 @@ class ServiceConfig {
             $service->setResourceStorage($resourceStorage);
         }
         
-        $this->combileResourceManager($resourceManager, $resourceStorage, $authService);
+        $this->combileResourceManager($resourceManager, $resourceStorage, $authService, $roleMapper);
         //その他組み合わせたいものがあればメソッドを追加する
     }
     
@@ -158,7 +159,7 @@ class ServiceConfig {
      * @param \Flower\AccessControl\AuthClient\ResourceStorage $resourceStorage
      * @param \Zend\Authentication\AuthenticationService $authService
      */
-    public function combileResourceManager(ResourceManager $resourceManager = null, $resourceStorage = null, AuthenticationService $authService = null)
+    public function combileResourceManager(ResourceManager $resourceManager = null, $resourceStorage = null, AuthenticationService $authService = null, RoleMapperInterface $roleMapper = null)
     {
         if (null !== $resourceManager && null !== $resourceStorage) {
             $resourceStorage->setResourceManager($resourceManager);
@@ -174,6 +175,11 @@ class ServiceConfig {
                 $storage->add($resourceStorage, -1);
                 $authService->setStorage($storage);
             }
+        }
+        if (isset($roleMapper) 
+            && method_exists($roleMapper, 'setResourceStorage') 
+            && isset($resourceStorage)) {
+            $roleMapper->setResourceStorage($resourceStorage);
         }
     }
 }
