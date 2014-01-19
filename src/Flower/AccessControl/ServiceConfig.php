@@ -9,7 +9,8 @@
 
 namespace Flower\AccessControl;
 
-use Flower\AccessControl\AuthClient\IdenticalStorageInterface;
+use Flower\AccessControl\AuthClient\ResourceStorageInterface;
+use Flower\AccessControl\AuthClient\ResourceStorageAwareInterface;
 use Flower\AccessControl\AuthClient\ResourceStorage;
 use Flower\AccessControl\RoleMapper\RoleMapperInterface;
 use Flower\Resource\Manager\ManagerInterface as ResourceManager;
@@ -117,7 +118,7 @@ class ServiceConfig {
             } elseif(class_exists($resourceStorage)) {
                 $resourceStorage = new $resourceStorage;
             }
-            if ($resourceStorage instanceof IdenticalStorageInterface) {
+            if ($resourceStorage instanceof ResourceStorageInterface) {
                 $service->setResourceStorage($resourceStorage);
             }
         }
@@ -185,7 +186,7 @@ class ServiceConfig {
             }
         }
         if (isset($roleMapper) 
-            && method_exists($roleMapper, 'setResourceStorage') 
+            && $roleMapper instanceof ResourceStorageAwareInterface
             && isset($resourceStorage)) {
             $roleMapper->setResourceStorage($resourceStorage);
         }

@@ -8,16 +8,17 @@
  */
 namespace Flower\AccessControl\RoleMapper;
 
-use Flower\AccessControl\AuthClient\IdenticalStorageInterface;
+use Flower\AccessControl\AuthClient\ResourceStorageAwareInterface;
+use Flower\AccessControl\AuthClient\ResourceStorageAwareTrait;
 use Zend\Permissions\Acl\Role\RoleInterface;
 /**
  * プロジェクトに合ったRoleMapperを自由に作成してServiceにinjectしてください。
  *
  * @author tomoaki
  */
-class RoleMapper implements RoleMapperInterface {
+class RoleMapper implements RoleMapperInterface, ResourceStorageAwareInterface {
+    use ResourceStorageAwareTrait;
 
-    protected $resourceStorage;
     
     public function getRole($identity = null)
     {
@@ -54,14 +55,5 @@ class RoleMapper implements RoleMapperInterface {
         $role->setParents($roles);
         return $role;
     }
-    
-    public function setResourceStorage(IdenticalStorageInterface $resourceStorage)
-    {
-        $this->resourceStorage = $resourceStorage;
-    }
-    
-    public function getResourceStorage()
-    {
-        return $this->resourceStorage;
-    }
+
 }

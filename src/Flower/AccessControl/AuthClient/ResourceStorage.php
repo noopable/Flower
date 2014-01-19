@@ -18,7 +18,7 @@ use Flower\Resource\Manager\ManagerInterface;
  * @see Flower\Resource
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class ResourceStorage implements IdenticalStorageInterface {
+class ResourceStorage implements ResourceStorageInterface {
     
     protected $identity;
     

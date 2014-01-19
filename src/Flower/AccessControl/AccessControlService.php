@@ -8,6 +8,8 @@
  */
 namespace Flower\AccessControl;
 
+use Flower\AccessControl\AuthClient\ResourceStorageAwareInterface;
+use Flower\AccessControl\AuthClient\ResourceStorageAwareTrait;
 use Flower\AccessControl\Exception\RuntimeException;
 use Flower\AccessControl\RoleMapper\RoleContainer;
 use Flower\ServiceLayer\Wrapper\ServiceWrapperInterface;
@@ -21,8 +23,9 @@ use Zend\Permissions\Acl\Role\RoleInterface;
  *
  * @author tomoaki
  */
-class AccessControlService implements ServiceWrapperInterface{
+class AccessControlService implements ServiceWrapperInterface, ResourceStorageAwareInterface {
     use ACSSetterGetterTrait;
+    use ResourceStorageAwareTrait;
 
     /**
      * 認証を行ったかどうか

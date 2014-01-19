@@ -333,7 +333,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $authService->expects($this->once())
                 ->method('getIdentity')
                 ->will($this->returnValue($identity));
-        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\IdenticalStorageInterface');
+        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\ResourceStorageInterface');
         $resourceStorage->expects($this->once())
                 ->method('setIdentity')
                 ->with($this->equalTo($identity));
@@ -372,7 +372,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetResourceStorage()
     {
-        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\IdenticalStorageInterface');
+        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\ResourceStorageInterface');
         $this->object->setResourceStorage($resourceStorage);
         $this->assertSame($resourceStorage, TestTool::getPropertyValue($this->object, 'resourceStorage'));
     }
@@ -382,7 +382,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetResourceStorage()
     {
-        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\IdenticalStorageInterface');
+        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\ResourceStorageInterface');
         $this->object->setResourceStorage($resourceStorage);
         $this->assertSame($resourceStorage, $this->object->getResourceStorage());
     }

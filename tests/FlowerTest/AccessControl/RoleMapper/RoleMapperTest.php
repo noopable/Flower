@@ -36,7 +36,7 @@ class RoleMapperTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetResourceStorage()
     {
-        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\IdenticalStorageInterface');
+        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\ResourceStorageInterface');
         $ref = new \ReflectionObject($this->object);
         $prop = $ref->getProperty('resourceStorage');
         $prop->setAccessible(true);
@@ -51,7 +51,7 @@ class RoleMapperTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetResourceStorage()
     {
-        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\IdenticalStorageInterface');
+        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\ResourceStorageInterface');
         $this->object->setResourceStorage($resourceStorage);
         $this->assertSame($resourceStorage, $this->object->getResourceStorage());
     }
@@ -78,7 +78,7 @@ class RoleMapperTest extends \PHPUnit_Framework_TestCase
         $identity = 'foo';
         $rowResultObject = new \stdClass;
         $rowResultObject->role = 'admin';
-        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\IdenticalStorageInterface');
+        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\ResourceStorageInterface');
         $this->object->setResourceStorage($resourceStorage);
         $resourceStorage->expects($this->once())
                 ->method('setIdentity')
@@ -99,7 +99,7 @@ class RoleMapperTest extends \PHPUnit_Framework_TestCase
         $identity = 'foo';
         $rowResultObject = new \stdClass;
         $rowResultObject->roles = array('editor', 'publisher');
-        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\IdenticalStorageInterface');
+        $resourceStorage = $this->getMock('Flower\AccessControl\AuthClient\ResourceStorageInterface');
         $this->object->setResourceStorage($resourceStorage);
         $resourceStorage->expects($this->once())
                 ->method('setIdentity')
