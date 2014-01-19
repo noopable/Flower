@@ -11,10 +11,11 @@ namespace Flower\AccessControl;
 use Flower\AccessControl\Exception\RuntimeException;
 use Flower\AccessControl\RoleMapper\RoleContainer;
 use Flower\ServiceLayer\Wrapper\ServiceWrapperInterface;
-
+use Zend\Authentication\Adapter\AbstractAdapter;
+use Zend\Authentication\Adapter\DbTable\AbstractAdapter as DbTableAdapter;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Role\RoleInterface;
-use Zend\Authentication\Adapter\DbTable\AbstractAdapter as DbTableAdapter;
+
 /**
  * Description of Service
  *
@@ -52,16 +53,30 @@ class AccessControlService implements ServiceWrapperInterface{
      * @todo EventベースにしてStorageでresultを保存する？
      * @return type
      */
-    public function authenticate()
+    public function authenticate($identity = null, $credential = null)
     {
         if ($this->isAuthenticated) {
             return;
         }
         
         $authService = $this->getAuthService();
-        /* @var \Zend\Authentication\Result */
-        $result = $authService->authenticate();
-        
+        $adapter = $authService->getAdapter();
+        if ($adapter instanceof AbstractAdapter) {
+            if (null !== $identity) {
+                $adapter->setIdentity($identity);
+            }
+            if (null !== $credential) {
+                $adapter->setCredential($credential);
+            }
+        }
+        try {
+            /* @var \Zend\Authentication\Result */
+            $result = $authService->authenticate();
+        } catch (\Zend\Db\Adapter\Exception\RuntimeException $ex) {
+            //接続エラー等
+            throw new RuntimeException('DbAdapter:' . $ex->getMessage(), 0, $ex);
+        }
+
         $this->isAuthenticated = true;
         $this->isValidClient = $result->isValid();
         $this->authResult = $result;
@@ -77,6 +92,18 @@ class AccessControlService implements ServiceWrapperInterface{
         
         $this->injectRoleToAcl($role, $this->getAcl());
         
+        return $this->isValidClient;
+    }
+    
+    /**
+     * $authResult = $authService->authenticate() ;
+     * $authResult->(isValid | getIdentity | getMessages | getCode )();
+     * 
+     * @return \Zend\Authentication\Result
+     */
+    public function getAuthResult()
+    {
+        return $this->authResult;
     }
     
     /**

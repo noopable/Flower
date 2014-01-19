@@ -36,7 +36,6 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Flower\AccessControl\AccessControlService::authenticate
-     * @todo   Implement testAuthenticate().
      */
     public function testAuthenticate()
     {
@@ -59,8 +58,56 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setAcl($acl);
         $this->object->setAuthService($authService);
         $this->object->authenticate();
+        return array('object' => $this->object, 'result' => $result);
     }
-
+    
+        /**
+     * @covers Flower\AccessControl\AccessControlService::authenticate
+     */
+    public function testAuthenticateWithParams()
+    {
+        $identity = 'foo';
+        $credential = 'bar';
+        $result = $this->getMockBuilder('Zend\Authentication\Result')
+                ->disableOriginalConstructor()
+                ->getMock();
+        $result->expects($this->once())
+                ->method('getIdentity')
+                ->will($this->returnValue($identity));
+        $result->expects($this->once())
+                ->method('isValid')
+                ->will($this->returnValue(true));
+        $acl = $this->getMock('Zend\Permissions\Acl\Acl');
+        
+        $adapter = $this->getMock('Zend\Authentication\Adapter\AbstractAdapter');
+        $adapter->expects($this->once())
+                ->method('setIdentity')
+                ->with($this->equalTo($identity));
+        $adapter->expects($this->once())
+                ->method('setCredential')
+                ->with($this->equalTo($credential));
+        $authService = $this->getMock('Zend\Authentication\AuthenticationService');
+        $authService->expects($this->once())
+                ->method('getAdapter')
+                ->will($this->returnValue($adapter));
+        $authService->expects($this->once())
+                ->method('authenticate')
+                ->will($this->returnValue($result));
+        
+        $this->object->setAcl($acl);
+        $this->object->setAuthService($authService);
+        $res = $this->object->authenticate($identity, $credential);
+        $this->assertTrue($res);
+    }
+    
+    /**
+     * @depends testAuthenticate
+     * @covers Flower\AccessControl\AccessControlService::getAuthResult
+     */
+    public function testGetAuthResult($authDepend)
+    {
+        $this->assertSame($authDepend['result'], $authDepend['object']->getAuthResult());
+    }
     /**
      * @covers Flower\AccessControl\AccessControlService::getAuthResultRowObject
      */
