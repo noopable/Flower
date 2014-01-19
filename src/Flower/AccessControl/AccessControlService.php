@@ -149,10 +149,10 @@ class AccessControlService implements ServiceWrapperInterface{
     public function getAcl()
     {
         if (!isset($this->acl)) {
-            if (!isset($this->aclLoader)) {
+            if (!$aclLoader = $this->getAclLoader()) {
                 throw new RuntimeException('there are not acl nor aclLoader');
             }
-            $this->acl = $this->aclLoader->load();
+            $this->acl = $aclLoader->load();
             if (isset($this->role)) {// not getRole()
                 $this->injectRoleToAcl($this->role, $this->acl);
             }

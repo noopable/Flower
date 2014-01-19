@@ -533,6 +533,13 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($aclLoader, $this->object->getAclLoader());
     }
     
+    public function testGetAclLoaderWithAclScriptPath()
+    {
+        $this->object->setAclScriptPath(__DIR__);
+        $aclLoader = $this->object->getAclLoader();
+        $this->assertInstanceOf('Flower\AccessControl\AclLoader', $aclLoader);
+    }
+    
     /**
      * @depends testGetAclLoader
      * @covers Flower\AccessControl\AccessControlService::getAcl
