@@ -1,0 +1,28 @@
+<?php
+/**
+ * zf skelton
+ * 
+ */
+/**
+ * 
+ * installed by composer ?
+ *   vendor or module ?
+ */
+// defined('ZF2_PATH') or define('ZF2_PATH', __DIR__ . '/../../../../vendor/zendframework/zendframework/library');
+// defined('ZF2_PATH') or define('ZF2_PATH', __DIR__ . '/../../../vendor/zendframework/zendframework/library');
+/**
+ * 
+ * git sub modules ?
+ */
+// defined('ZF2_PATH') or define('ZF2_PATH', __DIR__ . '/../../vendor/ZF2/library');
+return array(
+    'modules' => array(
+        'Flower',
+    ),
+    'module_listener_options' => array(
+        'module_paths' => array(
+            'module',
+            'vendor',
+        ),
+    ),
+);
