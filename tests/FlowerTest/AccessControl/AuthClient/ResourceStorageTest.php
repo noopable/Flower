@@ -134,7 +134,7 @@ class ResourceStorageTest extends \PHPUnit_Framework_TestCase
         
         $this->object->setResourceManager($manager);
         $res = $this->object->getCurrentClientResource();
-        $this->assertSame($res, $resource);
+        $this->assertSame($resource, $res);
     }
 
     /**
