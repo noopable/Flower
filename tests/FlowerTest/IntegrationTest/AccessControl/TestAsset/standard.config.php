@@ -48,6 +48,7 @@ return array(
         'resource_manager' => $resourceManagerServiceName,
         'resource_plugin_manager' => $resourcePluginManagerServiceName,
         'acl_path' => __DIR__ . '/acl.php',
+        'auth_result_omit_columns' => array('password'),
     ),
     'flower_resource_manager' => array(
         'resource_plugin_manager' => $resourcePluginManagerServiceName,

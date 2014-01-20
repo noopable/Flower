@@ -189,30 +189,6 @@ class ResourceStorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\AccessControl\AuthClient\ResourceStorage::setAuthResultReturnColumns
-     */
-    public function testSetAuthResultReturnColumns()
-    {
-        $columns = array('real_name', 'roles');
-        $this->object->setAuthResultReturnColumns($columns);
-        $prop = $this->ref->getProperty('returnColumns');
-        $prop->setAccessible(true);
-        $this->assertEquals($columns, $prop->getValue($this->object));
-    }
-
-    /**
-     * @covers Flower\AccessControl\AuthClient\ResourceStorage::setAuthResultOmitColumns
-     */
-    public function testSetAuthResultOmitColumns()
-    {
-        $columns = array('password');
-        $this->object->setAuthResultOmitColumns($columns);
-        $prop = $this->ref->getProperty('omitColumns');
-        $prop->setAccessible(true);
-        $this->assertEquals($columns, $prop->getValue($this->object));
-    }
-
-    /**
      * @covers Flower\AccessControl\AuthClient\ResourceStorage::isEmpty
      */
     public function testIsEmpty()
@@ -245,21 +221,16 @@ class ResourceStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testWrite()
     {
-        $omitColumns = array('password');
-        $returnColumns = array('role');
         $object = new \stdClass;
         $object->role = 'admin';
         $object->password = 'lisjeli';
         //returnColumnsが指定された場合は、omitColumnsは考慮されない
-        $this->object->setAuthResultOmitColumns($omitColumns);
-        $this->object->setAuthResultReturnColumns($returnColumns);
         $manager = $this->getMock('Flower\Resource\Manager\ManagerInterface');
         $this->object->setResourceManager($manager);
         $service = $this->getMock('Flower\AccessControl\AccessControlService');
         $this->object->setAccessControlService($service);
         $service->expects($this->once())
                 ->method('getAuthResultRowObject')
-                ->with($this->equalTo($returnColumns), $this->equalTo($omitColumns))
                 ->will($this->returnValue($object));
         $manager->expects($this->once())
                 ->method('saveResource')

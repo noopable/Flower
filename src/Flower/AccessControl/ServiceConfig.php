@@ -81,6 +81,15 @@ class ServiceConfig {
                 $service->addUnderAccessControl($name);
             }
         }
+        
+        if (isset($this->config['auth_result_return_columns'])) {
+            $service->setAuthResultReturnColumns($this->config['auth_result_return_columns']);
+        }
+        
+        if (isset($this->config['auth_result_omit_columns'])) {
+            $service->setAuthResultOmitColumns($this->config['auth_result_omit_columns']);
+        }    
+            
         $this->combineDependencies($service);
         return $service;
     }

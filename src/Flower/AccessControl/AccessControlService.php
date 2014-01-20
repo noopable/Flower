@@ -114,15 +114,13 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
      * パスワードカラムを除外したいときは、$omitColumnsに定義する
      * または、リソースストレージのオプションで保存時に指定する。
      *
-     * @param  string|array $returnColumns
-     * @param  string|array $omitColumns
      * @return stdClass|bool
      */
-    public function getAuthResultRowObject($returnColumns = null, $omitColumns = null)
+    public function getAuthResultRowObject()
     {
         $adapter = $this->getAuthService()->getAdapter();
         if ($adapter instanceof DbTableAdapter) {
-            $res = $adapter->getResultRowObject($returnColumns, $omitColumns);
+            $res = $adapter->getResultRowObject($this->returnColumns, $this->omitColumns);
             return $res;
         }
     }

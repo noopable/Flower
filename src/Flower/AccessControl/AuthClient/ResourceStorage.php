@@ -24,10 +24,6 @@ class ResourceStorage implements ResourceStorageInterface {
     
     protected $service;
     
-    protected $returnColumns;
-    
-    protected $omitColumns;
-    
     protected $resourceManager;
     
     public function __construct(AccessControlService $service)
@@ -98,18 +94,6 @@ class ResourceStorage implements ResourceStorageInterface {
         return $this->resourceManager;
     }
     
-    public function setAuthResultReturnColumns($returnColumns)
-    {
-        $this->returnColumns = $returnColumns;
-    }
-    
-    public function setAuthResultOmitColumns($omitColumns)
-    {
-        $this->omitColumns = $omitColumns;
-    }
-    
-    
-    
    /**
     * 認証済み追加データを保存するクラス内で、
     * 認証済みデータが存在するかどうかを確認するメソッド
@@ -157,7 +141,7 @@ class ResourceStorage implements ResourceStorageInterface {
             $this->setIdentity($contents);
         }
         /** @var \stdClass */
-        $result = $this->service->getAuthResultRowObject($this->returnColumns, $this->omitColumns);
+        $result = $this->service->getAuthResultRowObject();
         if (is_object($result)) {
             $resource = $this->getBareBoneClientResource($contents);
             $resource->setData($result);

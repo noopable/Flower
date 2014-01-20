@@ -108,28 +108,6 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame($authDepend['result'], $authDepend['object']->getAuthResult());
     }
-    /**
-     * @covers Flower\AccessControl\AccessControlService::getAuthResultRowObject
-     */
-    public function testGetAuthResultRowObject()
-    {
-        $returnColumns = array('username', 'role');
-        $omitColumns = array('password');
-        $object = new \stdClass;
-        $authService = $this->getMock('Zend\Authentication\AuthenticationService');
-        $adapter = $this->getMockBuilder('Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter')
-                ->disableOriginalConstructor()
-                ->getMock();
-        $authService->expects($this->once())
-                ->method('getAdapter')
-                ->will($this->returnValue($adapter));
-        $adapter->expects($this->once())
-                ->method('getResultRowObject')
-                ->with($this->equalTo($returnColumns), $this->equalTo($omitColumns))
-                ->will($this->returnValue($object));
-        $this->object->setAuthService($authService);
-        $this->object->getAuthResultRowObject($returnColumns, $omitColumns);
-    }
 
     /**
      * @covers Flower\AccessControl\AccessControlService::setRole
@@ -626,4 +604,52 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setAclScriptPath($aclScript);
         $this->assertEquals($aclScript, $this->object->getAclScriptPath());
     }
+    
+    /**
+     * @covers Flower\AccessControl\AccessControlService::setAuthResultReturnColumns
+     * @covers Flower\AccessControl\ACSSetterGetterTrait::setAuthResultReturnColumns
+     */
+    public function testSetAuthResultReturnColumns()
+    {
+        $columns = array('real_name', 'roles');
+        $this->object->setAuthResultReturnColumns($columns);
+        $this->assertEquals($columns, TestTool::getPropertyValue($this->object,'returnColumns'));
+    }
+
+    /**
+     * @covers Flower\AccessControl\AccessControlService::setAuthResultOmitColumns
+     * @covers Flower\AccessControl\ACSSetterGetterTrait::setAuthResultOmitColumns
+     */
+    public function testSetAuthResultOmitColumns()
+    {
+        $columns = array('password');
+        $this->object->setAuthResultOmitColumns($columns);
+        $this->assertEquals($columns, TestTool::getPropertyValue($this->object,'omitColumns'));
+    }
+    
+    /**
+     * @covers Flower\AccessControl\AccessControlService::getAuthResultRowObject
+     */
+    public function testGetAuthResultRowObject()
+    {
+        $returnColumns = array('username', 'role');
+        $omitColumns = array('password');
+        $object = new \stdClass;
+        $authService = $this->getMock('Zend\Authentication\AuthenticationService');
+        $adapter = $this->getMockBuilder('Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter')
+                ->disableOriginalConstructor()
+                ->getMock();
+        $authService->expects($this->once())
+                ->method('getAdapter')
+                ->will($this->returnValue($adapter));
+        $adapter->expects($this->once())
+                ->method('getResultRowObject')
+                ->with($this->equalTo($returnColumns), $this->equalTo($omitColumns))
+                ->will($this->returnValue($object));
+        $this->object->setAuthResultReturnColumns($returnColumns);
+        $this->object->setAuthResultOmitColumns($omitColumns);
+        $this->object->setAuthService($authService);
+        $this->object->getAuthResultRowObject($returnColumns, $omitColumns);
+    }
+    
 }

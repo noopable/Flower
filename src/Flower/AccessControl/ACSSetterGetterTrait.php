@@ -57,6 +57,10 @@ trait ACSSetterGetterTrait {
     
     protected $resourceManager;
     
+    protected $returnColumns;
+    
+    protected $omitColumns;
+    
     public function setAuthService(AuthenticationService $authService)
     {
         $this->authService = $authService;
@@ -183,6 +187,16 @@ trait ACSSetterGetterTrait {
     public function getAclScriptPath()
     {
         return $this->aclScriptPath;
+    }
+    
+    public function setAuthResultReturnColumns($returnColumns)
+    {
+        $this->returnColumns = $returnColumns;
+    }
+    
+    public function setAuthResultOmitColumns($omitColumns)
+    {
+        $this->omitColumns = $omitColumns;
     }
 }
 
