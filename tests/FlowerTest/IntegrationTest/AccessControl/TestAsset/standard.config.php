@@ -63,7 +63,7 @@ return array(
             'adapter' => array(
                 'name'    => 'filesystem',
                 'options' => array(
-                    'namespace' => 'zfcache_resource_manager',
+                    'namespace' => 'flower_test_resource_manager',
                     'cache_dir' => FlowerTest\Bootstrap::getTestRootDir() . '/tmp/resource',
                     'dir_level' => 2,
                 ),
