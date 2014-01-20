@@ -14,18 +14,13 @@
     ],
     "require": {
         "php": ">=5.4.10",
-        "zendframework/zend-config": "dev-master",
-        "zendframework/zend-eventmanager": "dev-master",
-        "zendframework/zend-db": "dev-master",
-        "zendframework/zend-di": "dev-master",
-        "zendframework/zend-form": "dev-master",
-        "zendframework/zend-mail": "dev-master",
-        "zendframework/zend-mvc": "dev-master",
-        "zendframework/zend-permissions-acl": "dev-master",
-        "zendframework/zend-session": "dev-master",
-        "zendframework/zend-servicemanager": "dev-master",
-        "zendframework/zend-stdlib": "dev-master",
-        "zendframework/zend-view": "dev-master"
+        "zendframework/zendframework": "dev-master"
+    },
+    "require-dev": {
+        "zendframework/zendframework": "dev-master",
+        "phpunit/phpunit": "~3.7",
+        "squizlabs/php_codesniffer": "1.4.*",
+        "satooshi/php-coveralls": "~0.6"
     },
     "autoload": {
         "psr-0": {
