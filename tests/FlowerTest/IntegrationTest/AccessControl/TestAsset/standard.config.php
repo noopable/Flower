@@ -35,9 +35,10 @@ return array(
     //driverは autoload/auth.local.php等から取得した方がよい。
     //これは簡易テストのために同じファイルに記述
     //@todo データベース接続情報をgitから
+    //@todo CIテスト用にsqliteをつかってもよい。
     'test_auth_db' => array(
         'driver' => include(__DIR__ . '/sandbox.db.php'),
-        'table_name' => 'persons',
+        'table_name' => 'email',
         'identity_column' => 'email',
         'credential_column' => 'password',
         //sha1は既に安全ではありません。
