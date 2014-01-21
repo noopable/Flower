@@ -43,7 +43,7 @@ class ZendConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\File\Listener\ZendConfig::configure
+     * @covers Flower\File\Adapter\ZendConfig::configure
      * @todo   Implement testConfigure().
      */
     public function testConfigure()
@@ -55,7 +55,7 @@ class ZendConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\File\Listener\ZendConfig::onRead
+     * @covers Flower\File\Adapter\ZendConfig::onRead
      * @todo   Implement testOnRead().
      */
     public function testOnRead()
@@ -67,8 +67,7 @@ class ZendConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\File\Listener\ZendConfig::onWrite
-     * @todo   Implement testOnWrite().
+     * @covers Flower\File\Adapter\ZendConfig::onWrite
      */
     public function testOnWrite()
     {
@@ -90,7 +89,7 @@ class ZendConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\File\Listener\ZendConfig::onMerge
+     * @covers Flower\File\Adapter\ZendConfig::onMerge
      * @todo   Implement testOnMerge().
      */
     public function testOnMerge()

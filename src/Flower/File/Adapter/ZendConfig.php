@@ -86,6 +86,11 @@ class ZendConfig implements AdapterInterface, ListenerAggregateInterface
         return $files;
     }
     
+    /**
+     * 
+     * @param \Flower\File\Event $e
+     * @return int
+     */
     public function onWrite(Event $e)
     {
         $files = $e->getNamedFiles();

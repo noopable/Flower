@@ -82,7 +82,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @covers Flower\View\PaneHelper::abstractFactoryPaneRenderer
+     * @covers Flower\View\Pane\PaneHelper::abstractFactoryPaneRenderer
      * @todo   Implement testAbstractFactoryPaneRenderer().
      */
     public function testAbstractFactoryPaneRenderer() {
@@ -98,7 +98,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Flower\View\PaneHelper::paneFactory
+     * @covers Flower\View\Pane\PaneHelper::paneFactory
      * @todo   Implement testPaneFactory().
      */
     public function testPaneFactory() {
@@ -109,7 +109,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Flower\View\PaneHelper::__invoke
+     * @covers Flower\View\Pane\PaneHelper::__invoke
      * @todo   Implement test__invoke().
      */
     public function test__invoke() {
@@ -308,7 +308,7 @@ EOF;
         $this->assertXmlStringEqualsXmlString($expected, (string) $data);
     }
     /**
-     * @covers Flower\View\PaneHelper::setObjectKey
+     * @covers Flower\View\Pane\PaneHelper::setObjectKey
      * @todo   Implement testSetObjectKey().
      */
     public function testSetObjectKey() {
@@ -319,7 +319,7 @@ EOF;
     }
 
     /**
-     * @covers Flower\View\PaneHelper::getObjectKey
+     * @covers Flower\View\Pane\PaneHelper::getObjectKey
      * @todo   Implement testGetObjectKey().
      */
     public function testGetObjectKey() {

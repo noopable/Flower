@@ -30,7 +30,7 @@ class TestToolTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers TestTool::getPropertyRef
+     * @covers Flower\Test\TestTool::getPropertyRef
      */
     public function testGetPropertyRef()
     {
@@ -42,7 +42,7 @@ class TestToolTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers TestTool::getPropertyValue
+     * @covers Flower\Test\TestTool::getPropertyValue
      */
     public function testGetPropertyValue()
     {
@@ -51,7 +51,7 @@ class TestToolTest extends \PHPUnit_Framework_TestCase {
     }
     
    /**
-     * @covers TestTool::getPropertyValue
+     * @covers Flower\Test\TestTool::getPropertyValue
      */
     public function testGetStaticPropertyValue()
     {
@@ -60,7 +60,7 @@ class TestToolTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers TestTool::getMethodRef
+     * @covers Flower\Test\TestTool::getMethodRef
      */
     public function testGetMethodRef()
     {

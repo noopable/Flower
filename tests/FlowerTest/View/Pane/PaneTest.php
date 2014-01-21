@@ -38,7 +38,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane::build
+     * @covers Flower\View\Pane\Pane::build
      */
     public function testBuild()
     {
@@ -54,7 +54,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane::getOrder
+     * @covers Flower\View\Pane\Pane::getOrder
      * @todo   Implement testGetOrder().
      */
     public function testGetOrder()
@@ -63,7 +63,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane::insert
+     * @covers Flower\View\Pane\Pane::insert
      * @todo   Implement testInsert().
      */
     public function testInsert()

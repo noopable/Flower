@@ -1,6 +1,6 @@
 <?php
 
-namespace FlowerTest\File\Spec;
+namespace FlowerTest\File\Service;
 /*
  *
  *
@@ -46,7 +46,7 @@ class SpecConfigTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @covers Flower\File\Spec\SpecConfig::createWellKnownInstance
+     * @covers Flower\File\Service\SpecConfig::createWellKnownInstance
      */
     public function testCreateWellKnownInstance()
     {
@@ -67,7 +67,7 @@ class SpecConfigTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @covers Flower\File\Spec\SpecConfig::createSpec
+     * @covers Flower\File\Service\SpecConfig::createSpec
      */
     public function testCreateSpec()
     {
@@ -79,7 +79,7 @@ class SpecConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\File\Spec\SpecConfig::createGateway
+     * @covers Flower\File\Service\SpecConfig::createGateway
      */
     public function testCreateGateway()
     {
@@ -92,7 +92,7 @@ class SpecConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\File\Spec\SpecConfig::createResolveSpec
+     * @covers Flower\File\Service\SpecConfig::createResolveSpec
      */
     public function testCreateResolveSpec()
     {
@@ -105,7 +105,7 @@ class SpecConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\File\Spec\SpecConfig::createCacheSpec
+     * @covers Flower\File\Service\SpecConfig::createCacheSpec
      */
     public function testCreateCacheSpec()
     {
@@ -118,7 +118,7 @@ class SpecConfigTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @covers Flower\File\Spec\SpecConfig::createMergeSpec
+     * @covers Flower\File\Service\SpecConfig::createMergeSpec
      */
     public function testCreateMergeSpec()
     {
@@ -130,7 +130,7 @@ class SpecConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceof('Flower\File\Spec\Merge\MergeSpecInterface', $instance);
     }
     /**
-     * @covers Flower\File\Spec\SpecConfig::createFileAdapter
+     * @covers Flower\File\Service\SpecConfig::createFileAdapter
      */
     public function testCreateFileAdapter()
     {
@@ -143,7 +143,7 @@ class SpecConfigTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @covers Flower\File\Spec\SpecConfig::configure
+     * @covers Flower\File\Service\SpecConfig::configure
      * @todo   Implement testConfigure().
      */
     public function testConfigure()
