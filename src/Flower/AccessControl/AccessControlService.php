@@ -12,6 +12,7 @@ use Flower\AccessControl\AuthClient\ResourceStorageAwareInterface;
 use Flower\AccessControl\AuthClient\ResourceStorageAwareTrait;
 use Flower\AccessControl\Exception\RuntimeException;
 use Flower\AccessControl\RoleMapper\RoleContainer;
+use Flower\AccessControl\RoleMapper\RoleMapperInterface;
 use Flower\ServiceLayer\Wrapper\ServiceWrapperInterface;
 use Zend\Authentication\Adapter\AbstractAdapter;
 use Zend\Authentication\Adapter\DbTable\AbstractAdapter as DbTableAdapter;
@@ -45,11 +46,19 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
     
     protected $acl;
     
+    protected $builtInRoles;
+    
     public function __construct(ServiceConfig $config = null)
     {
         if (null !== $config) {
             $config->configure($this);
         }
+        
+        $this->builtInRoles = array(
+            RoleMapperInterface::BUILT_IN_AUTHENTICATED_CLIENT,
+            RoleMapperInterface::BUILT_IN_CURRENT_CLIENT_AGGREGATE,
+            RoleMapperInterface::BUILT_IN_NOT_AUTHENTICATED_CLIENT,
+        );
     }
     
     /**
@@ -168,6 +177,7 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
     
     public function setAcl(Acl $acl)
     {
+        $this->injectBuiltInRoles($acl);
         if (isset($this->role)) {
             $this->injectRoleToAcl($this->role, $acl);
         }
@@ -180,15 +190,23 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
             if (!$aclLoader = $this->getAclLoader()) {
                 throw new RuntimeException('there are not acl nor aclLoader');
             }
-            $this->acl = $aclLoader->load();
-            if (isset($this->role)) {// not getRole()
-                $this->injectRoleToAcl($this->role, $this->acl);
-            }
+            $this->setAcl($aclLoader->load());
         }
         return $this->acl;
     }
     
-    
+    public function injectBuiltInRoles($acl)
+    {
+        if (!isset($this->builtInRoles)) {
+            return $acl;
+        }
+        foreach ($this->builtInRoles as $role) {
+            if (! $acl->hasRole($role)) {
+                $acl->addRole($role);
+            }
+        }
+        return $acl;
+    }
     
     public function injectRoleToAcl($role, $acl)
     {

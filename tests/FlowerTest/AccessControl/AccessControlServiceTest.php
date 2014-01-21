@@ -2,6 +2,7 @@
 namespace FlowerTest\AccessControl;
 
 use Flower\AccessControl\AccessControlService;
+use Flower\AccessControl\RoleMapper\RoleMapperInterface;
 use Flower\AccessControl\RoleMapper\RoleContainer;
 use Flower\Test\TestTool;
 use Zend\Permissions\Acl\Acl;
@@ -139,7 +140,6 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
     
     /**
      * @covers Flower\AccessControl\AccessControlService::setAcl
-     * @todo   Implement testSetAcl().
      */
     public function testSetAcl()
     {
@@ -147,7 +147,60 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setAcl($acl);
         $this->assertSame($acl, TestTool::getPropertyValue($this->object, 'acl'));
     }
-
+    
+    public function testHasBuiltInRoles()
+    {
+        $builtInRoles = TestTool::getPropertyValue($this->object, 'builtInRoles');
+        $this->assertCount(3, $builtInRoles);
+        $this->assertContains(RoleMapperInterface::BUILT_IN_AUTHENTICATED_CLIENT, $builtInRoles);
+        $this->assertContains(RoleMapperInterface::BUILT_IN_CURRENT_CLIENT_AGGREGATE, $builtInRoles);
+        $this->assertContains(RoleMapperInterface::BUILT_IN_NOT_AUTHENTICATED_CLIENT, $builtInRoles);
+    }
+    
+    /**
+     * @depends testHasBuiltInRoles
+     * @covers Flower\AccessControl\AccessControlService::injectBuiltInRoles
+     */
+    public function testInjectBuiltInRoles()
+    {
+        $roles = array(
+            RoleMapperInterface::BUILT_IN_AUTHENTICATED_CLIENT,
+            RoleMapperInterface::BUILT_IN_CURRENT_CLIENT_AGGREGATE,
+            RoleMapperInterface::BUILT_IN_NOT_AUTHENTICATED_CLIENT,
+        );
+        $acl = $this->getMock('Zend\Permissions\Acl\Acl');
+        $acl->expects($this->exactly(3))
+                ->method('hasRole')
+                ->with($this->callback(function ($param) use ($roles) { return in_array($param, $roles);}))
+                ->will($this->returnValue(false));
+        $acl->expects($this->exactly(3))
+                ->method('addRole')
+                ->with($this->callback(function ($param) use ($roles) { return in_array($param, $roles);}));
+        $this->object->injectBuiltInRoles($acl);
+    }
+    
+    /**
+     * 
+     * @depends testInjectBuiltInRoles
+     */
+    public function testSetAclInjectBuiltInRoles()
+    {
+        $roles = array(
+            RoleMapperInterface::BUILT_IN_AUTHENTICATED_CLIENT,
+            RoleMapperInterface::BUILT_IN_CURRENT_CLIENT_AGGREGATE,
+            RoleMapperInterface::BUILT_IN_NOT_AUTHENTICATED_CLIENT,
+        );
+        $acl = $this->getMock('Zend\Permissions\Acl\Acl');
+        $acl->expects($this->exactly(3))
+                ->method('hasRole')
+                ->with($this->callback(function ($param) use ($roles) { return in_array($param, $roles);}))
+                ->will($this->returnValue(false));
+        $acl->expects($this->exactly(3))
+                ->method('addRole')
+                ->with($this->callback(function ($param) use ($roles) { return in_array($param, $roles);}));
+        $this->object->setAcl($acl);
+    }
+    
     /**
      * @expectedException Flower\AccessControl\Exception\RuntimeException
      * @covers Flower\AccessControl\AccessControlService::getAcl
