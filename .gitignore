@@ -1,10 +1,11 @@
 nbproject
-
+composer.phar
 .buildpath
 .project
 .settings/
 .DS_Store
 vendor
+vendor/*
 data/*
 !data/cache
 data/cache/*
