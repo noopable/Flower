@@ -71,9 +71,8 @@ class RoleMapperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\AccessControl\RoleMapper\RoleMapper::filterRoles
      */
-    public function testFilterRolesExample()
+    public function testFilterRolesExample1()
     {
         $filter = new RolePrefixFilter;
         $prefix = 'pre';
@@ -83,6 +82,17 @@ class RoleMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('pre.foo', 'pre.bar'), $this->object->filterRoles($roles));
     }
 
+    /**
+     */
+    public function testFilterRolesExample2()
+    {
+        $filter = new RolePrefixRemoveFilter;
+        $prefix = 'pre';
+        $roles = array('pre.foo', 'pre.bar', 'baz', 'other.qux');
+        $filter->setPrefix($prefix);
+        $this->object->setRoleFilter($filter);
+        $this->assertEquals(array('foo', 'bar'), $this->object->filterRoles($roles));
+    }
     /**
      * @covers Flower\AccessControl\RoleMapper\RoleMapper::setResourceStorage
      */
