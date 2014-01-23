@@ -2,6 +2,7 @@
 namespace FlowerTest\Router;
 
 use Flower\Router\TreeRouteStack;
+use Flower\Test\TestTool;
 use Zend\Mvc\Router\RoutePluginManager;
 use Zend\ServiceManager\ServiceManager;
 
@@ -82,5 +83,6 @@ class TreeRouteStackTest extends \PHPUnit_Framework_TestCase
         $serviceLocator->setFactory('Flower_LazyRouteLoaderFile', 'Flower\Router\LazyRouteLoaderFileFactory');
         $serviceLocator->setService('RoutePluginManager', $routePluginManager);
         $this->object = TreeRouteStack::factory(array('route_plugins' => $routePluginManager));
+        $this->assertArrayHasKey('chain', TestTool::getPropertyValue($routePluginManager, 'invokableClasses'));
     }
 }
