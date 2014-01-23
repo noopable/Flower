@@ -1,6 +1,9 @@
 <?php
 return array(
     'service_manager' => array(
+        'invokables' => array(
+            'Flower_Domain_Service' => 'Flower\Domain\Service',
+        ),
         'factories' => array(
             'Flower_File_Adapter' => 'Flower\File\Service\FileServiceFactoryFromConfig',
             'Flower\FormPostRedirectGet\Plugin\FilePostRedirectGet' => 'Flower\FilePostRedirectGet\Service\Factory',
