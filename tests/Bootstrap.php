@@ -4,6 +4,7 @@ namespace FlowerTest;
  * This file is copy from zf2/tutorial/album and minor modify
 
  *  */
+use Zend\Console\Console;
 use Zend\Loader\AutoloaderFactory;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
@@ -27,14 +28,14 @@ class Bootstrap
             $testConfig = include __DIR__ . '/TestConfig.php.dist';
         }
 
-        if (isset($testConfig['module_listener_options']) 
+        if (isset($testConfig['module_listener_options'])
                 && isset($testConfig['module_listener_options']['module_paths'])) {
             $modulePathsConfig = $testConfig['module_listener_options']['module_paths'];
         }
         else {
             $modulePathsConfig = array('vendor', 'module');
         }
-        
+
         $zf2ModulePaths = array(dirname(dirname(__DIR__)));
         foreach ($modulePathsConfig as $moduleDirName) {
             if (($path = static::findParentPath($moduleDirName))) {
@@ -47,6 +48,11 @@ class Bootstrap
 
         static::initAutoloader();
 
+        $ref = new \ReflectionClass('Zend\Console\Console');
+        $prop = $ref->getProperty('isConsole');
+        $prop->setAccessible(true);
+        $prop->setValue(false);
+
         // use ModuleManager to load this module and it's dependencies
         $baseConfig = array(
             'module_listener_options' => array(
@@ -55,7 +61,7 @@ class Bootstrap
         );
 
         $config = ArrayUtils::merge($baseConfig, $testConfig);
-        
+
         $serviceManager = new ServiceManager(new ServiceManagerConfig());
         $serviceManager->setService('ApplicationConfig', $config);
         $serviceManager->get('ModuleManager')->loadModules();
@@ -88,7 +94,7 @@ class Bootstrap
             //try to load ZF2 autoload class
             if (! $zf2Path = getenv('ZF2_PATH')) {
                 if (defined('ZF2_PATH')) {
-                    $zf2Path = ZF2_PATH; 
+                    $zf2Path = ZF2_PATH;
                 }
                 elseif(is_dir($vendorPath . '/ZF2/library')) {
                     $zf2Path = $vendorPath . '/ZF2/library';
@@ -101,19 +107,19 @@ class Bootstrap
             if (!$zf2Path) {
                 throw new RuntimeException('Unable to load ZF2. Run `php composer.phar install` or define a ZF2_PATH environment variable.');
             }
-            
+
             if (isset($loader)) {
                 $loader->add('Zend\\', $zf2Path . '/Zend');
             } else {
                 require_once $zf2Path . '/Zend/Loader/AutoloaderFactory.php';
             }
-            
+
             if (! class_exists('Zend\Loader\AutoloaderFactory')) {
                 throw new RuntimeException('faild to load zf2 AutoloaderFactory from ' . $zf2Path );
             }
 
         }
-        
+
         AutoloaderFactory::factory(array(
             'Zend\Loader\StandardAutoloader' => array(
                 'autoregister_zf' => true,
@@ -122,7 +128,7 @@ class Bootstrap
                 ),
             ),
         ));
-        
+
 
     }
 
@@ -137,7 +143,7 @@ class Bootstrap
         }
         return realpath($dir . '/' . $path);
     }
-    
+
     public static function getTestRootDir()
     {
         static $dir;
