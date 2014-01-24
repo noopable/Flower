@@ -44,7 +44,7 @@ return array(
                         'type' => 'lazyfile',
                         'may_terminate' => true,
                         'options' => array(
-                            'name' => 'foo',
+                            'name' => 'foo/bar',
                         ),
                     ),
                 ),
