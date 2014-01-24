@@ -20,7 +20,7 @@ use Flower\NamedFiles;
 class PathStack implements ResolverInterface, ResolveTerminatorInterface
 {
     use MayTerminateTrait;
-    
+
     const FAILURE_NO_PATHS  = 'TemplatePathStack_Failure_No_Paths';
     const FAILURE_NOT_FOUND = 'TemplatePathStack_Failure_Not_Found';
 
@@ -162,10 +162,7 @@ class PathStack implements ResolverInterface, ResolveTerminatorInterface
      */
     public static function normalizePath($path)
     {
-        $path = rtrim($path, '/');
-        $path = rtrim($path, '\\');
-        $path .= DIRECTORY_SEPARATOR;
-        return $path;
+        return rtrim($path, '/\\') . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -280,7 +277,7 @@ class PathStack implements ResolverInterface, ResolveTerminatorInterface
         }
 
         $files = array();
-        
+
         foreach ($this->paths as $path) {
             foreach ($fileNames as $fileName) {
                 $file = new FileInfo($path . $fileName);
@@ -295,7 +292,7 @@ class PathStack implements ResolverInterface, ResolveTerminatorInterface
                 }
             }
         }
-        
+
         if (count($files)) {
             return $files;
         }
