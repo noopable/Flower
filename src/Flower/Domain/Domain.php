@@ -1,7 +1,7 @@
 <?php
 
 /*
- * 
+ *
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
@@ -9,16 +9,18 @@
 namespace Flower\Domain;
 
 /**
- * Description of Domain
+ * -------------          ------------------
+ * | domainId | 1 - n | domainName |
+ * -------------          ------------------
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
 class Domain implements DomainInterface {
-    
+
     protected $domainId;
-    
+
     protected $domainName;
-    
+
     public function getDomainId()
     {
         return $this->domainId;
@@ -31,7 +33,7 @@ class Domain implements DomainInterface {
 
     public function setDomainId($domainId)
     {
-        $this->domainId = (int) $domainId;
+        $this->domainId = $domainId;
     }
 
     public function setDomainName($domainName)
