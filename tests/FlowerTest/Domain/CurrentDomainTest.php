@@ -10,6 +10,7 @@ use Flower\Test\TestTool;
  */
 class CurrentDomainTest extends \PHPUnit_Framework_TestCase
 {
+    protected $service;
     /**
      * @var CurrentDomain
      */
@@ -21,8 +22,8 @@ class CurrentDomainTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $service = new Service;
-        $this->object = new CurrentDomain($service);
+        $this->service = new Service;
+        $this->object = new CurrentDomain($this->service);
     }
 
     /**
@@ -33,7 +34,14 @@ class CurrentDomainTest extends \PHPUnit_Framework_TestCase
     {
     }
 
-
+    /**
+     * @covers Flower\Domain\CurrentDomain::__construct
+     */
+    public function testConstructorBinding()
+    {
+        $this->assertSame($this->object, $this->service->getCurrentDomain());
+    }
+    
     /**
      * @covers Flower\Domain\CurrentDomain::setDomainId
      */

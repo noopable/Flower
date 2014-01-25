@@ -33,11 +33,23 @@ class Service implements ListenerAggregateInterface {
 
     protected $domainRoutes;
 
+    public function setCurrentDomain(CurrentDomain $currentDomain)
+    {
+        if (isset($this->currentDomain) && ($this->currentDomain !== $currentDomain)) {
+            throw new DomainException('currentDomain is immutable');
+        }
+        $this->currentDomain = $currentDomain;
+    }
+
     public function createCurrentDomain()
     {
         if (isset($this->currentDomain)) {
             $currentDomain = $this->currentDomain;
         } else {
+            /**
+             * Double dispatch process
+             * CurrentDomain::__construct invoke $service->setCurrentDomain(self)
+             */
             $currentDomain = new CurrentDomain($this);
         }
 
@@ -69,7 +81,7 @@ class Service implements ListenerAggregateInterface {
     public function getCurrentDomain()
     {
         if (!isset($this->currentDomain)) {
-            $this->currentDomain = $this->createCurrentDomain();
+            $this->createCurrentDomain();
         }
         return $this->currentDomain;
     }

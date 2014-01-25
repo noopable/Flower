@@ -24,6 +24,7 @@ class CurrentDomain extends Domain {
 
     public function __construct(Service $service)
     {
+        $service->setCurrentDomain($this);
         $this->service = $service;
     }
 
