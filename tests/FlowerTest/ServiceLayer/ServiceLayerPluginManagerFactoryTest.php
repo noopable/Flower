@@ -3,7 +3,12 @@ namespace FlowerTest\ServiceLayer;
 
 use Flower\AccessControl\AccessControlService;
 use Flower\AccessControl\AccessControlWrapper;
+use Flower\Domain\CurrentDomain;
+use Flower\Domain\Service as DomainService;
 use Flower\ServiceLayer\ServiceLayerPluginManagerFactory;
+use Flower\Test\TestTool;
+use FlowerTest\Domain\TestAsset\ConcreteDomainAware;
+use Zend\Di\Di;
 use Zend\Permissions\Acl\Acl;
 use Zend\ServiceManager\ServiceManager;
 /**
@@ -43,7 +48,7 @@ class ServiceLayerPluginManagerFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Flower\ServiceLayer\ServiceLayerPluginManager', $res);
         $this->assertSame($serviceLocator, $res->getServiceLocator());
     }
-    
+
     public function testCreateServiceWithAccessControl()
     {
         $accessControlService = new AccessControlService;
@@ -73,15 +78,42 @@ class ServiceLayerPluginManagerFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($serviceLocator, $res->getServiceLocator());
         $wrappers = \Flower\Test\TestTool::getPropertyValue($res, 'wrappers');
         $this->assertSame($accessControlService, $wrappers[0]);
-        
+
         $service = $this->getMock('Flower\ServiceLayer\AbstractService');
         $res->setService('foo', $service);
         $noWrapped = $res->get('foo');
         $this->assertNotInstanceOf('Flower\AccessControl\ServiceProxy', $noWrapped);
         $this->assertInstanceOf('Flower\ServiceLayer\AbstractService', $noWrapped);
-        
+
         $accessControlService->addUnderAccessControl('foo');
         $wrapped = $res->get('foo');
         $this->assertInstanceOf('Flower\AccessControl\ServiceProxy', $wrapped);
+    }
+
+    public function testDiServiceInitializerIsActive()
+    {
+
+        $serviceLocator = new ServiceManager;
+        $di = new Di;
+        $domainService = new DomainService;
+        $currentDomain = new CurrentDomain($domainService);
+        $instanceManager = $di->instanceManager();
+        $instanceManager->addSharedInstance($currentDomain, 'Flower\Domain\CurrentDomain');
+        $instanceManager->addTypePreference('Flower\Domain\DomainInterface', $currentDomain);
+        $serviceLocator->setService('Di', $di);
+
+        $res = $this->object->createService($serviceLocator);
+        $this->assertInstanceOf('Flower\ServiceLayer\ServiceLayerPluginManager', $res);
+        $this->assertSame($serviceLocator, $res->getServiceLocator());
+
+        $initializers = TestTool::getPropertyValue($res, 'initializers');
+
+        //1 is default closure for serviceLocatorAware
+        $initializer = $initializers[0];
+
+        $this->assertInstanceOf('Zend\ServiceManager\Di\DiServiceInitializer', $initializer);
+        $concreteDomainAware = new ConcreteDomainAware;
+        $initializer->initialize($concreteDomainAware, $serviceLocator);
+        $this->assertSame($currentDomain, $concreteDomainAware->getDomain());
     }
 }
