@@ -49,14 +49,15 @@ return array(
             'cache_path' => __DIR__ . '/../data/routes/cache',
         ),
     ),
+    /*
     'flower_lazy_load_route_resource' => array(
         'resource_plugin_manager' => 'Flower_Resources',
         //reserve configuration
-        /**
-         * class => マネージャークラスを換装できる
-         * その他はResource\Manager\Config経由でconfigureされるオプション
-         *
-         */
+        //
+        //  class => マネージャークラスを換装できる
+        //  その他はResource\Manager\Config経由でconfigureされるオプション
+        //
+        //
         //@see http://framework.zend.com/manual/2.2/en/modules/zend.cache.storage.adapter.html
         'cache_storage' => array(
             'adapter' => array(
@@ -72,6 +73,7 @@ return array(
             ),
         ),
     ),
+    */
     'flower_file' => array(
         'spec_class' => 'Flower\File\Spec\TreeArrayMerge',
         'spec_options' => array(
