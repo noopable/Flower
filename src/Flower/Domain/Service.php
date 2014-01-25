@@ -29,7 +29,7 @@ class Service implements ListenerAggregateInterface {
 
     protected $hostMap;
 
-    protected $listeners;
+    protected $listeners = array();
 
     protected $domainRoutes;
 
@@ -126,8 +126,12 @@ class Service implements ListenerAggregateInterface {
 
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_BOOTSTRAP, [$this, 'onBootstrap']);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'onRoute']);
+        if (! isset($this->listeners['onBootstrap'])) {
+            $this->listeners['onBootstrap'] = $events->attach(MvcEvent::EVENT_BOOTSTRAP, [$this, 'onBootstrap']);
+        }
+        if (!isset($this->listeners['onRoute'])) {
+            $this->listeners['onRoute'] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'onRoute']);
+        }
     }
 
     public function detach(EventManagerInterface $events)

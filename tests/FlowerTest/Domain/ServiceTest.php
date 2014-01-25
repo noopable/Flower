@@ -164,6 +164,17 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('onRoute', $listener2->getCallback()[1]);
     }
 
+    public function testAttachTwice()
+    {
+        $eventManager = new EventManager;
+        $eventManager->attachAggregate($this->object);
+        $eventManager->attachAggregate($this->object);
+        $onBootstrapListners = $eventManager->getListeners(MvcEvent::EVENT_BOOTSTRAP);
+        $this->assertCount(1, $onBootstrapListners);
+        $onRouteListners = $eventManager->getListeners(MvcEvent::EVENT_ROUTE);
+        $this->assertCount(1, $onRouteListners);
+    }
+
     /**
      * @covers Flower\Domain\Service::detach
      */
@@ -174,7 +185,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
         $listeners = array();
         $listeners[] = $eventManager->getListeners(MvcEvent::EVENT_BOOTSTRAP)->getIterator()->current();
         $listeners[] = $eventManager->getListeners(MvcEvent::EVENT_ROUTE)->getIterator()->current();
-        $this->assertEquals($listeners, TestTool::getPropertyValue($this->object, 'listeners'));
+        $this->assertEquals($listeners, array_values(TestTool::getPropertyValue($this->object, 'listeners')));
         $this->object->detach($eventManager);
         $this->assertEmpty(TestTool::getPropertyValue($this->object, 'listeners'));
         $this->assertTrue($eventManager->getListeners(MvcEvent::EVENT_BOOTSTRAP)->isEmpty());
