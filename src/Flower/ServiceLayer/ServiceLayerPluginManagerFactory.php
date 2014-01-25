@@ -18,6 +18,9 @@ use Zend\ServiceManager\Di\DiServiceInitializer;
  * @author tomoaki
  */
 class ServiceLayerPluginManagerFactory implements FactoryInterface {
+
+    protected $pluginClass = 'Flower\ServiceLayer\ServiceLayerPluginManager';
+
     protected $configId = 'flower_service_layer';
     /**
      * Create and return abstract factory seeded by dependency injector
@@ -35,24 +38,24 @@ class ServiceLayerPluginManagerFactory implements FactoryInterface {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->has('Config') ? $serviceLocator->get('Config') : array();
-        
+
         /**
          * use di?
          *  オプションベースでDIの使用不使用をわけるよりも、Factoryを切り替えた方がいいと思います。
-         * 
+         *
          */
-        $pluginManager = new ServiceLayerPluginManager;
-        
+        $pluginManager = new $this->pluginClass;
+
         if (isset($config[$this->configId])) {
             $managerConfig = new ManagerConfig($config[$this->configId]);
             $managerConfig->configure($pluginManager);
         }
-        
+
         if ($serviceLocator->has('Flower_AccessControl')) {
             $accessControlService = $serviceLocator->get('Flower_AccessControl');
             $pluginManager->addServiceWrapper($accessControlService);
         }
-        
+
         if ($serviceLocator->has('Di')) {
             $di = $serviceLocator->get('Di');
             $pluginManager->addAbstractFactory(
@@ -62,9 +65,9 @@ class ServiceLayerPluginManagerFactory implements FactoryInterface {
                 new DiServiceInitializer($di, $serviceLocator)
             );
         }
-        
+
         $pluginManager->setServiceLocator($serviceLocator);
-        
+
         return $pluginManager;
     }
 }
