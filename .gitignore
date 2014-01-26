@@ -14,3 +14,4 @@ data/cache/*
 data/cache/file/*
 !data/cache/file/.placeholder
 !data/fprg
+!data/salt.php

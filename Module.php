@@ -6,6 +6,7 @@ namespace Flower;
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
+use Flower\Exception\RuntimeException;
 use Zend\View\Model\ViewModel;
 use Zend\Mvc\MvcEvent;
 use Zend\Http\Response as HttpResponse;
@@ -13,7 +14,6 @@ use Zend\Http\Response as HttpResponse;
 class Module
 {
 
-    
     public function getAutoloaderConfig()
     {
         return array(
@@ -27,15 +27,24 @@ class Module
             ),
         );
     }
-    
+
     /**
-     * 
+     *
      * @see Flower\File\DefaultResolveListener
      * @return string
      */
     public static function dataDir()
     {
         return __DIR__ . '/data';
+    }
+
+    public static function getSalt()
+    {
+        $path = __DIR__ . '/data/salt.php';
+        if (! is_readable($path)) {
+            throw new RuntimeException('Please set salt in '. $path);
+        }
+        return include($path);
     }
 
     public function getConfig()
