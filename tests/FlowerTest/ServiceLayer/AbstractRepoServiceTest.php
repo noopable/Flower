@@ -49,7 +49,7 @@ class AbstractRepoServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setRepositoryPluginManager($repositoryPluginManager);
         $this->assertSame($repositoryPluginManager, $this->object->getRepositoryPluginManager());
     }
-    
+
     /**
      * @covers Flower\ServiceLayer\AbstractRepoService::setRepositoryName
      */
@@ -90,12 +90,12 @@ class AbstractRepoServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setRepository($repository);
         $this->assertSame($repository, $this->object->getRepository());
     }
-    
+
     public function testGetRepositoryNotSet()
     {
         $this->assertEquals(null, $this->object->getRepository());
     }
-    
+
     public function testGetRepositoryWithSpecifiedName()
     {
         $repository = $this->getMock('Flower\Model\RepositoryInterface');
@@ -112,5 +112,30 @@ class AbstractRepoServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setRepositoryName($repositoryName);
         $res = $this->object->getRepository();
         $this->assertSame($repository, $res);
+    }
+
+    /**
+     * @covers Flower\ServiceLayer\AbstractRepoService::__call
+     */
+    public function test__call()
+    {
+        $repository = $this->getMock('Flower\Model\RepositoryInterface', array('getEntity', 'initialize', 'isInitialized'));
+        $repository->expects($this->once())
+                ->method('getEntity')
+                ->with($this->equalTo(array('foo' => 'bar')))
+                ->will($this->returnValue(array('baz')));
+        $repositoryName = 'foo';
+        $repositoryPluginManager = $this->getMock('Flower\Model\Service\RepositoryPluginManager');
+        $repositoryPluginManager->expects($this->once())
+                ->method('has')
+                ->will($this->returnValue(true));
+        $repositoryPluginManager->expects($this->once())
+                ->method('get')
+                ->with($this->equalTo($repositoryName))
+                ->will($this->returnValue($repository));
+        $this->object->setRepositoryPluginManager($repositoryPluginManager);
+        $this->object->setRepositoryName($repositoryName);
+        $res = $this->object->getEntity(array('foo' => 'bar'));
+        $this->assertEquals(array('baz'), $res);
     }
 }
