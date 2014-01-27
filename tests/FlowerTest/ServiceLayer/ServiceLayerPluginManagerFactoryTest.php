@@ -63,9 +63,6 @@ class ServiceLayerPluginManagerFactoryTest extends \PHPUnit_Framework_TestCase
         $result->expects($this->once())
                 ->method('isValid')
                 ->will($this->returnValue(true));
-        $authService->expects($this->once())
-                ->method('authenticate')
-                ->will($this->returnValue($result));
         $accessControlService->setAuthService($authService);
         $acl = new Acl;
         $accessControlService->setAcl($acl);
