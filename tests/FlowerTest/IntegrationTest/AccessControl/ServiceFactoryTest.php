@@ -37,7 +37,7 @@ class AccessControlServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Zend\ServiceManager\ServiceManager', $serviceLocator);
         return $serviceLocator;
     }
-    
+
     /**
      * @depends testStandardServiceLocator
      */
@@ -45,7 +45,7 @@ class AccessControlServiceFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue(isset($serviceLocator->get('Config')['service_manager']['factories']['FlowerTest_AccessControl']));
     }
-    
+
     /**
      * @depends testStandardServiceLocator
      */
@@ -55,7 +55,7 @@ class AccessControlServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Flower\AccessControl\AccessControlService', $accessControlService);
         return $accessControlService;
     }
-    
+
     /**
      * @depends testStandardAccessControlService
      */
@@ -65,9 +65,9 @@ class AccessControlServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Flower\AccessControl\RoleMapper\RoleMapperInterface', $roleMapper);
         $resourceStorage = $roleMapper->getResourceStorage();
         $this->assertInstanceOf('Flower\AccessControl\AuthClient\IdenticalStorageInterface', $resourceStorage);
-        
+
     }
-    
+
     /**
      * @depends testStandardServiceLocator
      */
@@ -86,7 +86,7 @@ class AccessControlServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $connection->connect();
     }
     /**
-     * 
+     *
      * @depends testStandardAccessControlService
      */
     public function testAuthenticate($accessControlService)
@@ -96,13 +96,12 @@ class AccessControlServiceFactoryTest extends \PHPUnit_Framework_TestCase
               'Pdo_MySQL 拡張モジュールが使用できません。'
             );
         }
-        
-        $this->assertTrue($accessControlService->authenticate('foo@example.com', 'admin'));
+        $this->assertTrue($accessControlService->authenticate('bar@example.com', 'admin'));
         $role = $accessControlService->getRole();
         $this->assertEquals(RoleMapperInterface::BUILT_IN_CURRENT_CLIENT_AGGREGATE, $role);
         $this->assertContains('admin', $role->getParents());
     }
-    
+
     /**
      * @depends testStandardAccessControlService
      * @param type $accessControlService
@@ -112,5 +111,5 @@ class AccessControlServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $authService = $accessControlService->getAuthService();
         $this->assertInstanceOf('Zend\Authentication\AuthenticationService', $authService);
     }
- 
+
 }

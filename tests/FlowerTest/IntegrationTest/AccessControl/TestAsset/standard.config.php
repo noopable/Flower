@@ -21,12 +21,25 @@ return array(
             $authDbAdapterName => function($sm, $cName, $rName) {
                 $db = $sm->get('Config')['test_auth_db'];
                 $dbAdapter = new \Zend\Db\Adapter\Adapter($db['driver']);
+                /*
+                 * CredentialTreatmentAdapterを使った例
                 $authAdapter = new \Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter(
                             $dbAdapter, //DbAdapter $zendDb,
                             $db['table_name'],//$tableName = null,
                             $db['identity_column'],//$identityColumn = null,
                             $db['credential_column'],//$credentialColumn = null,
                             $db['credential_treatment']//$credentialTreatment = null
+                        );
+                 *
+                 */
+                $authAdapter = new \Zend\Authentication\Adapter\DbTable\CallbackCheckAdapter(
+                            $dbAdapter, //DbAdapter $zendDb,
+                            $db['table_name'],//$tableName = null,
+                            $db['identity_column'],//$identityColumn = null,
+                            $db['credential_column'],//$credentialColumn = null,
+                            function($dbCredential, $feedCredential) {
+                                return ($dbCredential === \Flower\Hash\Hash1::hash($feedCredential, 'FlowerTest'));
+                            }
                         );
                 return $authAdapter;
             }
@@ -53,11 +66,11 @@ return array(
     ),
     'flower_resource_manager' => array(
         'resource_plugin_manager' => $resourcePluginManagerServiceName,
-        //reserve configuration 
+        //reserve configuration
         /**
          * class => マネージャークラスを換装できる
          * その他はResource\Manager\Config経由でconfigureされるオプション
-         * 
+         *
          */
         //@see http://framework.zend.com/manual/2.2/en/modules/zend.cache.storage.adapter.html
         'cache_storage' => array(
