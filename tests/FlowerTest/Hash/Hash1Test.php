@@ -7,6 +7,25 @@ use Flower\Hash\Hash1;
  */
 class Hash1Test extends \PHPUnit_Framework_TestCase
 {
+
+    public function tearDown()
+    {
+        $ref = new \ReflectionClass('Flower\Hash\Hash1');
+        $prop = $ref->getProperty('salt');
+        $prop->setAccessible(true);
+        $prop->setValue(null);
+    }
+    /**
+     * @covers Flower\Hash\Hash1::createNewPassword
+     */
+    public function testCreateNewPassword()
+    {
+        $password = Hash1::createNewPassword();
+        $matches = array();
+        $this->assertEquals(1, preg_match('/^[a-z][]a-zA-Z0-9#$-=?@[_]{9}$/', $password, $matches));
+        $this->assertEquals($matches[0], $password);
+    }
+
     /**
      * @covers Flower\Hash\Hash1::getSalt
      */
@@ -32,5 +51,20 @@ class Hash1Test extends \PHPUnit_Framework_TestCase
         // dummy
         //How to test?
         $this->assertEquals(Hash1::hash($credential, 'prefix'), Hash1::hash($credential, 'prefix'));
+    }
+
+    /**
+     * builtinのsaltに変更がないかを確認
+     * もし変更があれば結果も異なる。
+     */
+    public function testCheckBuiltInSalt()
+    {
+        $this->assertEquals('ff5a0b84a8e2d61249928bd49c077ea0', \Flower\Module::getSalt());
+    }
+
+    public function testBuiltInHash()
+    {
+        $credential = 'apple';
+        $this->assertEquals('b19d268b36913dd2775aa2a9dc14e460756632bff6d491b5aaf69cb97f862d2b', Hash1::hash($credential, 'FlowerTest'));
     }
 }

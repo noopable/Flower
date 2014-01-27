@@ -21,6 +21,44 @@ class Hash1 {
 
     protected static $salt;
 
+    /**
+     * @param int $length
+     */
+    public static function createNewPassword($length = 10, $charList = null)
+    {
+        if (null === $charList) {
+            $charArray = array(
+                'abcdefghijkmnopqrtuwxy',
+                'ABCDEFGHJKLMNPQRSTUVWXYZ',
+                '123456789',
+                '#$-=?@[]_',
+            );
+            $charList = implode('', $charArray);
+        } elseif (is_string($charList)) {
+            $charArray = array($charList);
+        }
+
+        $result = array();
+        $i = 1;
+        $indexes = range(1, $length);
+        $iterator = new \ArrayIterator($charArray);
+
+        while (count($indexes)) {
+            $list = $iterator->current();
+            $i = array_shift($indexes);
+            $result[$i] = substr($list, rand(0, strlen($list) -1), 1);
+            shuffle($indexes);
+            $iterator->next();
+            if (! $iterator->valid()) {
+                shuffle($charArray);
+                $iterator = new \ArrayIterator($charArray);
+                $iterator->rewind();
+            }
+        }
+        ksort($result);
+        return implode('', $result);
+    }
+
     public static function getSalt()
     {
         if (isset(self::$salt)) {
@@ -46,7 +84,7 @@ class Hash1 {
         $len = strlen($str);
         $counter = ($len > 16) ? 5 : $max - $len;
         do {
-            $str = sha1($prefix . $str . $salt);
+            $str = hash('sha256', sha1($prefix . $str . $salt) . $salt);
         } while (--$counter > 0);
 
         return $str;
