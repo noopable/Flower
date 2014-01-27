@@ -33,34 +33,40 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
      * @var boolean
      */
     protected $isAuthenticated = false;
-    
+
+    /**
+     * is in authenticated session or not
+     * @var boolean
+     */
+    protected $isLoggedIn;
+
     /**
      *　認証された正規クライアントかどうか
      * @var boolean
      */
     protected $isValidClient;
-    
+
     protected $authResult;
-    
+
     protected $role;
-    
+
     protected $acl;
-    
+
     protected $builtInRoles;
-    
+
     public function __construct(ServiceConfig $config = null)
     {
         if (null !== $config) {
             $config->configure($this);
         }
-        
+
         $this->builtInRoles = array(
             RoleMapperInterface::BUILT_IN_AUTHENTICATED_CLIENT,
             RoleMapperInterface::BUILT_IN_CURRENT_CLIENT_AGGREGATE,
             RoleMapperInterface::BUILT_IN_NOT_AUTHENTICATED_CLIENT,
         );
     }
-    
+
     /**
      * @todo EventベースにしてStorageでresultを保存する？
      * @return type
@@ -70,7 +76,7 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
         if ($this->isAuthenticated) {
             return;
         }
-        
+
         $authService = $this->getAuthService();
         $adapter = $authService->getAdapter();
         if ($adapter instanceof AbstractAdapter) {
@@ -93,31 +99,60 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
         $this->isValidClient = $result->isValid();
         $this->authResult = $result;
         $identity = $result->getIdentity();
-        
+
         if ($this->isValidClient) {
+            $this->isLoggedIn = true;
             $role = $this->getRoleMapper()->getRole($identity);
         } else {
             $role = $this->getRoleMapper()->getRole(null);
         }
-        
+
         $this->setRole($role);
-        
+
         $this->injectRoleToAcl($role, $this->getAcl());
-        
+
         return $this->isValidClient;
     }
-    
+
+    public function isLoggedIn()
+    {
+        if (isset($this->isLoggedIn)) {
+            return $this->isLoggedIn;
+        }
+
+        $this->isLoggedIn = false;
+
+        if ($identity = $this->getIdentity()) {
+            $role = $this->getRoleMapper()->getRole($identity);
+            $this->setRole($role);
+            $this->injectRoleToAcl($role, $this->getAcl());
+
+            $this->isLoggedIn = true;
+        }
+
+        return $this->isLoggedIn;
+    }
+
+    public function getIdentity()
+    {
+        $authService = $this->getAuthService();
+        if (! isset($authService) || ! $authService->hasIdentity()) {
+            return;
+        }
+
+        return $authService->getIdentity();
+    }
     /**
      * $authResult = $authService->authenticate() ;
      * $authResult->(isValid | getIdentity | getMessages | getCode )();
-     * 
+     *
      * @return \Zend\Authentication\Result
      */
     public function getAuthResult()
     {
         return $this->authResult;
     }
-    
+
     /**
      * getResultRowObject() - Returns the result row as a stdClass object
      * パスワードカラムを除外したいときは、$omitColumnsに定義する
@@ -133,7 +168,7 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
             return $res;
         }
     }
-    
+
     public function setRole(RoleInterface $role)
     {
         $this->role = $role;
@@ -141,40 +176,50 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
             $this->injectRoleToAcl($role, $this->acl);
         }
     }
-    
-    public function getRole()
+
+    public function getRole($withAuthenticate = false)
     {
         //ロールが設定されていればそれを返す。
         if (isset($this->role)) {
             return $this->role;
         }
-        
-        if (!isset($this->authService)) {
-            throw new RuntimeException('there is no role and authentication service');
+
+        if ($this->isLoggedIn()) {
+            $role = $this->getRoleMapper()->getRole($this->getIdentity());
+            $this->setRole($role);
+            $this->injectRoleToAcl($role, $this->getAcl());
+            return $this->role;
+        } elseif ($withAuthenticate) {
+            if (!isset($this->authService)) {
+                throw new RuntimeException('there is no role and authentication service');
+            }
+            $this->authenticate();
+        } else {
+            $role = $this->getRoleMapper()->getRole(null);
+            $this->setRole($role);
+            $this->injectRoleToAcl($role, $this->getAcl());
         }
-        
-        $this->authenticate();
 
         return $this->role;
     }
-    
+
     public function getCurrentClientData()
     {
         $resourceStorage = $this->getResourceStorage();
         if (null === $resourceStorage) {
             return null;
         }
-        
+
         $identity = $this->getAuthService()->getIdentity();
         if (null === $identity) {
             return null;
         }
         //be sure
         $resourceStorage->setIdentity($identity);
-        
+
         return $resourceStorage->getCurrentClientData();
     }
-    
+
     public function setAcl(Acl $acl)
     {
         $this->injectBuiltInRoles($acl);
@@ -183,7 +228,7 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
         }
         $this->acl = $acl;
     }
-    
+
     public function getAcl()
     {
         if (!isset($this->acl)) {
@@ -194,7 +239,7 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
         }
         return $this->acl;
     }
-    
+
     public function injectBuiltInRoles($acl)
     {
         if (!isset($this->builtInRoles)) {
@@ -207,7 +252,7 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
         }
         return $acl;
     }
-    
+
     public function injectRoleToAcl($role, $acl)
     {
         if (!$acl->hasRole($role)) {
@@ -219,7 +264,7 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
             }
         }
     }
-    
+
     public function wrap($name, $instance)
     {
         if (!$this->isUnderAccessControl($name)) {
@@ -227,7 +272,7 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
         }
         return $this->getAccessControlWrapper()->wrap($instance, $this->getMethodPrivilegeMap($name));
     }
-    
+
     /**
      * Returns true if and only if the Role has access to the Resource
      *

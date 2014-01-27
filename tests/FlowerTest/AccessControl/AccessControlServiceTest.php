@@ -50,18 +50,18 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
                 ->method('isValid')
                 ->will($this->returnValue(true));
         $acl = $this->getMock('Zend\Permissions\Acl\Acl');
-                
+
         $authService = $this->getMock('Zend\Authentication\AuthenticationService');
         $authService->expects($this->once())
                 ->method('authenticate')
                 ->will($this->returnValue($result));
-        
+
         $this->object->setAcl($acl);
         $this->object->setAuthService($authService);
         $this->object->authenticate();
         return array('object' => $this->object, 'result' => $result);
     }
-    
+
         /**
      * @covers Flower\AccessControl\AccessControlService::authenticate
      */
@@ -79,7 +79,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
                 ->method('isValid')
                 ->will($this->returnValue(true));
         $acl = $this->getMock('Zend\Permissions\Acl\Acl');
-        
+
         $adapter = $this->getMock('Zend\Authentication\Adapter\AbstractAdapter');
         $adapter->expects($this->once())
                 ->method('setIdentity')
@@ -94,13 +94,74 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $authService->expects($this->once())
                 ->method('authenticate')
                 ->will($this->returnValue($result));
-        
+
         $this->object->setAcl($acl);
         $this->object->setAuthService($authService);
         $res = $this->object->authenticate($identity, $credential);
         $this->assertTrue($res);
     }
-    
+
+    /**
+     * @covers Flower\AccessControl\AccessControlService::isLoggedIn
+     */
+    public function testIsLoggedInSuccessAndCache()
+    {
+        $identity = 'foo';
+        $authService = $this->getMock('Zend\Authentication\AuthenticationService');
+        $authService->expects($this->once())
+                ->method('hasIdentity')
+                ->will($this->returnValue(true));
+        $authService->expects($this->once())
+                ->method('getIdentity')
+                ->will($this->returnValue($identity));
+        $acl = $this->getMock('Zend\Permissions\Acl\Acl');
+        $this->object->setAcl($acl);
+        $this->object->setAuthService($authService);
+        $this->assertTrue($this->object->isLoggedIn());
+        $this->assertTrue($this->object->isLoggedIn());
+    }
+    /**
+     * @covers Flower\AccessControl\AccessControlService::isLoggedIn
+     */
+    public function testIsLoggedInFailAndCache()
+    {
+        $authService = $this->getMock('Zend\Authentication\AuthenticationService');
+        $authService->expects($this->once())
+                ->method('hasIdentity')
+                ->will($this->returnValue(false));
+        $acl = $this->getMock('Zend\Permissions\Acl\Acl');
+        $this->object->setAcl($acl);
+        $this->object->setAuthService($authService);
+        $this->assertFalse($this->object->isLoggedIn());
+        $this->assertFalse($this->object->isLoggedIn());
+    }
+
+    /**
+     * @covers Flower\AccessControl\AccessControlService::getIdentity
+     */
+    public function testGetIdentity()
+    {
+        $authService = $this->getMock('Zend\Authentication\AuthenticationService');
+        $authService->expects($this->once())
+                ->method('hasIdentity')
+                ->will($this->returnValue(false));
+        $this->object->setAuthService($authService);
+        $this->assertNull($this->object->getIdentity());
+    }
+
+    public function getIdentitySuccess()
+    {
+        $identity = 'foo';
+        $authService = $this->getMock('Zend\Authentication\AuthenticationService');
+        $authService->expects($this->once())
+                ->method('hasIdentity')
+                ->will($this->returnValue(true));
+        $authService->expects($this->once())
+                ->method('getIdentity')
+                ->will($this->returnValue($identity));
+        $this->assertEquals($identity, $this->object->getIdentity());
+    }
+
     /**
      * @depends testAuthenticate
      * @covers Flower\AccessControl\AccessControlService::getAuthResult
@@ -129,7 +190,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setRole($role);
         $this->assertSame($role, $this->object->getRole());
     }
-    
+
     /**
      * @expectedException Flower\AccessControl\Exception\RuntimeException
      */
@@ -137,7 +198,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->object->getRole();
     }
-    
+
     /**
      * @covers Flower\AccessControl\AccessControlService::setAcl
      */
@@ -147,7 +208,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setAcl($acl);
         $this->assertSame($acl, TestTool::getPropertyValue($this->object, 'acl'));
     }
-    
+
     public function testHasBuiltInRoles()
     {
         $builtInRoles = TestTool::getPropertyValue($this->object, 'builtInRoles');
@@ -156,7 +217,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertContains(RoleMapperInterface::BUILT_IN_CURRENT_CLIENT_AGGREGATE, $builtInRoles);
         $this->assertContains(RoleMapperInterface::BUILT_IN_NOT_AUTHENTICATED_CLIENT, $builtInRoles);
     }
-    
+
     /**
      * @depends testHasBuiltInRoles
      * @covers Flower\AccessControl\AccessControlService::injectBuiltInRoles
@@ -178,9 +239,9 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
                 ->with($this->callback(function ($param) use ($roles) { return in_array($param, $roles);}));
         $this->object->injectBuiltInRoles($acl);
     }
-    
+
     /**
-     * 
+     *
      * @depends testInjectBuiltInRoles
      */
     public function testSetAclInjectBuiltInRoles()
@@ -200,7 +261,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
                 ->with($this->callback(function ($param) use ($roles) { return in_array($param, $roles);}));
         $this->object->setAcl($acl);
     }
-    
+
     /**
      * @expectedException Flower\AccessControl\Exception\RuntimeException
      * @covers Flower\AccessControl\AccessControlService::getAcl
@@ -209,7 +270,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->object->getAcl();
     }
-    
+
     /**
      * @depends testSetAcl
      * @covers Flower\AccessControl\AccessControlService::getAcl
@@ -220,7 +281,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setAcl($acl);
         $this->assertSame($acl, $this->object->getAcl());
     }
-    
+
     /**
      * @covers Flower\AccessControl\AccessControlService::injectRoleToAcl
      */
@@ -233,10 +294,10 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $acl->expects($this->once())
                 ->method('addRole')
                 ->with($role, $parents);
-        
+
         $this->object->injectRoleToAcl($role, $acl);
     }
-    
+
     /**
      * @covers Flower\AccessControl\AccessControlService::injectRoleToAcl
      */
@@ -247,10 +308,10 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $acl->expects($this->once())
                 ->method('addRole')
                 ->with($role);
-        
+
         $this->object->injectRoleToAcl($role, $acl);
     }
-    
+
     /**
      * @covers Flower\AccessControl\AccessControlService::wrap
      * @todo   Implement testWrap().
@@ -271,7 +332,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $res = $this->object->wrap('stdClass', $service);
         $this->assertSame($response, $res);
     }
-    
+
     public function testWrapNotUnderControl()
     {
         $service = new \stdClass;
@@ -299,7 +360,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
          */
         $this->assertFalse($acl->isAllowed($role, $resource, null));
         $this->assertFalse($this->object->isAllowed($resource, null));
-        
+
         $acl->allow($role, $resource, 'publish');
         $this->assertTrue($acl->isAllowed($role, $resource, 'publish'));
         $this->assertTrue($this->object->isAllowed($resource, 'publish'));
@@ -325,7 +386,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setAuthService($authService);
         $this->assertSame($authService, $this->object->getAuthService());
     }
-    
+
     /**
      * @depends testSetAuthService
      * @covers Flower\AccessControl\AccessControlService::getRole
@@ -342,17 +403,17 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
                 ->method('isValid')
                 ->will($this->returnValue(true));
         $acl = $this->getMock('Zend\Permissions\Acl\Acl');
-                
+
         $authService = $this->getMock('Zend\Authentication\AuthenticationService');
         $authService->expects($this->once())
                 ->method('authenticate')
                 ->will($this->returnValue($result));
-        
+
         $this->object->setAcl($acl);
         $this->object->setAuthService($authService);
-        $this->object->getRole();
+        $this->object->getRole(true);
     }
-    
+
     /**
      * @covers Flower\AccessControl\AccessControlService::getCurrentClientData
      */
@@ -376,7 +437,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $res = $this->object->getCurrentClientData();
         $this->assertSame($data, $res);
     }
-    
+
     /**
      * @covers Flower\AccessControl\AccessControlService::setRoleMapper
      */
@@ -397,7 +458,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setRoleMapper($roleMapper);
         $this->assertSame($roleMapper, $this->object->getRoleMapper());
     }
-    
+
     /**
      * @covers Flower\AccessControl\AccessControlService::setResourceStorage
      */
@@ -417,7 +478,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setResourceStorage($resourceStorage);
         $this->assertSame($resourceStorage, $this->object->getResourceStorage());
     }
-    
+
     /**
      * @covers Flower\AccessControl\AccessControlService::setResourceManager
      */
@@ -437,7 +498,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setResourceManager($manager);
         $this->assertSame($manager, $this->object->getResourceManager());
     }
-    
+
     /**
      * @covers Flower\AccessControl\AccessControlService::setAccessControlWrapper
      * @todo   Implement testSetAccessControlWrapper().
@@ -503,7 +564,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setMethodPrivilegeMaps($maps);
         $this->assertEquals($maps['Foo/Bar'], $this->object->getMethodPrivilegeMap('Foo/Bar'));
     }
-    
+
     /**
      * @depends testGetMethodPrivilegeMap
      * @covers Flower\AccessControl\AccessControlService::addMethodPrivilegeMap
@@ -610,14 +671,14 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setAclLoader($aclLoader);
         $this->assertSame($aclLoader, $this->object->getAclLoader());
     }
-    
+
     public function testGetAclLoaderWithAclScriptPath()
     {
         $this->object->setAclScriptPath(__DIR__);
         $aclLoader = $this->object->getAclLoader();
         $this->assertInstanceOf('Flower\AccessControl\AclLoader', $aclLoader);
     }
-    
+
     /**
      * @depends testGetAclLoader
      * @covers Flower\AccessControl\AccessControlService::getAcl
@@ -634,7 +695,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setAclLoader($aclLoader);
         $this->assertSame($acl, $this->object->getAcl());
     }
-    
+
     /**
      * @covers Flower\AccessControl\AccessControlService::setAclScriptPath
      * @covers Flower\AccessControl\ACSSetterGetterTrait::setAclScriptPath
@@ -657,7 +718,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setAclScriptPath($aclScript);
         $this->assertEquals($aclScript, $this->object->getAclScriptPath());
     }
-    
+
     /**
      * @covers Flower\AccessControl\AccessControlService::setAuthResultReturnColumns
      * @covers Flower\AccessControl\ACSSetterGetterTrait::setAuthResultReturnColumns
@@ -679,7 +740,7 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setAuthResultOmitColumns($columns);
         $this->assertEquals($columns, TestTool::getPropertyValue($this->object,'omitColumns'));
     }
-    
+
     /**
      * @covers Flower\AccessControl\AccessControlService::getAuthResultRowObject
      */
@@ -704,5 +765,5 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->object->setAuthService($authService);
         $this->object->getAuthResultRowObject($returnColumns, $omitColumns);
     }
-    
+
 }
