@@ -41,8 +41,14 @@ class Module
     public static function getSalt()
     {
         $path = __DIR__ . '/data/salt.php';
+        $distPath = __DIR__ . '/data/salt.php.dist';
         if (! is_readable($path)) {
-            throw new RuntimeException('Please set salt in '. $path);
+            error_log('please set your salt in ' . $path, E_USER_NOTICE);
+            if (! is_readable($distPath)) {
+                throw new RuntimeException('Please set salt in '. $path);
+            } else {
+                return include($distPath);
+            }
         }
         return include($path);
     }
