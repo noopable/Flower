@@ -16,6 +16,12 @@ use ArrayObject;
  */
 abstract class AbstractEntity extends ArrayObject
 {
+    /**
+     * column aliases
+     * key = material name
+     * value = logical name
+     * @var array
+     */
     protected $columns = array();
     /**
      *
@@ -33,6 +39,12 @@ abstract class AbstractEntity extends ArrayObject
      */
     abstract public function getIdentifier();
 
+    /**
+     * convert material name to logical name
+     * if not in_set columns return material name
+     * @param type $key
+     * @return type
+     */
     public function column($key)
     {
         if (isset($this->columns[$key])) {
@@ -40,4 +52,13 @@ abstract class AbstractEntity extends ArrayObject
         }
         return $key;
     }
+
+    public function offsetGet($name)
+    {
+        if (! $this->offsetExists($name)) {
+            return null;
+        }
+        return parent::offsetGet($name);
+    }
+    
 }
