@@ -34,4 +34,13 @@ interface PaneInterface extends RecursiveIterator
     public function setBegin($begin);
 
     public function setEnd($end);
+
+    public function setOptions(array $options);
+
+    public function getOptions();
+
+    public function setOption($name, $option);
+
+    public function getOption($name);
+
 }

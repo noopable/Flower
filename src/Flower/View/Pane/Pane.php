@@ -44,6 +44,8 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
 
     public $tag = 'div';
 
+    protected $options;
+
     public function __construct(Pane $parent = null)
     {
         if (null !== $parent) {
@@ -92,6 +94,35 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
     public function setEnd($end)
     {
         $this->end = $end;
+    }
+
+    public function getOption($name)
+    {
+        if (! isset($this->options[$name])) {
+            return;
+        }
+        return $this->options[$name];
+    }
+
+    public function getOptions()
+    {
+        if (!isset($this->options)) {
+            return array();
+        }
+        return $this->options;
+    }
+
+    public function setOption($name, $option)
+    {
+        if (!isset($this->options)) {
+            $this->options = array();
+        }
+        $this->options[$name] = $option;
+    }
+
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
     }
 
 }
