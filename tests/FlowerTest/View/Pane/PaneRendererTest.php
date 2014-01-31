@@ -1,14 +1,16 @@
 <?php
 
-namespace FlowerTest\View;
 /*
  *
  *
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
+
+namespace FlowerTest\View;
+
+use Flower\Test\TestTool;
 use Flower\View\Pane\PaneRenderer;
-use Flower\View\Pane\Pane;
 use Flower\View\Pane\Builder;
 
 /**
@@ -38,7 +40,7 @@ class PaneRendererTest extends \PHPUnit_Framework_TestCase
     {
     }
 
-    
+
     public function testRender()
     {
         $paneConfig = include __DIR__ . '/TestAsset/2column.php';
@@ -76,11 +78,11 @@ class PaneRendererTest extends \PHPUnit_Framework_TestCase
   </div>
 </body>
 
-<!-- end PaneRenderer -->   
+<!-- end PaneRenderer -->
 EOD;
         $this->assertXmlStringEqualsXmlString($expected, (string) $paneRenderer);
     }
-    
+
    public function testRenderWithSize()
     {
         $paneConfig = include __DIR__ . '/TestAsset/2column_size.php';
@@ -130,15 +132,15 @@ EOD;
   </div>
 </div>
 <!-- end pane -->
-<!-- end PaneRenderer -->   
+<!-- end PaneRenderer -->
 EOD;
         $this->assertXmlStringEqualsXmlString($expected, (string) $paneRenderer);
     }
-    
+
     public function testMustNotRenderNoVar()
     {
         $builder =new Builder;
-        $expected = 
+        $expected =
 '<!-- begin PaneRenderer -->
 <div>
 </div>
@@ -153,152 +155,247 @@ EOD;
         $paneRenderer = new PaneRenderer($pane);
         $this->assertXmlStringEqualsXmlString($expected, (string) $paneRenderer, 'checking var = "Null"');
     }
-    
+
     public function testAttributeNameOnlyRendering()
     {
         $builder =new Builder;
-        $expected = str_replace(array("\r\n","\n","\r"), '', 
+        $expected = str_replace(array("\r\n","\n","\r"), '',
 '<!-- begin PaneRenderer -->
 <div ng-view>
 </div>
 <!-- end PaneRenderer -->'
 );
-        
+
         $pane = $builder->build(array('attributes' => ['ng-view' => null]));
         $paneRenderer = new PaneRenderer($pane);
         $actual = str_replace(array("\r\n","\n","\r"), '', (string) $paneRenderer);
         $this->assertEquals($expected, $actual);
     }
+
     /**
      * @covers Flower\View\PaneRenderer::setVars
-     * @todo   Implement testSetVars().
      */
     public function testSetVars()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
+        $vars = array(
+            'foo' => 'bar',
+            'bar' => 'baz',
         );
+        $builder =new Builder;
+        $pane = $builder->build(array('var' => false));
+        $paneRenderer = new PaneRenderer($pane);
+        $paneRenderer->setVars($vars);
+        $this->assertEquals($vars, TestTool::getPropertyValue($paneRenderer, 'vars'));
     }
 
     /**
      * @covers Flower\View\PaneRenderer::getVars
-     * @todo   Implement testGetVars().
      */
     public function testGetVars()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
+        $vars = array(
+            'foo' => 'bar',
+            'bar' => 'baz',
         );
+        $builder =new Builder;
+        $pane = $builder->build(array('var' => false));
+        $paneRenderer = new PaneRenderer($pane);
+        $paneRenderer->setVars($vars);
+        $this->assertEquals($vars, $paneRenderer->getVars());
     }
 
     /**
      * @covers Flower\View\PaneRenderer::setVar
-     * @todo   Implement testSetVar().
      */
     public function testSetVar()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
+        $vars = array(
+            'foo' => 'bar',
+            'bar' => 'baz',
         );
+        $builder =new Builder;
+        $pane = $builder->build(array('var' => false));
+        $paneRenderer = new PaneRenderer($pane);
+        $paneRenderer->setVar('foo', 'bar');
+        $paneRenderer->setVar('bar', 'baz');
+        $this->assertEquals($vars, $paneRenderer->getVars()->getArrayCopy());
     }
 
     /**
      * @covers Flower\View\PaneRenderer::setView
-     * @todo   Implement testSetView().
      */
     public function testSetView()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $view = $this->getMock('Zend\View\View');
+        $builder =new Builder;
+        $pane = $builder->build(array('var' => false));
+        $paneRenderer = new PaneRenderer($pane);
+        $paneRenderer->setView($view);
+        $this->assertSame($view, TestTool::getPropertyValue($paneRenderer, 'view'));
     }
 
     /**
      * @covers Flower\View\PaneRenderer::getView
-     * @todo   Implement testGetView().
      */
     public function testGetView()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $view = $this->getMock('Zend\View\View');
+        $builder =new Builder;
+        $pane = $builder->build(array('var' => false));
+        $paneRenderer = new PaneRenderer($pane);
+        $paneRenderer->setView($view);
+        $this->assertSame($view, $paneRenderer->getView());
     }
 
     /**
      * @covers Flower\View\PaneRenderer::beginIteration
-     * @todo   Implement testBeginIteration().
      */
     public function testBeginIteration()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $expectedString = "\n<!-- begin PaneRenderer -->\n" . 'foo';
+        $builder =new Builder;
+        $pane = $builder->build(array('begin' => 'foo'));
+        $paneRenderer = new PaneRenderer($pane);
+        $paneRenderer->beginIteration();
+        $this->expectOutputString($expectedString);
     }
 
     /**
      * @covers Flower\View\PaneRenderer::endIteration
-     * @todo   Implement testEndIteration().
      */
     public function testEndIteration()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $expectedString = 'foo' . "\n<!-- end PaneRenderer -->\n" ;
+        $builder =new Builder;
+        $pane = $builder->build(array('end' => 'foo'));
+        $paneRenderer = new PaneRenderer($pane);
+        $paneRenderer->endIteration();
+        $this->expectOutputString($expectedString);
     }
 
     /**
      * @covers Flower\View\PaneRenderer::beginChildren
-     * @todo   Implement testBeginChildren().
-     */
-    public function testBeginChildren()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
      * @covers Flower\View\PaneRenderer::endChildren
-     * @todo   Implement testEndChildren().
      */
-    public function testEndChildren()
+    public function testBeginChildrenEndChildren()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $builder =new Builder;
+        $pane = $builder->build(array('begin' => 'foo', 'end' => 'bar'));
+        $paneRenderer = new PaneRenderer($pane);
+        $paneRenderer->beginChildren();
+        echo " ";
+        $paneRenderer->endChildren();
+        $this->expectOutputString('foo bar');
     }
 
     /**
      * @covers Flower\View\PaneRenderer::current
-     * @todo   Implement testCurrent().
      */
-    public function testCurrent()
+    public function testCurrentVarUndefined()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $expected = '  <!-- start content content -->
+  <div class=\'container\'>
+    <!-- var content is not found -->
+  </div>
+  <!-- end content content -->
+';
+        $expected = str_replace(array("\n", "\r"), '', $expected);
+        $builder =new Builder;
+        $pane = $builder->build(
+                array(
+                    'begin' => 'foo',
+                    'end' => 'bar',
+                    'inner' => array('classes' => 'container'),
+                ));
+        $paneRenderer = new PaneRenderer($pane);
+        $this->assertTrue($paneRenderer->valid());
+        ob_start();
+        $paneRenderer->current();
+        $res = ob_get_clean();
+        $res = str_replace(array("\n", "\r"), '', $res);
+        $this->assertEquals($expected, $res);
+    }
+
+    /**
+     * @covers Flower\View\PaneRenderer::current
+     */
+    public function testCurrentVarDefined()
+    {
+        $expected = '  <!-- start content varName -->
+  <div class=\'container\'>
+article
+  </div>
+  <!-- end content varName -->
+';
+        $expected = str_replace(array("\n", "\r"), '', $expected);
+        $builder =new Builder;
+        $pane = $builder->build(
+                array(
+                    'begin' => 'foo',
+                    'end' => 'bar',
+                    'inner' => array(
+                        'classes' => 'container',
+                        'var' => 'varName',
+                    ),
+                ));
+        $paneRenderer = new PaneRenderer($pane);
+        $paneRenderer->setVar('varName', 'article');
+        $this->assertTrue($paneRenderer->valid());
+        ob_start();
+        $paneRenderer->current();
+        $res = ob_get_clean();
+        $res = str_replace(array("\n", "\r"), '', $res);
+        $this->assertEquals($expected, $res);
+    }
+
+    /**
+     * @covers Flower\View\PaneRenderer::current
+     */
+    public function testCurrentVarClosure()
+    {
+        $expected = '  <!-- start content Closure -->
+  <div class=\'container\'>
+article
+  </div>
+  <!-- end content Closure -->
+';
+        $expected = str_replace(array("\n", "\r"), '', $expected);
+        $builder =new Builder;
+        $pane = $builder->build(
+                array(
+                    'begin' => 'foo',
+                    'end' => 'bar',
+                    'inner' => array(
+                        'classes' => 'container',
+                        'var' => function($ren) { return 'article';},
+                    ),
+                ));
+        $paneRenderer = new PaneRenderer($pane);
+        $paneRenderer->setVar('varName', 'article');
+        $this->assertTrue($paneRenderer->valid());
+        ob_start();
+        $paneRenderer->current();
+        $res = ob_get_clean();
+        $res = str_replace(array("\n", "\r"), '', $res);
+        $this->assertEquals($expected, $res);
     }
 
     /**
      * @covers Flower\View\PaneRenderer::__toString
-     * @todo   Implement test__toString().
      */
-    public function test__toString()
+    public function test__toStringSimple()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $builder =new Builder;
+        $pane = $builder->build(array('begin' => 'foo', 'end' => 'bar'));
+        $paneRenderer = new PaneRenderer($pane);
+        //$this->assertTrue($paneRenderer->valid());
+        //$paneRenderer->current();
+        $expected = '
+<!-- begin PaneRenderer -->
+foobar
+<!-- end PaneRenderer -->
+';
+        $this->assertEquals(str_replace(array("\n","\r"),'', $expected), str_replace(array("\n","\r"), '', (string) $paneRenderer));
     }
 
 }

@@ -171,13 +171,13 @@ class Builder
          }
 
          if (isset($config['end'])) {
-             $current->setEnd((string) $config['end'] . PHP_EOL);
+             $current->setEnd((string) $config['end']);
          }
          elseif(! strlen($current->tag)) {
-             $current->setEnd('<!-- end pane -->' . PHP_EOL);
+             $current->setEnd('<!-- end pane -->');
          }
          else {
-             $current->setEnd('</' . $current->tag . '>' . PHP_EOL);
+             $current->setEnd('</' . $current->tag . '>');
          }
 
          return $current;

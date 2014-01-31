@@ -102,7 +102,7 @@ class PaneRenderer extends RecursiveIteratorIterator
             echo $indent . parent::current()->begin();
             echo $innerIndent . "<!-- var is omitted -->\n";
             echo $indent . parent::current()->end();
-            return null;
+            return;
         }
 
         if (is_string($var)) {
@@ -116,14 +116,14 @@ class PaneRenderer extends RecursiveIteratorIterator
                 echo $innerIndent . "<!-- var $var is not found -->\n";
             }
             echo $indent . parent::current()->end();
-            echo $indent . "<!-- end content $var -->\n";
+            echo "\n" . $indent . "<!-- end content $var -->\n";
         }
         elseif ($var instanceof Closure) {
             echo $indent . "<!-- start content Closure -->\n";
             echo $indent . parent::current()->begin();
             echo $var($this);
             echo $indent . parent::current()->end();
-            echo $indent . "<!-- end content Closure -->\n";
+            echo $indent . "\n<!-- end content Closure -->\n";
         }
         else {
             echo get_class($var);
