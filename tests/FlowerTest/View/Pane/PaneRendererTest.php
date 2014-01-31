@@ -319,6 +319,31 @@ EOD;
     /**
      * @covers Flower\View\PaneRenderer::current
      */
+    public function testCurrentVarIsOmitted()
+    {
+        $expected = '  <div class=\'container\'>    <!-- var is omitted -->  </div>';
+        $builder =new Builder;
+        $pane = $builder->build(
+                array(
+                    'begin' => 'foo',
+                    'end' => 'bar',
+                    'inner' => array(
+                        'classes' => 'container',
+                        'var' => null,
+                    ),
+                ));
+        $paneRenderer = new PaneRenderer($pane);
+        $this->assertTrue($paneRenderer->valid());
+        ob_start();
+        $paneRenderer->current();
+        $res = ob_get_clean();
+        $res = str_replace(array("\n", "\r"), '', $res);
+        $this->assertEquals($expected, $res);
+    }
+
+    /**
+     * @covers Flower\View\PaneRenderer::current
+     */
     public function testCurrentVarDefined()
     {
         $expected = '  <!-- start content varName -->
