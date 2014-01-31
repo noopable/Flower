@@ -13,5 +13,6 @@ namespace Flower\View\Pane\Exception;
  *
  * @author tomoaki
  */
-class PaneClassNotFoundException implements \Flower\Exception\RuntimeException{
+class PaneClassNotFoundException implements \Flower\Exception\RuntimeException
+{
 }

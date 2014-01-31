@@ -1,5 +1,5 @@
 <?php
-namespace Flower\View\Pane;
+
 /*
  *
  *
@@ -7,32 +7,36 @@ namespace Flower\View\Pane;
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
+namespace Flower\View\Pane;
+
 use Zend\Stdlib\ArrayUtils;
 use Zend\Escaper\Escaper;
 use Flower\Exception\IllegalClassException;
+
 /**
  * Description of Builder
  *
  * @author tomoaki
  */
-class Builder {
+class Builder
+{
     protected $paneClass = 'Flower\View\Pane\Pane';
 
     protected $sizeToClassFunction;
-    
+
     protected $escaper;
-    
+
     public function __construct($options = array())
     {
         if (isset($options['pane_class'])) {
             $this->paneClass = $options['pane_class'];
         }
-        
+
         if (isset($options['size_to_class_function']) && is_callable($options['size_to_class_function'])) {
             $this->sizeToClassFunction = $options['size_to_class_function'];
         }
     }
-    
+
     public function setPaneClass($pane)
     {
         if ($pane instanceof PaneInterface) {
@@ -43,20 +47,20 @@ class Builder {
             }
             $this->paneClass = $pane;
         }
-        
+
         return $this;
     }
-    
+
 
     /**
      * これから作成しようとするPaneの設定を$configに配列で渡す。
      * 設定から直接Paneをビルドするときは、$current = nullとして渡す。
      * 既存のPaneがあり、子を追加したいときには、$current = $parentPaneとして渡す
-     * 
+     *
      * 出来上がったPane　$currentを返します。
-     * 
+     *
      * @param array $config pane structure configuration
-     * @param PaneInterface|null $current 
+     * @param PaneInterface|null $current
      * @return PaneInterface
      */
     public function build(array $config, PaneInterface $current = null)
@@ -64,7 +68,7 @@ class Builder {
         if (null === $current) {
             $current = $this->getNewPane();
         }
-        
+
         foreach ($config as $k => $v) {
             if ($v instanceof Pane) {
                 //direct pane insert ,ignore $type
@@ -85,7 +89,7 @@ class Builder {
                     break;
                 case "id":
                 case "tag":
-                    $current->$k = (string) $v;
+                    $current->$k = preg_replace('/[^a-z_:]+[^a-z0-9-_:]*/i', '', (string)$v);
                     break;
                 case "classes":
                 case "attributes":
@@ -113,10 +117,10 @@ class Builder {
             }
         }
         if (isset($config['begin'])) {
-            $current->begin = (string) $config['begin'];
+            $current->setBegin((string) $config['begin']);
         }
         elseif(! strlen($current->tag)) {
-            $current->begin = '<!-- start pane -->' . PHP_EOL;
+            $current->setBegin('<!-- start pane -->' . PHP_EOL);
         }
         else {
             $attributes = $current->attributes ?: array();
@@ -143,33 +147,33 @@ class Builder {
                 }
             }
             if (strlen($attributeString)) {
-                $current->begin = sprintf('<%s%s>', $current->tag, $attributeString) . PHP_EOL;
+                $current->setBegin(sprintf('<%s%s>', $current->tag, $attributeString) . PHP_EOL);
             }
             else {
-                $current->begin = sprintf('<%s>', $current->tag) . PHP_EOL;
+                $current->setBegin(sprintf('<%s>', $current->tag) . PHP_EOL);
             }
          }
 
          if (isset($config['end'])) {
-             $current->end = (string) $config['end'] . PHP_EOL;
+             $current->setEnd((string) $config['end'] . PHP_EOL);
          }
          elseif(! strlen($current->tag)) {
-             $current->end = '<!-- end pane -->' . PHP_EOL;
+             $current->setEnd('<!-- end pane -->' . PHP_EOL);
          }
          else {
-             $current->end = '</' . $current->tag . '>' . PHP_EOL;
+             $current->setEnd('</' . $current->tag . '>' . PHP_EOL);
          }
-         
+
          return $current;
     }
-    
+
     public function getNewPane()
     {
         return new $this->paneClass;
     }
-    
+
     /**
-     * 
+     *
      * @param type $class
      * @param array $attributes
      */
@@ -178,18 +182,18 @@ class Builder {
         $aClass = explode(' ', $class);
         array_map(array($this->getEscaper(), 'escapeHtmlAttr'), $aClass);
         $class = implode(' ', $aClass);
-        
+
         if (!isset($attributes['class']) || !strlen($attributes['class'])) {
             $attributes['class'] = $class;
         } else {
             $attributes['class'] .= ' ' . $class;
         }
     }
-    
+
     /**
      * for util
-     * pane size to class 
-     * 
+     * pane size to class
+     *
      * @param mixed $size
      * @return string $class
      */
@@ -205,7 +209,7 @@ class Builder {
         }
         return $class;
     }
-    
+
     protected function getEscaper()
     {
         if (!isset($this->escaper)) {

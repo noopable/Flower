@@ -34,28 +34,11 @@ class PaneTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        
-    }
 
-    /**
-     * @covers Flower\View\Pane\Pane::build
-     */
-    public function testBuild()
-    {
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-        $paneConfig = array('tag' => '','inner' => array('classes' => 'container'));
-        $this->object->build($paneConfig);
-        
-        $this->assertFalse($this->object->hasChildren());
-        $children = $this->object->current();
-        $this->assertInstanceOf('Flower\View\Pane\Pane', $children);
     }
 
     /**
      * @covers Flower\View\Pane\Pane::getOrder
-     * @todo   Implement testGetOrder().
      */
     public function testGetOrder()
     {
@@ -77,7 +60,43 @@ class PaneTest extends \PHPUnit_Framework_TestCase
         //RecursiveIterator must return a current entry has child
         $this->object->current()->insert(new \Flower\View\Pane\Pane);
         $this->assertTrue($this->object->hasChildren());
-        
+
+    }
+
+    /**
+     * @covers Flower\View\Pane\Pane::setBegin
+     */
+    public function testSetBegin()
+    {
+        $this->object->setBegin('foo');
+        $this->assertEquals('foo', $this->object->begin);
+    }
+
+    /**
+     * @covers Flower\View\Pane\Pane::setEnd
+     */
+    public function testSetEnd()
+    {
+        $this->object->setEnd('bar');
+        $this->assertEquals('bar', $this->object->end);
+    }
+
+    /**
+     * @covers Flower\View\Pane\Pane::begin
+     */
+    public function testBegin()
+    {
+        $this->object->setBegin('foo');
+        $this->assertEquals('foo', $this->object->begin());
+    }
+
+    /**
+     * @covers Flower\View\Pane\Pane::end
+     */
+    public function testEnd()
+    {
+        $this->object->setEnd('bar');
+        $this->assertEquals('bar', $this->object->end());
     }
 
 }

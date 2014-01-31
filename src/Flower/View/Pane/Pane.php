@@ -1,11 +1,14 @@
 <?php
-namespace Flower\View\Pane;
+
 /*
  *
  *
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
+
+namespace Flower\View\Pane;
+
 use Flower\RecursivePriorityQueue;
 
 /**
@@ -55,7 +58,7 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
     }
 
     /**
-     * 
+     *
      * @param type $value
      * @param type $priority
      * @return type
@@ -67,8 +70,28 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
                 $priority = $value->getOrder();
             }
         }
-        
+
         return parent::insert($value, $priority);
+    }
+
+    public function begin()
+    {
+        return $this->begin;
+    }
+
+    public function end()
+    {
+        return $this->end;
+    }
+
+    public function setBegin($begin)
+    {
+        $this->begin = $begin;
+    }
+
+    public function setEnd($end)
+    {
+        $this->end = $end;
     }
 
 }

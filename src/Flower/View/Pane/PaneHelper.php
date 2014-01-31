@@ -1,13 +1,15 @@
 <?php
-namespace Flower\View\Pane;
-/*
+
+/**
  *
  *
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
-use Zend\View\Helper\AbstractHelper;
 
+namespace Flower\View\Pane;
+
+use Zend\View\Helper\AbstractHelper;
 use RecursiveIterator;
 
 /**
@@ -29,7 +31,7 @@ class PaneHelper extends AbstractHelper
     public $defaultContent = 'content';
 
     public $paneRenderer = 'Flower\View\Pane\PaneRenderer';
-    
+
     protected $builder;
 
     public function abstractFactoryPaneRenderer(RecursiveIterator $pane)
@@ -118,7 +120,7 @@ class PaneHelper extends AbstractHelper
     {
         return $this->objectKey;
     }
-    
+
     public function setBuilder(Builder $builder = null)
     {
         if (null === $builder) {
@@ -126,7 +128,7 @@ class PaneHelper extends AbstractHelper
         }
         $this->builder = $builder;
     }
-    
+
     public function getBuilder()
     {
         if (!isset($this->builder)) {
