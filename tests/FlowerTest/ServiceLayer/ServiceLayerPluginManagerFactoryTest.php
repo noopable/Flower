@@ -54,15 +54,6 @@ class ServiceLayerPluginManagerFactoryTest extends \PHPUnit_Framework_TestCase
         $accessControlService = new AccessControlService;
         $accessControlWrapper = new AccessControlWrapper;
         $authService = $this->getMock('Zend\Authentication\AuthenticationService');
-        $result = $this->getMockBuilder('Zend\Authentication\Result')
-                ->disableOriginalConstructor()
-                ->getMock();
-        $result->expects($this->once())
-                ->method('getIdentity')
-                ->will($this->returnValue('foo'));
-        $result->expects($this->once())
-                ->method('isValid')
-                ->will($this->returnValue(true));
         $accessControlService->setAuthService($authService);
         $acl = new Acl;
         $accessControlService->setAcl($acl);
@@ -73,7 +64,7 @@ class ServiceLayerPluginManagerFactoryTest extends \PHPUnit_Framework_TestCase
         $res = $this->object->createService($serviceLocator);
         $this->assertInstanceOf('Flower\ServiceLayer\ServiceLayerPluginManager', $res);
         $this->assertSame($serviceLocator, $res->getServiceLocator());
-        $wrappers = \Flower\Test\TestTool::getPropertyValue($res, 'wrappers');
+        $wrappers = TestTool::getPropertyValue($res, 'wrappers');
         $this->assertSame($accessControlService, $wrappers[0]);
 
         $service = $this->getMock('Flower\ServiceLayer\AbstractService');
