@@ -16,7 +16,11 @@ use Flower\View\Pane\Exception\PaneClassNotFoundException;
 use Flower\View\Pane\Exception\RuntimeException;
 
 /**
- * Description of Builder
+ * Paneツリーの定義配列からPaneオブジェクトツリーをビルドします。
+ * もし、対象とするPaneが多様化し、Factory過程も分岐するなら、
+ * AbstractPluginFactoryを含む形の別のBuilderを作成・使用
+ * することを検討してください。
+ * 利用使途と実装のバランスで現在はこのBuilderを使います。
  *
  * @author tomoaki
  */
