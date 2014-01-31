@@ -93,7 +93,23 @@ class Builder
                     break;
                 case "classes":
                 case "attributes":
-                    $current->$k = (array) $v;
+                    if (is_string($v)) {
+                        $v = explode(' ', $v);
+                    }
+                    $v = (array) $v;
+                    $tmp = array();
+                    foreach ($v as $key => $value) {
+                        $key = htmlspecialchars($key, ENT_QUOTES);
+                        if (null !== $value) {
+                            $value = htmlspecialchars($value, ENT_QUOTES);
+                        }
+                        $tmp[$key] = $value;
+                    }
+                    $current->$k = $tmp;
+                    break;
+                case "options":
+                    //配列型の他各種データを受け入れてよい。
+                    $current->setOptions($v);
                     break;
                 case "inner":
                     if ($v instanceof Pane) {

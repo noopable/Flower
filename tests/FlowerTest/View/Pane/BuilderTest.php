@@ -66,7 +66,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Flower\View\Pane\Builder::build
      */
-    public function testBuildFilteredValues()
+    public function testBuildFilteredTagValues()
     {
         $paneConfig = array('tag' => '-%-44dあｲi^%v','inner' => array('classes' => 'container'));
         $pane = $this->object->build($paneConfig);
@@ -77,6 +77,43 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Flower\View\Pane\PaneInterface', $children);
     }
 
+    /**
+     * @covers Flower\View\Pane\Builder::build
+     */
+    public function testBuildOptions()
+    {
+        $paneConfig = array('options' =>
+            array(
+                'foo' => new \stdClass,
+                'bar' => 'baz',
+            ));
+        $pane = $this->object->build($paneConfig);
+
+        $this->assertInstanceOf('stdClass', $pane->getOption('foo'));
+        $this->assertEquals('baz', $pane->getOption('bar'));
+    }
+   /**
+     * @covers Flower\View\Pane\Builder::build
+     */
+    public function testBuildVariousClassesOrAttributes()
+    {
+        $paneConfig = array(
+            'classes' => 'container row 2003\'s',
+            'attributes' => array(
+                'foo' => 'bar',
+                'baz' => '2003\'s',
+            ),
+            'inner' => array(
+                'classes' => 'content'
+            ));
+        $pane = $this->object->build($paneConfig);
+
+        $this->assertFalse($pane->hasChildren());
+        $this->assertEquals(array('container', 'row', '2003&#039;s'), $pane->classes);
+        $this->assertEquals(array('foo' => 'bar', 'baz' => '2003&#039;s'), $pane->attributes);
+        $children = $pane->current();
+        $this->assertInstanceOf('Flower\View\Pane\PaneInterface', $children);
+    }
     /**
      * @covers Flower\View\Pane\Builder::getNewPane
      */
