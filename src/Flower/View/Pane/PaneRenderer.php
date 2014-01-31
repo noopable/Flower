@@ -129,6 +129,13 @@ class PaneRenderer extends RecursiveIteratorIterator
             echo $indent . parent::current()->end();
             echo $indent . "\n<!-- end content Closure -->\n";
         }
+        elseif (is_callable($var)) {
+            echo $indent . "<!-- start content Callable -->\n";
+            echo $indent . parent::current()->begin();
+            echo $var($this);
+            echo $indent . parent::current()->end();
+            echo $indent . "\n<!-- end content Callable -->\n";
+        }
     }
 
     public function __toString()

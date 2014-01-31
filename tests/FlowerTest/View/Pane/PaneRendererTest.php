@@ -406,6 +406,41 @@ article
     }
 
     /**
+     * @covers Flower\View\PaneRenderer::current
+     */
+    public function testCurrentVarIsCallable()
+    {
+        $object = $this->getMock('stdClass', array('render'));
+        $object->expects($this->once())
+                ->method('render')
+                ->will($this->returnValue('article'));
+        $expected = '  <!-- start content Callable -->
+  <div class=\'container\'>
+article
+  </div>
+  <!-- end content Callable -->
+';
+        $expected = str_replace(array("\n", "\r"), '', $expected);
+        $builder =new Builder;
+        $pane = $builder->build(
+                array(
+                    'begin' => 'foo',
+                    'end' => 'bar',
+                    'inner' => array(
+                        'classes' => 'container',
+                        'var' => array($object, 'render'),
+                    ),
+                ));
+        $paneRenderer = new PaneRenderer($pane);
+        $this->assertTrue($paneRenderer->valid());
+        ob_start();
+        $paneRenderer->current();
+        $res = ob_get_clean();
+        $res = str_replace(array("\n", "\r"), '', $res);
+        $this->assertEquals($expected, $res);
+    }
+
+    /**
      * @covers Flower\View\PaneRenderer::__toString
      */
     public function test__toStringSimple()

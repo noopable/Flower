@@ -81,7 +81,7 @@ class Builder
                     $current->$k = (int) $v;
                     break;
                 case "var":
-                    if ($v instanceof \Closure || is_string($v)) {
+                    if ($v instanceof \Closure || is_string($v) || is_callable($v)) {
                         $current->$k = $v;
                     } else {
                         $current->$k = false;
