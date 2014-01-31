@@ -18,6 +18,8 @@ use Flower\RecursivePriorityQueue;
  */
 class Pane extends RecursivePriorityQueue implements PaneInterface
 {
+    protected static $factoryClass = 'Flower\View\Pane\PaneFactory';
+    
     public $id;
 
     /**
@@ -46,11 +48,8 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
 
     protected $options;
 
-    public function __construct(Pane $parent = null)
+    public function __construct()
     {
-        if (null !== $parent) {
-            $this->parent = $parent;
-        }
         parent::__construct(RecursivePriorityQueue::HAS_CHILDREN_STRICT_CONTAINS);
     }
 
@@ -123,6 +122,11 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
     public function setOptions(array $options)
     {
         $this->options = $options;
+    }
+
+    public static function getFactoryClass()
+    {
+        return self::$factoryClass;
     }
 
 }

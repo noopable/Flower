@@ -17,6 +17,11 @@ use RecursiveIterator;
  */
 interface PaneInterface extends RecursiveIterator
 {
+    /**
+     * @return PaneFactoryInterface
+     */
+    public static function getFactoryClass();
+
     public function getOrder();
 
     /**

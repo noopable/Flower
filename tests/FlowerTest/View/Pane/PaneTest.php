@@ -142,4 +142,12 @@ class PaneTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($options, $this->object->getOptions());
     }
 
+    /**
+     * @covers Flower\View\Pane\Pane::getFactoryClass
+     */
+    public function testGetFactoryClass()
+    {
+        $this->assertEquals('Flower\View\Pane\PaneFactory', Pane::getFactoryClass());
+    }
+
 }
