@@ -27,9 +27,9 @@ interface PaneInterface extends RecursiveIterator
      */
     public function insert($value, $priority = null);
 
-    public function begin();
+    public function begin($depth = null);
 
-    public function end();
+    public function end($depth = null);
 
     public function setBegin($begin);
 

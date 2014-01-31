@@ -70,20 +70,21 @@ class PaneRenderer extends RecursiveIteratorIterator
     public function beginIteration()
     {
         echo "\n<!-- begin PaneRenderer -->\n";
-        echo parent::getInnerIterator()->begin();
+        echo parent::getInnerIterator()->begin($this->getDepth());
     }
 
     public function endIteration()
     {
-        echo parent::getInnerIterator()->end();
+        echo parent::getInnerIterator()->end($this->getDepth());
         echo "\n<!-- end PaneRenderer -->\n";
     }
 
     public function beginChildren()
     {
-        $indent = str_repeat($this->_indent, $this->getDepth());
-        echo $indent . parent::getInnerIterator()->begin();
-        $this->endTagStack[] = $indent . parent::getInnerIterator()->end();
+        $depth = $this->getDepth();
+        $indent = str_repeat($this->_indent, $depth);
+        echo $indent . parent::getInnerIterator()->begin($depth);
+        $this->endTagStack[] = $indent . parent::getInnerIterator()->end($depth);
 
     }
 
@@ -98,20 +99,21 @@ class PaneRenderer extends RecursiveIteratorIterator
             return;
         }
 
-        $indent = str_repeat($this->_indent, $this->getDepth() + 1);
+        $depth = $this->getDepth();
+        $indent = str_repeat($this->_indent, $depth + 1);
         $innerIndent = $indent . $this->_indent;
 
         if (!isset(parent::current()->var) || (!$var = parent::current()->var)) {
-            echo $indent . parent::current()->begin();
+            echo $indent . parent::current()->begin($depth);
             echo $innerIndent . "<!-- var is omitted -->\n";
-            echo $indent . parent::current()->end();
+            echo $indent . parent::current()->end($depth);
             return;
         }
 
         if (is_string($var)) {
             $var_comment = htmlspecialchars($var);
             echo $indent . "<!-- start content $var_comment -->\n";
-            echo $indent . parent::current()->begin();
+            echo $indent . parent::current()->begin($depth);
             if (isset($this->vars->$var)) {
                 echo $this->vars->$var;
                 echo PHP_EOL;
@@ -119,21 +121,21 @@ class PaneRenderer extends RecursiveIteratorIterator
             else {
                 echo $innerIndent . "<!-- var $var_comment is not found -->\n";
             }
-            echo $indent . parent::current()->end();
+            echo $indent . parent::current()->end($depth);
             echo "\n" . $indent . "<!-- end content $var_comment -->\n";
         }
         elseif ($var instanceof Closure) {
             echo $indent . "<!-- start content Closure -->\n";
-            echo $indent . parent::current()->begin();
+            echo $indent . parent::current()->begin($depth);
             echo $var($this);
-            echo $indent . parent::current()->end();
+            echo $indent . parent::current()->end($depth);
             echo $indent . "\n<!-- end content Closure -->\n";
         }
         elseif (is_callable($var)) {
             echo $indent . "<!-- start content Callable -->\n";
-            echo $indent . parent::current()->begin();
+            echo $indent . parent::current()->begin($depth);
             echo $var($this);
-            echo $indent . parent::current()->end();
+            echo $indent . parent::current()->end($depth);
             echo $indent . "\n<!-- end content Callable -->\n";
         }
     }

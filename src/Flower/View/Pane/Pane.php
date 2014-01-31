@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  *
  *
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
@@ -76,12 +76,12 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
         return parent::insert($value, $priority);
     }
 
-    public function begin()
+    public function begin($depth = null)
     {
         return $this->begin;
     }
 
-    public function end()
+    public function end($depth = null)
     {
         return $this->end;
     }
