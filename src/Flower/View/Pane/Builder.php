@@ -12,6 +12,8 @@ namespace Flower\View\Pane;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Escaper\Escaper;
 use Flower\Exception\IllegalClassException;
+use Flower\View\Pane\Exception\PaneClassNotFoundException;
+use Flower\View\Pane\Exception\RuntimeException;
 
 /**
  * Description of Builder
@@ -66,7 +68,17 @@ class Builder
     public function build(array $config, PaneInterface $current = null)
     {
         if (null === $current) {
-            $current = $this->getNewPane();
+            if (isset($config['pane_class'])) {
+                if (! class_exists($config['pane_class'])) {
+                    throw new PaneClassNotFoundException('class not exists ' . $config['pane_class']);
+                }
+                if (! is_a($config['pane_class'], 'Flower\View\Pane\PaneInterface', true)) {
+                    throw new RuntimeException($config['pane_class'] . ' is not instance of PaneInterface');
+                }
+                $current = new $config['pane_class'];
+            } else {
+                $current = $this->getNewPane();
+            }
         }
 
         foreach ($config as $k => $v) {
@@ -135,7 +147,7 @@ class Builder
         if (isset($config['begin'])) {
             $current->setBegin((string) $config['begin']);
         }
-        elseif(! strlen($current->tag)) {
+        elseif(!isset($current->tag) || empty($current->tag)) {
             $current->setBegin('<!-- start pane -->' . PHP_EOL);
         }
         else {

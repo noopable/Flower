@@ -80,6 +80,58 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Flower\View\Pane\Builder::build
      */
+    public function testBuildCustomPane()
+    {
+        $paneConfig = array(
+            'tag' => '',
+            'inner' => array(
+                'classes' => 'container',
+                'pane_class' => 'FlowerTest\View\Pane\TestAsset\YetAnotherPane',
+            ),
+        );
+        $pane = $this->object->build($paneConfig);
+
+        $this->assertFalse($pane->hasChildren());
+        $children = $pane->current();
+        $this->assertInstanceOf('Flower\View\Pane\PaneInterface', $pane);
+        $this->assertInstanceOf('FlowerTest\View\Pane\TestAsset\YetAnotherPane', $children);
+    }
+
+    /**
+     * @covers Flower\View\Pane\Builder::build
+     * @expectedException Flower\View\Pane\Exception\PaneClassNotFoundException
+     */
+    public function testBuildNotExistsCustomPane()
+    {
+        $paneConfig = array(
+            'tag' => '',
+            'inner' => array(
+                'classes' => 'container',
+                'pane_class' => 'dummy',
+            ),
+        );
+        $pane = $this->object->build($paneConfig);
+    }
+
+    /**
+     * @covers Flower\View\Pane\Builder::build
+     * @expectedException Flower\View\Pane\Exception\RuntimeException
+     */
+    public function testBuildInvalidCustomPane()
+    {
+        $paneConfig = array(
+            'tag' => '',
+            'inner' => array(
+                'classes' => 'container',
+                'pane_class' => 'stdClass',
+            ),
+        );
+        $this->object->build($paneConfig);
+    }
+
+    /**
+     * @covers Flower\View\Pane\Builder::build
+     */
     public function testBuildOptions()
     {
         $paneConfig = array('options' =>
