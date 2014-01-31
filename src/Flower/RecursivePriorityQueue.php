@@ -1,13 +1,16 @@
 <?php
-namespace Flower;
 
 /*
- * 
- * 
+ *
+ *
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
+
+namespace Flower;
+
 use Zend\Stdlib\PriorityQueue;
+
 /**
  * Description of RecursivePriorityQueue
  *
@@ -19,7 +22,7 @@ class RecursivePriorityQueue implements \RecursiveIterator
     const EXTR_DATA     = 0x00000001;
     const EXTR_PRIORITY = 0x00000002;
     const EXTR_BOTH     = 0x00000003;
-    
+
     const HAS_CHILDREN_STRICT_CONTAINS = 0x00010000;
 
     /**
@@ -46,17 +49,17 @@ class RecursivePriorityQueue implements \RecursiveIterator
      * @var \Iterator
      */
     protected $iterator;
-    
+
     /**
      *
-     * @var type 
+     * @var type
      */
     protected $flag;
 
     public function __construct($flag = 0)
     {
         $this->flag = $flag;
-        $this->rewind();
+        $this->resetIterator();
     }
 
     /**
@@ -155,12 +158,20 @@ class RecursivePriorityQueue implements \RecursiveIterator
 
     public function rewind()
     {
-        $queue = $this->getQueue();
-        $iterator = $this->getQueue()->getIterator();
-        foreach ($iterator as $entry) {
-            $this->hasChildren();
-            //$entry->rewind();
+        $this->resetIterator();
+        while( $this->iterator->valid()) {
+            $entry = $this->iterator->current();
+            if ($entry instanceof self) {
+                $entry->resetIterator();
+            }
+            $this->iterator->next();
         }
+
+        $this->resetIterator();
+    }
+
+    public function resetIterator()
+    {
         $this->iterator = $this->getQueue()->getIterator();
     }
 
