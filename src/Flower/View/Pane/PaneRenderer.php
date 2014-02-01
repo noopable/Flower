@@ -23,7 +23,7 @@ class PaneRenderer extends RecursiveIteratorIterator
     protected $endTagStack = array();
 
 
-    public function __construct(Pane $pane,
+    public function __construct(PaneInterface $pane,
             $mode = RecursiveIteratorIterator::LEAVES_ONLY,
             $flag = RecursiveIteratorIterator::CATCH_GET_CHILD)
     {
