@@ -12,8 +12,18 @@ return array(
                 => 'Flower\Resource\ResourceManagerFactory',
             'Flower_Resources'
                 => 'Flower\Resource\ResourcePluginManagerFactory',
-            'Flower_LazyRouteLoaderFile' => 'Flower\Router\LazyRouteLoaderFileFactory',
-            'Flower_LazyRouteLoaderResource' => 'Flower\Router\LazyRouteLoaderResourceFactory'
+            /**
+             * このサービスを有効にするときは、下部参照の
+             * flower_lazy_load_route_file
+             * を環境に合わせて適切に設定してください。
+             */
+            //'Flower_LazyRouteLoaderResource' => 'Flower\Router\LazyRouteLoaderResourceFactory'
+            /**
+             * このサービスを有効にするときは、下部参照の
+             * flower_lazy_load_route_resource
+             * を環境に合わせて適切に設定してください。
+             */
+            //'Flower_LazyRouteLoaderFile' => 'Flower\Router\LazyRouteLoaderFileFactory',
         ),
     ),
     'controllers' => array(
@@ -32,8 +42,16 @@ return array(
     ),
     'router' => array(
         //override Zend\Mvc\Router\Http\TreeRouteStack
-        'router_class' => 'Flower\Router\TreeRouteStack',
+        /**
+         * このルーターを有意義に使うなら、他のサービスとの併用設定が必要です。
+         *  lazyFile => ServiceとしてFlower_LazyRouteLoaderFile
+         *  lazyResource　=> ServiceとしてFlower_LazyRouteLoaderResource
+         *
+         * @see tests/FlowerTest/IntegrationTest/Router/TestAsset/standard.config.php
+         */
+        //'router_class' => 'Flower\Router\TreeRouteStack',
     ),
+    /*
     'flower_lazy_load_route_file' => array(
         'spec_class' => 'Flower\File\Spec\TreeArrayMerge',
         'spec_options' => array(
@@ -49,6 +67,7 @@ return array(
             'cache_path' => __DIR__ . '/../data/routes/cache',
         ),
     ),
+     */
     /*
     'flower_lazy_load_route_resource' => array(
         'resource_plugin_manager' => 'Flower_Resources',

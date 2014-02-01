@@ -12,8 +12,8 @@ return array(
         'factories' => array(
             //module.config.phpに記載があるので重複する必要はない
             //'Flower_Resources' => 'Flower\Resource\ResourcePluginManagerFactory',
-            //'Flower_LazyRouteLoaderFile' => 'Flower\Router\LazyRouteLoaderFileFactory',
-            //'Flower_LazyRouteLoaderResource' => 'Flower\Router\LazyRouteLoaderResourceFactory'
+            'Flower_LazyRouteLoaderFile' => 'Flower\Router\LazyRouteLoaderFileFactory',
+            'Flower_LazyRouteLoaderResource' => 'Flower\Router\LazyRouteLoaderResourceFactory'
         ),
     ),
     'router' => array(
