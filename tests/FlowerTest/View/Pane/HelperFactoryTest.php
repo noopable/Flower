@@ -14,19 +14,19 @@ class HelperFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $object;
 
-    
+
     /**
      *
      * @var \Zend\ServiceManager\ServiceManager
      */
     protected $serviceLocator;
-    
+
     /**
      *
      * @var array
      */
     protected $config;
-    
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -35,7 +35,7 @@ class HelperFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->serviceLocator = Bootstrap::getServiceManager();
         $this->config = $this->serviceLocator->get('Config');
-        
+
         $this->object = new HelperFactory;
     }
 
@@ -56,11 +56,11 @@ class HelperFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceof('Flower\View\Pane\PaneHelper', $helper);
         return $helper;
     }
-    
+
     /**
-     * 
+     *
      * @depends testCreateService
-     * 
+     *
      */
     public function testBuildOptionsIsInjected(PaneHelper $helper)
     {

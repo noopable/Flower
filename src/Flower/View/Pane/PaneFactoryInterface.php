@@ -14,5 +14,5 @@ namespace Flower\View\Pane;
  */
 interface PaneFactoryInterface
 {
-    public static function factory(array $config);
+    public static function factory(array $config, Builder $builder);
 }

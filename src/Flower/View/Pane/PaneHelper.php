@@ -46,6 +46,7 @@ class PaneHelper extends AbstractHelper
     {
         return $this->getBuilder()->build($array);
     }
+
     /**
      * Renders a template fragment within a variable scope distinct from the
      * calling View object.
@@ -67,8 +68,7 @@ class PaneHelper extends AbstractHelper
      */
     public function __invoke($pane = null, $default = null)
     {
-        if (null === $pane)
-        {
+        if (null === $pane) {
             $pane = $this->getView()->get($this->objectKey);
             if (! $pane) {
                 $pane = $this->paneFactory($this->defaultPane);

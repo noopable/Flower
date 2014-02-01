@@ -294,7 +294,7 @@ EOD;
     public function testCurrentVarUndefined()
     {
         $expected = '  <!-- start content content -->
-  <div class=\'container\'>
+  <div class="container">
     <!-- var content is not found -->
   </div>
   <!-- end content content -->
@@ -321,7 +321,7 @@ EOD;
      */
     public function testCurrentVarIsOmitted()
     {
-        $expected = '  <div class=\'container\'>    <!-- var is omitted -->  </div>';
+        $expected = '  <div class="container">    <!-- var is omitted -->  </div>';
         $builder =new Builder;
         $pane = $builder->build(
                 array(
@@ -347,7 +347,7 @@ EOD;
     public function testCurrentVarDefined()
     {
         $expected = '  <!-- start content varName -->
-  <div class=\'container\'>
+  <div class="container">
 article
   </div>
   <!-- end content varName -->
@@ -379,7 +379,7 @@ article
     public function testCurrentVarClosure()
     {
         $expected = '  <!-- start content Closure -->
-  <div class=\'container\'>
+  <div class="container">
 article
   </div>
   <!-- end content Closure -->
@@ -415,7 +415,7 @@ article
                 ->method('render')
                 ->will($this->returnValue('article'));
         $expected = '  <!-- start content Callable -->
-  <div class=\'container\'>
+  <div class="container">
 article
   </div>
   <!-- end content Callable -->

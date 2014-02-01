@@ -26,11 +26,14 @@ use Flower\View\Pane\Exception\RuntimeException;
  */
 class Builder
 {
+
     protected $paneClass = 'Flower\View\Pane\Pane';
 
     protected $sizeToClassFunction;
 
     protected $escaper;
+
+    protected $defaultPaneFactory = 'Flower\View\Pane\PaneFactory';
 
     public function __construct($options = array())
     {
@@ -41,6 +44,80 @@ class Builder
         if (isset($options['size_to_class_function']) && is_callable($options['size_to_class_function'])) {
             $this->sizeToClassFunction = $options['size_to_class_function'];
         }
+    }
+
+
+    /**
+     * これから作成しようとするPaneの設定を$configに配列で渡す。
+     * HashArrayは現在Paneの設定情報
+     * Hashのうちinnerで渡される値については
+     *  リストならPane構築情報のリスト
+     *  ハッシュなら単一Paneの構成情報
+     *
+     * よって、buildでは、設定情報からinnerを分離し、現在PaneをFactory
+     * 次にinnerをFactoryして現在Paneにinsertする
+     *
+     * 出来上がったPaneを返します。
+     *
+     * @param array $config pane structure configuration
+     * @param PaneInterface|null $parent
+     * @return PaneInterface
+     */
+    public function build(array $config, PaneInterface $parent = null)
+    {
+        if (isset($config['inner'])) {
+            $innerConfig = $config['inner'];
+            unset($config['inner']);
+        }
+
+        if (isset($config['factory_class'])) {
+            $factoryClass = $config['factory_class'];
+        } elseif (isset($config['pane_class'])) {
+            if (! class_exists($config['pane_class'])) {
+                throw new PaneClassNotFoundException('class not exists ' . $config['pane_class']);
+            }
+            if (! is_a($config['pane_class'], 'Flower\View\Pane\PaneInterface', true)) {
+                throw new RuntimeException($config['pane_class'] . ' is not instance of PaneInterface');
+            }
+            $factoryClass = call_user_func($config['pane_class'] . '::getFactoryClass');
+        } else {
+            $factoryClass = $this->getDefaultPaneFactory();
+        }
+
+        $current = call_user_func($factoryClass . '::factory', $config, $this);
+
+        if (isset($innerConfig)) {
+            if (ArrayUtils::isList($innerConfig)) {
+                foreach ($innerConfig as $c) {
+                    $child = $this->build($c, $current);
+                }
+            }
+            elseif(is_array($innerConfig)) {
+                $child = $this->build($innerConfig, $current);
+            }
+        }
+
+         if (isset($parent)) {
+             $parent->insert($current, $current->getOrder());
+         }
+
+         return $current;
+    }
+
+    public function setDefaultPaneFactory($paneFactory)
+    {
+        if (!is_subclass_of($paneFactory, 'Flower\View\Pane\PaneFactoryInterface', true)) {
+            throw new RuntimeException('defaultPaneFactory should implement PaneFactoryInterface :' . $paneFactory);
+        }
+        if ($paneFactory instanceof PaneFactoryInterface) {
+            $paneFactory = get_class($paneFactory);
+        }
+        $this->defaultPaneFactory = $paneFactory;
+    }
+
+    public function getDefaultPaneFactory()
+    {
+        return $this->defaultPaneFactory;
     }
 
     public function setPaneClass($pane)
@@ -54,154 +131,9 @@ class Builder
             $this->paneClass = $pane;
         }
 
+        $this->setDefaultPaneFactory(call_user_func($this->paneClass . '::getFactoryClass'));
+
         return $this;
-    }
-
-
-    /**
-     * これから作成しようとするPaneの設定を$configに配列で渡す。
-     * 設定から直接Paneをビルドするときは、$current = nullとして渡す。
-     * 既存のPaneがあり、子を追加したいときには、$current = $parentPaneとして渡す
-     *
-     * 出来上がったPane　$currentを返します。
-     *
-     * @param array $config pane structure configuration
-     * @param PaneInterface|null $current
-     * @return PaneInterface
-     */
-    public function build(array $config, PaneInterface $current = null)
-    {
-        if (null === $current) {
-            if (isset($config['pane_class'])) {
-                if (! class_exists($config['pane_class'])) {
-                    throw new PaneClassNotFoundException('class not exists ' . $config['pane_class']);
-                }
-                if (! is_a($config['pane_class'], 'Flower\View\Pane\PaneInterface', true)) {
-                    throw new RuntimeException($config['pane_class'] . ' is not instance of PaneInterface');
-                }
-                $current = new $config['pane_class'];
-            } else {
-                $current = $this->getNewPane();
-            }
-        }
-
-        foreach ($config as $k => $v) {
-            if ($v instanceof Pane) {
-                //direct pane insert ,ignore $type
-                $current->insert($v, $v->getOrder());
-                continue;
-            }
-            switch ($k) {
-                case "order":
-                case "size":
-                    $current->$k = (int) $v;
-                    break;
-                case "var":
-                    if ($v instanceof \Closure || is_string($v) || is_callable($v)) {
-                        $current->$k = $v;
-                    } else {
-                        $current->$k = false;
-                    }
-                    break;
-                case "id":
-                case "tag":
-                    $current->$k = preg_replace('/[^a-z_:]+[^a-z0-9-_:]*/i', '', (string)$v);
-                    break;
-                case "classes":
-                case "attributes":
-                    if (is_string($v)) {
-                        $v = explode(' ', $v);
-                    }
-                    $v = (array) $v;
-                    $tmp = array();
-                    foreach ($v as $key => $value) {
-                        $key = htmlspecialchars($key, ENT_QUOTES);
-                        if (null !== $value) {
-                            $value = htmlspecialchars($value, ENT_QUOTES);
-                        }
-                        $tmp[$key] = $value;
-                    }
-                    $current->$k = $tmp;
-                    break;
-                case "options":
-                    //配列型の他各種データを受け入れてよい。
-                    $current->setOptions($v);
-                    break;
-                case "inner":
-                    if ($v instanceof Pane) {
-                        $current->insert($v, $v->getOrder());
-                    }
-                    elseif (ArrayUtils::isList($v)) {
-                        foreach ($v as $c) {
-                            $child = $this->build($c);
-                            $current->insert($child, $child->getOrder());
-                        }
-                    }
-                    elseif(is_array($v)) {
-                        $child = $this->build($v);
-                        $current->insert($child, $child->getOrder());
-                    }
-                    break;
-                case "begin":
-                case "end":
-                default:
-                    break;
-            }
-        }
-        if (isset($config['begin'])) {
-            $current->setBegin((string) $config['begin']);
-        }
-        elseif(!isset($current->tag) || empty($current->tag)) {
-            $current->setBegin('<!-- start pane -->' . PHP_EOL);
-        }
-        else {
-            $attributes = $current->attributes ?: array();
-
-            if (isset($current->size)) {
-                $this->addHtmlClass($this->sizeToClass($current->size), $attributes);
-            }
-
-            if (isset($current->classes)) {
-                $this->addHtmlClass(implode(' ', $current->classes), $attributes);
-            }
-
-            if (isset($current->id)) {
-                $attributes['id'] = $current->id;
-            }
-
-            $attributeString = '';
-
-            foreach($attributes as $name => $attribute) {
-                if (is_string($attribute) || is_numeric($attribute)) {
-                    $attributeString .= ' ' . $name . '=\'' . trim($attribute) . '\'';
-                } elseif (!$attribute) {
-                    $attributeString .= ' ' . $name;
-                }
-            }
-            if (strlen($attributeString)) {
-                $current->setBegin(sprintf('<%s%s>', $current->tag, $attributeString) . PHP_EOL);
-            }
-            else {
-                $current->setBegin(sprintf('<%s>', $current->tag) . PHP_EOL);
-            }
-         }
-
-         if (isset($config['end'])) {
-             $current->setEnd((string) $config['end']);
-         }
-         elseif(! strlen($current->tag)) {
-             $current->setEnd('<!-- end pane -->');
-         }
-         else {
-             $current->setEnd('</' . $current->tag . '>');
-         }
-
-         return $current;
-    }
-
-    public function getNewPane()
-    {
-        return new $this->paneClass;
     }
 
     /**
@@ -209,11 +141,11 @@ class Builder
      * @param type $class
      * @param array $attributes
      */
-    protected function addHtmlClass($class, array &$attributes)
+    public function addHtmlClass($class, array &$attributes)
     {
-        $aClass = explode(' ', $class);
-        array_map(array($this->getEscaper(), 'escapeHtmlAttr'), $aClass);
-        $class = implode(' ', $aClass);
+        if (is_array($class)) {
+            $class = implode(' ', $class);
+        }
 
         if (!isset($attributes['class']) || !strlen($attributes['class'])) {
             $attributes['class'] = $class;
@@ -229,9 +161,8 @@ class Builder
      * @param mixed $size
      * @return string $class
      */
-    protected function sizeToClass($size = 0)
+    public function sizeToClass($size = 0)
     {
-
         if (is_callable($this->sizeToClassFunction)) {
             $class = call_user_func($this->sizeToClassFunction, $size);
         } else {
@@ -242,11 +173,12 @@ class Builder
         return $class;
     }
 
-    protected function getEscaper()
+    public function getEscaper()
     {
         if (!isset($this->escaper)) {
             $this->escaper = new Escaper;
         }
         return $this->escaper;
     }
+
 }
