@@ -58,6 +58,10 @@ class Builder
      * 次にinnerをFactoryして現在Paneにinsertする
      *
      * 出来上がったPaneを返します。
+     * buildが返すのは単一のPaneである。
+     * 最初にコールされるときは、通常ではinner要素が必須となる。
+     * 再帰的にコールされるときは親Paneにinsertした上で、単一のPaneを返す。
+     * 初期configにListを指定されてもbuildは複数のpaneを返すことはない。
      *
      * @param array $config pane structure configuration
      * @param PaneInterface|null $parent

@@ -12,6 +12,16 @@ namespace Flower\View\Pane;
 use RecursiveIteratorIterator;
 use Closure;
 
+/**
+ * beginIteration:
+ *    全体のレンダリング開始時に一度だけ呼ばれる。
+ * beginChildren:
+ *    子RecursiveIteratorを開始するときに呼ばれる。
+ * nextElement:
+ *    各要素の開始前に呼ばれる。dividerを設定したいときなど
+ *
+ *
+ */
 class PaneRenderer extends RecursiveIteratorIterator
 {
     protected $vars;
