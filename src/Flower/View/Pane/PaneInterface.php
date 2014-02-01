@@ -32,6 +32,10 @@ interface PaneInterface extends RecursiveIterator
      */
     public function insert($value, $priority = null);
 
+    public function wrapBegin($depth = null);
+
+    public function wrapEnd($depth = null);
+
     public function begin($depth = null);
 
     public function end($depth = null);
@@ -39,6 +43,10 @@ interface PaneInterface extends RecursiveIterator
     public function setBegin($begin);
 
     public function setEnd($end);
+
+    public function setWrapBegin($wrapBegin);
+
+    public function setWrapEnd($wrapEnd);
 
     public function setOptions(array $options);
 

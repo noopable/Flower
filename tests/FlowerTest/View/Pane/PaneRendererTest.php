@@ -254,7 +254,7 @@ EOD;
     {
         $expectedString = "\n<!-- begin PaneRenderer -->\n" . 'foo';
         $builder =new Builder;
-        $pane = $builder->build(array('begin' => 'foo'));
+        $pane = $builder->build(array('wrapBegin' => 'foo'));
         $paneRenderer = new PaneRenderer($pane);
         $paneRenderer->beginIteration();
         $this->expectOutputString($expectedString);
@@ -267,7 +267,7 @@ EOD;
     {
         $expectedString = 'foo' . "\n<!-- end PaneRenderer -->\n" ;
         $builder =new Builder;
-        $pane = $builder->build(array('end' => 'foo'));
+        $pane = $builder->build(array('wrapEnd' => 'foo'));
         $paneRenderer = new PaneRenderer($pane);
         $paneRenderer->endIteration();
         $this->expectOutputString($expectedString);
@@ -280,7 +280,7 @@ EOD;
     public function testBeginChildrenEndChildren()
     {
         $builder =new Builder;
-        $pane = $builder->build(array('begin' => 'foo', 'end' => 'bar'));
+        $pane = $builder->build(array('wrapBegin' => 'foo', 'wrapEnd' => 'bar'));
         $paneRenderer = new PaneRenderer($pane);
         $paneRenderer->beginChildren();
         echo " ";
@@ -303,8 +303,8 @@ EOD;
         $builder =new Builder;
         $pane = $builder->build(
                 array(
-                    'begin' => 'foo',
-                    'end' => 'bar',
+                    'wrapBegin' => 'foo',
+                    'wrapEnd' => 'bar',
                     'inner' => array('classes' => 'container'),
                 ));
         $paneRenderer = new PaneRenderer($pane);
@@ -325,8 +325,8 @@ EOD;
         $builder =new Builder;
         $pane = $builder->build(
                 array(
-                    'begin' => 'foo',
-                    'end' => 'bar',
+                    'wrapBegin' => 'foo',
+                    'wrapEnd' => 'bar',
                     'inner' => array(
                         'classes' => 'container',
                         'var' => null,
@@ -356,8 +356,8 @@ article
         $builder =new Builder;
         $pane = $builder->build(
                 array(
-                    'begin' => 'foo',
-                    'end' => 'bar',
+                    'wrapBegin' => 'foo',
+                    'wrapEnd' => 'bar',
                     'inner' => array(
                         'classes' => 'container',
                         'var' => 'varName',
@@ -388,8 +388,8 @@ article
         $builder =new Builder;
         $pane = $builder->build(
                 array(
-                    'begin' => 'foo',
-                    'end' => 'bar',
+                    'wrapBegin' => 'foo',
+                    'wrapEnd' => 'bar',
                     'inner' => array(
                         'classes' => 'container',
                         'var' => function($ren) { return 'article';},
@@ -424,8 +424,8 @@ article
         $builder =new Builder;
         $pane = $builder->build(
                 array(
-                    'begin' => 'foo',
-                    'end' => 'bar',
+                    'wrapBegin' => 'foo',
+                    'wrapEnd' => 'bar',
                     'inner' => array(
                         'classes' => 'container',
                         'var' => array($object, 'render'),
@@ -446,7 +446,7 @@ article
     public function test__toStringSimple()
     {
         $builder =new Builder;
-        $pane = $builder->build(array('begin' => 'foo', 'end' => 'bar'));
+        $pane = $builder->build(array('wrapBegin' => 'foo', 'wrapEnd' => 'bar'));
         $paneRenderer = new PaneRenderer($pane);
         //$this->assertTrue($paneRenderer->valid());
         //$paneRenderer->current();

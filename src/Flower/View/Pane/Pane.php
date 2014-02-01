@@ -19,7 +19,7 @@ use Flower\RecursivePriorityQueue;
 class Pane extends RecursivePriorityQueue implements PaneInterface
 {
     protected static $factoryClass = 'Flower\View\Pane\PaneFactory';
-    
+
     public $id;
 
     /**
@@ -43,6 +43,8 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
     public $begin;
 
     public $end;
+
+    public $wrapTag;
 
     public $tag = 'div';
 
@@ -73,6 +75,22 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
         }
 
         return parent::insert($value, $priority);
+    }
+
+    public function wrapBegin($depth = null)
+    {
+        if (isset($this->wrapBegin)) {
+            return $this->wrapBegin;
+        }
+        return $this->begin;
+    }
+
+    public function wrapEnd($depth = null)
+    {
+        if (isset($this->wrapEnd)) {
+            return $this->wrapEnd;
+        }
+        return $this->end;
     }
 
     public function begin($depth = null)
@@ -127,6 +145,16 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
     public static function getFactoryClass()
     {
         return self::$factoryClass;
+    }
+
+    public function setWrapBegin($wrapBegin)
+    {
+        $this->wrapBegin = $wrapBegin;
+    }
+
+    public function setWrapEnd($wrapEnd)
+    {
+        $this->wrapEnd = $wrapEnd;
     }
 
 }

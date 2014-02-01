@@ -29,6 +29,60 @@ class PaneFactory implements PaneFactoryInterface
             $pane = new self::$paneClass;
         }
 
+        self::parseConfig($pane, $config);
+
+        if (isset($config['begin'])) {
+            $pane->setBegin((string) $config['begin']);
+        } elseif(!isset($pane->tag) || empty($pane->tag)) {
+            $pane->setBegin('<!-- start pane -->' . PHP_EOL);
+        } else {
+            $attributeString = self::parseAttributes($pane, $builder);
+            if (strlen($attributeString)) {
+                $pane->setBegin(sprintf('<%s%s>', $pane->tag, $attributeString) . PHP_EOL);
+            }
+            else {
+                $pane->setBegin(sprintf('<%s>', $pane->tag) . PHP_EOL);
+            }
+         }
+
+        if (isset($config['wrapBegin'])) {
+            $pane->setWrapBegin((string) $config['wrapBegin']);
+        } elseif(!isset($pane->wrapTag) || empty($pane->wrapTag)) {
+            $pane->setWrapBegin('<!-- start pane -->' . PHP_EOL);
+        } else {
+            if (!isset($attributeString)) {
+                $attributeString = self::parseAttributes($pane, $builder);
+            }
+            if (strlen($attributeString)) {
+                $pane->setWrapBegin(sprintf('<%s%s>', $pane->wrapTag, $attributeString) . PHP_EOL);
+            }
+            else {
+                $pane->setWrapBegin(sprintf('<%s>', $pane->wrapTag) . PHP_EOL);
+            }
+         }
+
+         if (isset($config['end'])) {
+             $pane->setEnd((string) $config['end']);
+         } elseif(! strlen($pane->tag)) {
+             $pane->setEnd('<!-- end pane -->');
+         } else {
+             $pane->setEnd('</' . $pane->tag . '>');
+         }
+
+         if (isset($config['wrapEnd'])) {
+             $pane->setWrapEnd((string) $config['wrapEnd']);
+         } elseif(! strlen($pane->wrapTag)) {
+             $pane->setWrapEnd('<!-- end pane -->');
+         } else {
+             $pane->setWrapEnd('</' . $pane->wrapTag . '>');
+         }
+
+         return $pane;
+    }
+
+    public static function parseConfig(PaneInterface $pane, array $config)
+    {
+        //parse config
         foreach ($config as $k => $v) {
             if ($v instanceof PaneInterface) {
                 //direct pane insert ,ignore $type
@@ -49,7 +103,12 @@ class PaneFactory implements PaneFactoryInterface
                     break;
                 case "id":
                 case "tag":
-                    $pane->$k = preg_replace(array('/^[^a-z_:]/i', '/[^-a-z0-9_:]*/i'), '', (string)$v);
+                case "wrapTag":
+                    if (is_string($v)) {
+                        $pane->$k = preg_replace(array('/^[^a-z_:][^a-z_:]*/i', '/[^-a-z0-9_:]*/i'), '', $v);
+                    } else {
+                        $pane->$k = $v;
+                    }
                     break;
                 case "classes":
                 case "attributes":
@@ -64,60 +123,45 @@ class PaneFactory implements PaneFactoryInterface
                     break;
                 case "begin":
                 case "end":
+                case "wrapBegin":
+                case "wrapEnd":
                 default:
                     break;
             }
         }
-        if (isset($config['begin'])) {
-            $pane->setBegin((string) $config['begin']);
-        } elseif(!isset($pane->tag) || empty($pane->tag)) {
-            $pane->setBegin('<!-- start pane -->' . PHP_EOL);
-        } else {
-            $attributes = $pane->attributes ?: array();
-
-            if (isset($pane->size)) {
-                $builder->addHtmlClass($builder->sizeToClass($pane->size), $attributes);
-            }
-
-            if (isset($pane->classes)) {
-                $builder->addHtmlClass($pane->classes, $attributes);
-            }
-
-            if (isset($pane->id)) {
-                $attributes['id'] = $pane->id;
-            }
-
-            $attributeString = '';
-
-            foreach($attributes as $name => $attribute) {
-                if (is_string($attribute) || is_numeric($attribute)) {
-                    $attributeArray = array_map(array($builder->getEscaper(), 'escapeHtmlAttr'), explode(' ', $attribute));
-                    $attributeString .= ' ' . preg_replace(array('/^[^a-z_:]/i', '/[^-a-z0-9_:]*/i'), '', (string)$name)
-                                            . '="' . implode(' ', $attributeArray) . '"';
-                } elseif (!$attribute) {
-                    $attributeString .= ' ' . $name;
-                }
-            }
-
-            if (strlen($attributeString)) {
-                $pane->setBegin(sprintf('<%s%s>', $pane->tag, $attributeString) . PHP_EOL);
-            }
-            else {
-                $pane->setBegin(sprintf('<%s>', $pane->tag) . PHP_EOL);
-            }
-         }
-
-         if (isset($config['end'])) {
-             $pane->setEnd((string) $config['end']);
-         }
-         elseif(! strlen($pane->tag)) {
-             $pane->setEnd('<!-- end pane -->');
-         }
-         else {
-             $pane->setEnd('</' . $pane->tag . '>');
-         }
-
-         return $pane;
+        if (!isset($pane->wrapTag)) {
+            $pane->wrapTag = $pane->tag;
+        }
     }
 
+    public static function parseAttributes(PaneInterface $pane, $builder)
+    {
+        $attributes = $pane->attributes ?: array();
+
+        if (isset($pane->id)) {
+            $attributes['id'] = $pane->id;
+        }
+
+        if (isset($pane->size)) {
+            $builder->addHtmlClass($builder->sizeToClass($pane->size), $attributes);
+        }
+
+        if (isset($pane->classes)) {
+            $builder->addHtmlClass($pane->classes, $attributes);
+        }
+
+        $attributeString = '';
+
+        foreach($attributes as $name => $attribute) {
+            if (is_string($attribute) || is_numeric($attribute)) {
+                $attributeArray = array_map(array($builder->getEscaper(), 'escapeHtmlAttr'), explode(' ', $attribute));
+                $attributeString .= ' ' . preg_replace(array('/^[^a-z_:][^a-z_:]*/i', '/[^-a-z0-9_:]*/i'), '', (string)$name)
+                                        . '="' . implode(' ', $attributeArray) . '"';
+            } elseif (!$attribute) {
+                $attributeString .= ' ' . $name;
+            }
+        }
+
+        return $attributeString;
+    }
 }

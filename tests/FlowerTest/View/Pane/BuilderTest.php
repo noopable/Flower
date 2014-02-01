@@ -65,11 +65,12 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @see PaneFactoryTest
      * @covers Flower\View\Pane\Builder::build
      */
     public function testBuildFilteredTagValues()
     {
-        $paneConfig = array('tag' => '-%-44dあｲi^%v','inner' => array('classes' => 'container'));
+        $paneConfig = array('tag' => '-%-44dあｲi^%v', 'inner' => array('classes' => 'container'));
         $pane = $this->object->build($paneConfig);
 
         $this->assertFalse($pane->hasChildren());

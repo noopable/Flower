@@ -36,11 +36,11 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         $pane = PaneFactory::factory($paneConfig, $builder);
         $this->assertInstanceOf('Flower\View\Pane\Pane', $pane);
         $this->assertEquals($tag, $pane->tag);
-        $this->assertEquals('cc', $pane->id);
+        $this->assertEquals('cc2', $pane->id);
         $this->assertEquals($order, $pane->order);
         $this->assertEquals($size, $pane->size);
         $this->assertEquals($var, $pane->var);
-        $this->assertEquals('<foo foo="bar" baz="qux" class="span10 container row" id="cc">', trim($pane->begin()));
+        $this->assertEquals('<foo foo="bar" baz="qux" id="cc2" class="span10 container row">', trim($pane->begin()));
         $this->assertEquals('</foo>', $pane->end());
         $this->assertEquals(explode(' ', $classes), $pane->classes);
         $this->assertEquals($attributes, $pane->attributes);
@@ -124,7 +124,7 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         $builder = new Builder;
         $paneConfig = array(
             'tag' => $tag = 'fo?"o',
-            'id' => $id = '30-c\c2',
+            'id' => $id = '30-c\c3',
             'order' => $order = '5x',
             'size' => $size = '10--',
             'classes' => $classes = 'container row 2002\'s"',
@@ -137,10 +137,10 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         $pane = PaneFactory::factory($paneConfig, $builder);
         $this->assertInstanceOf('Flower\View\Pane\Pane', $pane);
         $this->assertEquals('foo', $pane->tag);
-        $this->assertEquals('cc', $pane->id);
+        $this->assertEquals('cc3', $pane->id);
         $this->assertEquals(5, $pane->order);
         $this->assertEquals(10, $pane->size);
-        $this->assertEquals('<foo foo-1="bar&quot;" baz2="qux&#x27;" class="span10 container row 2002&#x27;s&quot;" id="cc">', trim($pane->begin()));
+        $this->assertEquals('<foo foo-1="bar&quot;" baz2="qux&#x27;" id="cc3" class="span10 container row 2002&#x27;s&quot;">', trim($pane->begin()));
         $this->assertEquals('</foo>', $pane->end());
         $this->assertEquals(explode(' ', $classes), $pane->classes);
         $this->assertEquals($attributes, $pane->attributes);
