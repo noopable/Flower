@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  *
  *
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
@@ -32,17 +32,6 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
         $this->renderer = new PhpRenderer;
         $this->helper   = new PaneHelper;
         $this->helper->setView($this->renderer);
-        /*
-        $serviceManager = Bootstrap::getServiceManager();
-        if ($serviceManager->has('ViewHelperManager')) {
-            $helperManager = $serviceManager->get('ViewHelperManager');
-            //$helperManager = clone $helperManager;
-            $helperManager->setRenderer($this->renderer);
-            $this->helper = $helperManager->get('pane');
-        }
-        else {
-            throw new \Exception('serviceManager don\'t have ViewHelperManager');
-        }*/
     }
 
     /**

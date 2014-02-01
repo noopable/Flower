@@ -36,12 +36,15 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         $pane = PaneFactory::factory($paneConfig, $builder);
         $this->assertInstanceOf('Flower\View\Pane\Pane', $pane);
         $this->assertEquals($tag, $pane->tag);
+        $this->assertEquals($tag, $pane->wrapTag, 'if wrapTag is omitted ,wrapTag is same to tag');
         $this->assertEquals('cc2', $pane->id);
         $this->assertEquals($order, $pane->order);
         $this->assertEquals($size, $pane->size);
         $this->assertEquals($var, $pane->var);
         $this->assertEquals('<foo foo="bar" baz="qux" id="cc2" class="span10 container row">', trim($pane->begin()));
+        $this->assertEquals('<foo foo="bar" baz="qux" id="cc2" class="span10 container row">', trim($pane->wrapBegin()));
         $this->assertEquals('</foo>', $pane->end());
+        $this->assertEquals('</foo>', $pane->wrapEnd());
         $this->assertEquals(explode(' ', $classes), $pane->classes);
         $this->assertEquals($attributes, $pane->attributes);
     }
@@ -114,8 +117,44 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($attributes, $pane->attributes);
         $this->assertEquals('foo', $pane->begin());
         $this->assertEquals('bar', $pane->end());
+        //begin endの指定とwrapBegin wrapEndは相互に影響しない。
+        $this->assertEquals('<foo foo="bar" baz="qux" class="span10 container row">', trim($pane->wrapBegin()));
+        $this->assertEquals('</foo>', $pane->wrapEnd());
     }
 
+    /**
+     * @covers Flower\View\Pane\PaneFactory::factory
+     */
+    public function testFactoryCustomWrapBeginEnd()
+    {
+        $builder = new Builder;
+        $paneConfig = array(
+            'tag' => $tag = 'foo',
+            'order' => $order = 5,
+            'size' => $size = 10,
+            'var' => $var = 'header',
+            'classes' => $classes = 'container row',
+            'attributes' => $attributes = array(
+                'foo' => 'bar',
+                'baz' => 'qux',
+            ),
+            'wrapBegin' => 'foo',
+            'wrapEnd' => 'bar',
+            /*
+             * normally autodetect
+            'pane_class' => 'FlowerTest\View\Pane\TestAsset\YetAnotherPane',
+            */
+        );
+
+        $pane = PaneFactory::factory($paneConfig, $builder);
+        //begin endの指定とwrapBegin wrapEndは相互に影響しない。
+        $this->assertEquals('<foo foo="bar" baz="qux" class="span10 container row">', trim($pane->begin()));
+        $this->assertEquals('</foo>', $pane->end());
+
+        $this->assertEquals('foo', $pane->wrapBegin());
+        $this->assertEquals('bar', $pane->wrapEnd());
+    }
+    
     /**
      * @covers Flower\View\Pane\PaneFactory::factory
      */

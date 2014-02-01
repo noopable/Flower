@@ -303,8 +303,6 @@ EOD;
         $builder =new Builder;
         $pane = $builder->build(
                 array(
-                    'wrapBegin' => 'foo',
-                    'wrapEnd' => 'bar',
                     'inner' => array('classes' => 'container'),
                 ));
         $paneRenderer = new PaneRenderer($pane);
@@ -325,8 +323,6 @@ EOD;
         $builder =new Builder;
         $pane = $builder->build(
                 array(
-                    'wrapBegin' => 'foo',
-                    'wrapEnd' => 'bar',
                     'inner' => array(
                         'classes' => 'container',
                         'var' => null,
@@ -356,8 +352,6 @@ article
         $builder =new Builder;
         $pane = $builder->build(
                 array(
-                    'wrapBegin' => 'foo',
-                    'wrapEnd' => 'bar',
                     'inner' => array(
                         'classes' => 'container',
                         'var' => 'varName',
@@ -388,8 +382,6 @@ article
         $builder =new Builder;
         $pane = $builder->build(
                 array(
-                    'wrapBegin' => 'foo',
-                    'wrapEnd' => 'bar',
                     'inner' => array(
                         'classes' => 'container',
                         'var' => function($ren) { return 'article';},
@@ -424,8 +416,6 @@ article
         $builder =new Builder;
         $pane = $builder->build(
                 array(
-                    'wrapBegin' => 'foo',
-                    'wrapEnd' => 'bar',
                     'inner' => array(
                         'classes' => 'container',
                         'var' => array($object, 'render'),
@@ -458,4 +448,108 @@ foobar
         $this->assertEquals(str_replace(array("\n","\r"),'', $expected), str_replace(array("\n","\r"), '', (string) $paneRenderer));
     }
 
+    /**
+     *
+     */
+    public function test__toStringCaseWrapTag()
+    {
+        $builder =new Builder;
+        $pane = $builder->build(array(
+            'wrapTag' => 'div',
+            'classes' => 'container',
+            'tag' => 'span',//no affection because:RecursiveIteratorIterator::LEAVES_ONLY
+            'var' => 'foo',
+            'inner' => array(
+                'classes' => 'main',
+                'wrapTag' => 'div',//no affection because: inner pane has no children
+                'tag' => 'span',
+                'var' => 'varName',
+            )));
+        $paneRenderer = new PaneRenderer($pane);
+        $paneRenderer->setVar('foo', 'bar');
+        $paneRenderer->setVar('varName', 'article');
+        //$this->assertTrue($paneRenderer->valid());
+        //$paneRenderer->current();
+        $expected = '
+<!-- begin PaneRenderer -->
+<div class="container">
+  <!-- start content varName -->
+  <span class="main">
+article
+  </span>
+  <!-- end content varName -->
+</div>
+<!-- end PaneRenderer -->
+';
+        $this->assertEquals(str_replace(array("\n","\r"),'', $expected), str_replace(array("\n","\r"), '', (string) $paneRenderer));
+    }
+
+    /**
+     *
+     */
+    public function test__toStringCaseWrapTagNull()
+    {
+        $builder =new Builder;
+        $pane = $builder->build(array(
+            'wrapTag' => null,
+            'classes' => 'container',
+            'tag' => 'span',//copied to wrapTag
+            'var' => 'foo',
+            'inner' => array(
+                'classes' => 'main',
+                'tag' => 'span',
+                'var' => 'varName',
+            )));
+        $paneRenderer = new PaneRenderer($pane);
+        $paneRenderer->setVar('foo', 'bar');
+        $paneRenderer->setVar('varName', 'article');
+        //$this->assertTrue($paneRenderer->valid());
+        //$paneRenderer->current();
+        $expected = '
+<!-- begin PaneRenderer -->
+<span class="container">
+  <!-- start content varName -->
+  <span class="main">
+article
+  </span>
+  <!-- end content varName -->
+</span>
+<!-- end PaneRenderer -->
+';
+        $this->assertEquals(str_replace(array("\n","\r"),'', $expected), str_replace(array("\n","\r"), '', (string) $paneRenderer));
+    }
+
+    /**
+     *
+     */
+    public function test__toStringCaseTagOmit()
+    {
+        $builder =new Builder;
+        $pane = $builder->build(array(
+            'classes' => 'container',
+            'tag' => '',//tag omitted
+            'var' => 'foo',
+            'inner' => array(
+                'classes' => 'main',
+                'tag' => 'span',
+                'var' => 'varName',
+            )));
+        $paneRenderer = new PaneRenderer($pane);
+        $paneRenderer->setVar('foo', 'bar');
+        $paneRenderer->setVar('varName', 'article');
+        //$this->assertTrue($paneRenderer->valid());
+        //$paneRenderer->current();
+        $expected = '
+<!-- begin PaneRenderer -->
+<!-- start pane -->
+  <!-- start content varName -->
+  <span class="main">
+article
+  </span>
+  <!-- end content varName -->
+<!-- end pane -->
+<!-- end PaneRenderer -->
+';
+        $this->assertEquals(str_replace(array("\n","\r"),'', $expected), str_replace(array("\n","\r"), '', (string) $paneRenderer));
+    }
 }
