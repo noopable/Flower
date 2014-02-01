@@ -19,9 +19,11 @@ class ListPane extends Pane
 {
     protected static $factoryClass = 'Flower\View\Pane\ListPaneFactory';
 
-    public $wrapTag = 'ul';
+    public $containerTag = 'ul';
 
-    public $tag = 'li';
+    public $wrapTag = 'li';
+
+    public $tag = 'span';
 
     /**
      *  var をcallbackとして使うため
@@ -33,25 +35,40 @@ class ListPane extends Pane
 
     protected $_indent = "  ";
 
-    public function wrapBegin($depth = null)
+    public $containerBegin;
+
+    public $containerEnd;
+
+    public function containerBegin($depth = null)
     {
         if ($depth === 0) {
-            return $this->wrapBegin;
+            return $this->containerBegin;
         }
-
         $indent = str_repeat($this->_indent, $depth);
-        return $this->begin($depth) .
-                $this->render($this->getPaneRenderer()) . 
-                $indent . $this->wrapBegin;
+        return $this->wrapBegin .
+                $indent . $this->begin($depth) .
+                $this->render($this->getPaneRenderer()) .
+                $indent . $this->end($depth) . "\n" .
+                $indent . $this->containerBegin;
+    }
+
+    public function containerEnd($depth = null)
+    {
+        if ($depth === 0) {
+            return $this->containerEnd;
+        }
+        $indent = str_repeat($this->_indent, $depth);
+        return $this->containerEnd . "\n" . $indent . $this->wrapEnd;
+    }
+
+    public function wrapBegin($depth = null)
+    {
+        return $this->wrapBegin;
     }
 
     public function wrapEnd($depth = null)
     {
-        if ($depth === 0) {
-            return $this->wrapEnd;
-        }
-        $indent = str_repeat($this->_indent, $depth);
-        return $this->wrapEnd . PHP_EOL . $indent . $this->end($depth) . PHP_EOL;
+        return $this->wrapEnd;
     }
 
     public function render(PaneRenderer $paneRenderer)
@@ -59,22 +76,26 @@ class ListPane extends Pane
         $depth = $paneRenderer->getDepth();
         $indent = str_repeat($this->_indent, $depth + 1);
         $innerIndent = $indent . $this->_indent;
+        $response = '';
 
         $var = $this->_var;
         if (is_string($var)) {
             $var_comment = htmlspecialchars($var);
-            echo $indent . "<!-- start content $var_comment -->\n";
+            $response .= $indent . "<!-- start content $var_comment -->\n";
             if (isset($paneRenderer->getVars()->$var)) {
-                echo $paneRenderer->getVars()->$var;
-                echo PHP_EOL;
+                $response .= $paneRenderer->getVars()->$var;
+                $response .= "\n";
             } else {
-                echo $innerIndent . "<!-- var $var_comment is not found -->\n";
+                $response .= $innerIndent . "<!-- var $var_comment is not found -->\n";
             }
-            echo "\n" . $indent . "<!-- end content $var_comment -->\n";
+            $response .= $indent . "<!-- end content $var_comment -->\n";
         } elseif ($var instanceof Closure) {
-            echo $indent . "<!-- start content Closure -->\n";
-            echo $var($paneRenderer);
-            echo "\n" . $indent . "<!-- end content Closure -->\n";
+            $response .= $indent . "<!-- start content Closure -->\n";
+            $response .= $var($paneRenderer);
+            $response .= "\n";
+            $response .= $indent . "<!-- end content Closure -->\n";
         }
+
+        return $response;
     }
 }

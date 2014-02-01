@@ -52,6 +52,10 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
 
     protected $paneRenderer;
 
+    protected $wrapBegin;
+
+    protected $wrapEnd;
+
     public function __construct()
     {
         parent::__construct(RecursivePriorityQueue::HAS_CHILDREN_STRICT_CONTAINS);

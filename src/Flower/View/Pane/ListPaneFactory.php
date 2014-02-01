@@ -60,6 +60,18 @@ class ListPaneFactory extends PaneFactory
             }
         }
 
+        if (isset($config['containerBegin'])) {
+            $pane->containerBegin = (string) $config['containerBegin'];
+        } elseif(isset($pane->containerTag)) {
+            $attributes = $pane->getOption('container_attributes');
+            if (is_array($attributes)) {
+                $attributeString = self::attributesToAttributeString($pane, $builder);
+                $pane->containerBegin = sprintf('<%s%s>', $pane->containerTag, $attributeString) . PHP_EOL;
+            } else {
+                $pane->containerBegin = sprintf('<%s>', $pane->containerTag) . PHP_EOL;
+            }
+        }
+
          if (isset($config['end'])) {
              $pane->setEnd((string) $config['end']);
          } elseif(! strlen($pane->tag)) {
@@ -76,6 +88,13 @@ class ListPaneFactory extends PaneFactory
              $pane->setWrapEnd('</' . $pane->wrapTag . '>');
          }
 
+         if (isset($config['containerEnd'])) {
+             $pane->containerEnd = (string) $config['containerEnd'];
+         } elseif (! isset($pane->containerTag)) {
+             $pane->containerEnd = '<!-- end container -->';
+         } else {
+             $pane->containerEnd = '</' . $pane->containerTag . '>';
+         }
          return $pane;
     }
 }
