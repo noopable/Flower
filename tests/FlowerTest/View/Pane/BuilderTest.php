@@ -64,6 +64,53 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Flower\View\Pane\PaneInterface', $children);
     }
 
+    public function testBuildComplexCase()
+    {
+        $paneConfig =
+        array(
+            'id' => 'a0',
+            'wrapTag' => 'div',
+            'classes' => 'container',
+            'tag' => 'span',//no affection because:RecursiveIteratorIterator::LEAVES_ONLY
+            'var' => 'foo',
+            'inner' => array(
+                array(
+                    'id' => 'a1',
+                    'classes' => 'main',
+                    'wrapTag' => 'div',//no affection because: inner pane has no children
+                    'tag' => 'span',
+                    'var' => 'varName',
+                    'inner' => array(
+                        array(
+                            'id' => 'a1.1',
+                            'classes' => 'main',
+                            'wrapTag' => 'div',//no affection because: inner pane has no children
+                            'tag' => 'span',
+                            'var' => 'varName',
+                        ),
+                        array(
+                            'id' => 'a1.2',
+                            'classes' => 'main',
+                            'wrapTag' => 'div',//no affection because: inner pane has no children
+                            'tag' => 'p',
+                            'var' => 'foo',
+                        )
+                    ),
+                ),
+                array(
+                    'order' => 100,
+                    'id' => 'a2',
+                    'classes' => 'main',
+                    'wrapTag' => 'div',//no affection because: inner pane has no children
+                    'tag' => 'p',
+                    'var' => 'foo',
+                ),
+            ),
+        );
+        $pane = $this->object->build($paneConfig);
+        $this->assertCount(2, $pane);
+    }
+
     /**
      * @see PaneFactoryTest
      * @covers Flower\View\Pane\Builder::build

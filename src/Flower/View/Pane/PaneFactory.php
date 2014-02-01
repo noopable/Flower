@@ -102,6 +102,8 @@ class PaneFactory implements PaneFactoryInterface
                     }
                     break;
                 case "id":
+                    $pane->$k = preg_replace(array('/^[^a-z][^a-z]*/i', '/[^-a-z0-9_:.]*/i'), '', (string) $v);
+                    break;
                 case "tag":
                 case "wrapTag":
                     if (is_string($v)) {
@@ -150,8 +152,12 @@ class PaneFactory implements PaneFactoryInterface
             $builder->addHtmlClass($pane->classes, $attributes);
         }
 
-        $attributeString = '';
+        return self::attributesToAttributeString($attributes, $builder);
+    }
 
+    public static function attributesToAttributeString(array $attributes, $builder)
+    {
+        $attributeString = '';
         foreach($attributes as $name => $attribute) {
             if (is_string($attribute) || is_numeric($attribute)) {
                 $attributeArray = array_map(array($builder->getEscaper(), 'escapeHtmlAttr'), explode(' ', $attribute));
