@@ -74,21 +74,7 @@ class Builder
             unset($config['inner']);
         }
 
-        if (isset($config['factory_class'])) {
-            $factoryClass = $config['factory_class'];
-        } elseif (isset($config['pane_class'])) {
-            if (! class_exists($config['pane_class'])) {
-                throw new PaneClassNotFoundException('class not exists ' . $config['pane_class']);
-            }
-            if (! is_a($config['pane_class'], 'Flower\View\Pane\PaneInterface', true)) {
-                throw new RuntimeException($config['pane_class'] . ' is not instance of PaneInterface');
-            }
-            $factoryClass = call_user_func($config['pane_class'] . '::getFactoryClass');
-        } else {
-            $factoryClass = $this->getDefaultPaneFactory();
-        }
-
-        $current = call_user_func($factoryClass . '::factory', $config, $this);
+        $current = $this->createFromConfig($config);
 
         if (isset($innerConfig)) {
             if (ArrayUtils::isList($innerConfig)) {
@@ -106,6 +92,25 @@ class Builder
          }
 
          return $current;
+    }
+
+    public function createFromConfig(array $config)
+    {
+        if (isset($config['factory_class'])) {
+            $factoryClass = $config['factory_class'];
+        } elseif (isset($config['pane_class'])) {
+            if (! class_exists($config['pane_class'])) {
+                throw new PaneClassNotFoundException('class not exists ' . $config['pane_class']);
+            }
+            if (! is_a($config['pane_class'], 'Flower\View\Pane\PaneInterface', true)) {
+                throw new RuntimeException($config['pane_class'] . ' is not instance of PaneInterface');
+            }
+            $factoryClass = call_user_func($config['pane_class'] . '::getFactoryClass');
+        } else {
+            $factoryClass = $this->getDefaultPaneFactory();
+        }
+
+        return call_user_func($factoryClass . '::factory', $config, $this);
     }
 
     public function setDefaultPaneFactory($paneFactory)
