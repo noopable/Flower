@@ -71,6 +71,10 @@ foo
         $expected = '
 <!-- begin PaneRenderer -->
 <ul>
+    <!-- start content anchor -->
+<a href="foo">bar</a>
+
+    <!-- end content anchor -->
   <li class="main">
   <ul>
     <!-- start content Callable -->
@@ -89,10 +93,10 @@ foo
         $expected = str_replace(array("\n","\r"),'', $expected);
         $paneConfig = array(
             'classes' => 'container',
-            'var' => 'foo',
+            'var' => 'content',
             'inner' => array(
                 'classes' => 'main',
-                'var' => 'content',
+                'var' => 'anchor',
                 'inner' => array(
                     'classes' => 'main',
                     'var' => 'content',
@@ -103,6 +107,8 @@ foo
         $this->assertInstanceOf('Flower\View\Pane\ListPane', $pane);
         $renderer = new PaneRenderer($pane);
         $renderer->setVar('content', 'foo');
+        $renderer->setVar('anchor', '<a href="foo">bar</a>');
+        echo $renderer;
         $this->assertEquals($expected, str_replace(array("\n","\r"), '', (string) $renderer));
     }
 }

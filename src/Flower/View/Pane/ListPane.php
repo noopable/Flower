@@ -38,8 +38,11 @@ class ListPane extends Pane
         if ($depth === 0) {
             return $this->wrapBegin;
         }
+
         $indent = str_repeat($this->_indent, $depth);
-        return $this->begin($depth) . $indent . $this->wrapBegin;
+        return $this->begin($depth) .
+                $this->render($this->getPaneRenderer()) . 
+                $indent . $this->wrapBegin;
     }
 
     public function wrapEnd($depth = null)

@@ -56,4 +56,7 @@ interface PaneInterface extends RecursiveIterator
 
     public function getOption($name);
 
+    public function setPaneRenderer(PaneRenderer $paneRenderer);
+
+    public function getPaneRenderer();
 }

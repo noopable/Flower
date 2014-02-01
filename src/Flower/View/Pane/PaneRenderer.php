@@ -83,8 +83,10 @@ class PaneRenderer extends RecursiveIteratorIterator
     {
         $depth = $this->getDepth();
         $indent = str_repeat($this->_indent, $depth);
-        echo $indent . parent::getInnerIterator()->wrapBegin($depth);
-        $this->endTagStack[] = $indent . parent::getInnerIterator()->wrapEnd($depth);
+        $pane = parent::getInnerIterator();
+        $pane->setPaneRenderer($this);
+        echo $indent . $pane->wrapBegin($depth);
+        $this->endTagStack[] = $indent . $pane->wrapEnd($depth);
 
     }
 
