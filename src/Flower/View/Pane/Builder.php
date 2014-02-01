@@ -38,7 +38,7 @@ class Builder
     public function __construct($options = array())
     {
         if (isset($options['pane_class'])) {
-            $this->paneClass = $options['pane_class'];
+            $this->setPaneClass($options['pane_class']);
         }
 
         if (isset($options['size_to_class_function']) && is_callable($options['size_to_class_function'])) {

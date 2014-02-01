@@ -117,26 +117,23 @@ class PaneRenderer extends RecursiveIteratorIterator
             if (isset($this->vars->$var)) {
                 echo $this->vars->$var;
                 echo PHP_EOL;
-            }
-            else {
+            } else {
                 echo $innerIndent . "<!-- var $var_comment is not found -->\n";
             }
             echo $indent . parent::current()->end($depth);
             echo "\n" . $indent . "<!-- end content $var_comment -->\n";
-        }
-        elseif ($var instanceof Closure) {
+        } elseif ($var instanceof Closure) {
             echo $indent . "<!-- start content Closure -->\n";
             echo $indent . parent::current()->begin($depth);
             echo $var($this);
             echo $indent . parent::current()->end($depth);
-            echo $indent . "\n<!-- end content Closure -->\n";
-        }
-        elseif (is_callable($var)) {
+            echo "\n" . $indent . "<!-- end content Closure -->\n";
+        } elseif (is_callable($var)) {
             echo $indent . "<!-- start content Callable -->\n";
             echo $indent . parent::current()->begin($depth);
             echo $var($this);
             echo $indent . parent::current()->end($depth);
-            echo $indent . "\n<!-- end content Callable -->\n";
+            echo "\n" . $indent . "<!-- end content Callable -->\n";
         }
     }
 

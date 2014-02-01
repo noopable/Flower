@@ -144,7 +144,7 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
 
     public static function getFactoryClass()
     {
-        return self::$factoryClass;
+        return static::$factoryClass;
     }
 
     public function setWrapBegin($wrapBegin)
