@@ -20,29 +20,29 @@ class ListRenderer extends PaneRenderer
 
     public function beginIteration()
     {
-        echo "\n<!-- begin ListRenderer -->\n";
-        echo parent::getInnerIterator()->containerBegin($this->getDepth());
+        $this->commentEnable and print("<!-- begin ListRenderer -->" . $this->linefeed);
+        echo parent::getInnerIterator()->containerBegin($this->getDepth()) . $this->linefeed;
     }
 
     public function endIteration()
     {
-        echo parent::getInnerIterator()->containerEnd($this->getDepth());
-        echo "\n<!-- end ListRenderer -->\n";
+        echo parent::getInnerIterator()->containerEnd($this->getDepth()) . $this->linefeed;
+        $this->commentEnable and print( "<!-- end ListRenderer -->" . $this->linefeed);
     }
 
     public function beginChildren()
     {
         $depth = $this->getDepth();
-        $indent = str_repeat($this->_indent, $depth);
+        $indent = str_repeat($this->indent, $depth);
         $pane = parent::getInnerIterator();
         $pane->setPaneRenderer($this);
-        echo $indent . $pane->containerBegin($depth);
-        $this->endTagStack[] = $indent . $pane->containerEnd($depth) . "\n";
+        echo $indent . $pane->containerBegin($depth) . $this->linefeed;
+        $this->endTagStack[] = $indent . $pane->containerEnd($depth) . $this->linefeed;
     }
 
     public function endChildren()
     {
-        echo array_pop($this->endTagStack);
+        echo array_pop($this->endTagStack) . $this->linefeed;
     }
 
     public function current()
@@ -56,16 +56,15 @@ class ListRenderer extends PaneRenderer
             return parent::current();
         }
         $depth = $this->getDepth();
-        $indent = str_repeat($this->_indent, $depth + 1);
+        $indent = str_repeat($this->indent, $depth + 1);
 
-        echo $indent . "<!-- start content ListPane -->\n";
-        echo $indent . $listPane->wrapBegin($depth);
-        echo $indent . $listPane->begin($depth);
-        echo $listPane->render($this);
-        echo $indent . $listPane->end($depth);
-        echo "\n";
-        echo $indent . $listPane->wrapEnd($depth);
-        echo "\n" . $indent . "<!-- end content ListPane -->\n";
+        $this->commentEnable and print($indent . "<!-- start content ListPane -->" . $this->linefeed);
+        echo $indent . $listPane->wrapBegin($depth) . $this->linefeed;
+        echo $indent . $listPane->begin($depth) . $this->linefeed;
+        echo $listPane->render($this) . $this->linefeed;
+        echo $indent . $listPane->end($depth) . $this->linefeed;
+        echo $indent . $listPane->wrapEnd($depth) . $this->linefeed;
+        $this->commentEnable and print($indent . "<!-- end content ListPane -->" . $this->linefeed);
         return $listPane;
     }
 }

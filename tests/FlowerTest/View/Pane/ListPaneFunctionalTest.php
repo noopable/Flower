@@ -113,4 +113,30 @@ foo
         $renderer->setVar('anchor', '<a href="foo">bar</a>');
         $this->assertEquals($expected, str_replace(array("\n","\r"), '', (string) $renderer));
     }
+
+    public function testMultiInnerCommentOff()
+    {
+        $expected = '<ul><li><span class="main"><a href="foo">bar</a></span><ul><li><span class="main">foo</span></li></ul></li></ul>';
+        $paneConfig = array(
+            'classes' => 'container',
+            'var' => 'content',
+            'inner' => array(
+                'classes' => 'main',
+                'var' => 'anchor',
+                'inner' => array(
+                    'classes' => 'main',
+                    'var' => 'content',
+                ),
+            ),
+        );
+        $pane = $this->builder->build($paneConfig);
+        $this->assertInstanceOf('Flower\View\Pane\ListPane', $pane);
+        $renderer = new ListRenderer($pane);
+        $renderer->commentEnable = false;
+        $renderer->indent = "";
+        $renderer->linefeed = "";
+        $renderer->setVar('content', 'foo');
+        $renderer->setVar('anchor', '<a href="foo">bar</a>');
+        $this->assertEquals($expected, (string) $renderer);
+    }
 }

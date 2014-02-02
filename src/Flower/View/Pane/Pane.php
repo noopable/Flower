@@ -56,6 +56,12 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
 
     protected $wrapEnd;
 
+    public $indent = "  ";
+
+    public $linefeed = "\n";
+
+    public $commentEnable = true;
+
     public function __construct()
     {
         parent::__construct(RecursivePriorityQueue::HAS_CHILDREN_STRICT_CONTAINS);
@@ -165,6 +171,9 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
 
     public function setPaneRenderer(PaneRenderer $paneRenderer)
     {
+        $this->indent = $paneRenderer->indent;
+        $this->linefeed = $paneRenderer->linefeed;
+        $this->commentEnable = $paneRenderer->commentEnable;
         $this->paneRenderer = $paneRenderer;
     }
 

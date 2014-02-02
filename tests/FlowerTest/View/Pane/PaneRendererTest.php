@@ -143,8 +143,7 @@ EOD;
         $builder =new Builder;
         $expected =
 '<!-- begin PaneRenderer -->
-<div>
-</div>
+<div/>
 <!-- end PaneRenderer -->';
         $pane = $builder->build(array('var' => false));
         $paneRenderer = new PaneRenderer($pane);
@@ -751,5 +750,58 @@ bar
 <!-- end PaneRenderer -->
 ';
         $this->assertEquals(str_replace(array("\n","\r"),'', $expected), str_replace(array("\n","\r"), '', (string) $paneRenderer));
+    }
+
+    /**
+     *
+     */
+    public function test__toStringCommentOffLFOff()
+    {
+        $builder =new Builder;
+        $pane = $builder->build(array(
+            'id' => 'a0',
+            'wrapTag' => 'div',
+            'classes' => 'container',
+            'tag' => 'span',//no affection because:RecursiveIteratorIterator::LEAVES_ONLY
+            'var' => 'foo',
+            'inner' => array(
+                array(
+                    'id' => 'a1',
+                    'classes' => 'main',
+                    'wrapTag' => 'div',//no affection because: inner pane has no children
+                    'tag' => 'span',
+                    'var' => 'varName',
+                    'inner' => array(
+                        array(
+                            'id' => 'a1.1',
+                            'classes' => 'main',
+                            'wrapTag' => 'div',//no affection because: inner pane has no children
+                            'tag' => 'span',
+                            'var' => 'varName',
+                        ),
+                        array(
+                            'id' => 'a1.2',
+                            'classes' => 'main',
+                            'wrapTag' => 'div',//no affection because: inner pane has no children
+                            'tag' => 'p',
+                            'var' => 'foo',
+                        ),
+                    ),
+                ),
+                array(
+                    'id' => 'a2',
+                    'classes' => 'main',
+                    'wrapTag' => 'div',//no affection because: inner pane has no children
+                    'tag' => 'p',
+                    'var' => 'foo',
+                ))));
+        $paneRenderer = new PaneRenderer($pane, \RecursiveIteratorIterator::SELF_FIRST);
+        $paneRenderer->commentEnable = false;
+        $paneRenderer->indent = "";
+        $paneRenderer->linefeed = "";
+        $paneRenderer->setVar('foo', 'bar');
+        $paneRenderer->setVar('varName', 'article');
+        $expected = '<div id="a0" class="container"><span id="a1" class="main">article</span><div id="a1" class="main"><span id="a1.1" class="main">article</span><p id="a1.2" class="main">bar</p></div><p id="a2" class="main">bar</p></div>';
+        $this->assertEquals($expected, (string) $paneRenderer);
     }
 }

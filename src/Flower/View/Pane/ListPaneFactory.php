@@ -41,10 +41,10 @@ class ListPaneFactory extends PaneFactory
         } else {
             $attributeString = self::parseAttributes($pane, $builder);
             if (strlen($attributeString)) {
-                $pane->setBegin(sprintf('<%s%s>', $pane->tag, $attributeString) . PHP_EOL);
+                $pane->setBegin(sprintf('<%s%s>', $pane->tag, $attributeString));
             }
             else {
-                $pane->setBegin(sprintf('<%s>', $pane->tag) . PHP_EOL);
+                $pane->setBegin(sprintf('<%s>', $pane->tag));
             }
          }
 
@@ -54,9 +54,9 @@ class ListPaneFactory extends PaneFactory
             $attributes = $pane->getOption('wrap_attributes');
             if (is_array($attributes)) {
                 $attributeString = self::attributesToAttributeString($pane, $builder);
-                $pane->setWrapBegin(sprintf('<%s%s>', $pane->wrapTag, $attributeString) . PHP_EOL);
+                $pane->setWrapBegin(sprintf('<%s%s>', $pane->wrapTag, $attributeString));
             } else {
-                $pane->setWrapBegin(sprintf('<%s>', $pane->wrapTag) . PHP_EOL);
+                $pane->setWrapBegin(sprintf('<%s>', $pane->wrapTag));
             }
         }
 
@@ -66,9 +66,9 @@ class ListPaneFactory extends PaneFactory
             $attributes = $pane->getOption('container_attributes');
             if (is_array($attributes)) {
                 $attributeString = self::attributesToAttributeString($pane, $builder);
-                $pane->containerBegin = sprintf('<%s%s>', $pane->containerTag, $attributeString) . PHP_EOL;
+                $pane->containerBegin = sprintf('<%s%s>', $pane->containerTag, $attributeString);
             } else {
-                $pane->containerBegin = sprintf('<%s>', $pane->containerTag) . PHP_EOL;
+                $pane->containerBegin = sprintf('<%s>', $pane->containerTag);
             }
         }
 

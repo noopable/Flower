@@ -257,7 +257,7 @@ EOF;
 <!-- begin PaneRenderer -->
 <body class='container'>
   <!-- start content header -->
-  <div class='container subhead header' id='overview'>
+  <div id='overview' class='container subhead header'>
     <!-- var header is not found -->
   </div>
   <!-- end content header -->
@@ -267,7 +267,7 @@ EOF;
 This is Content test
     </div>
     <!-- end content content -->
-    <div style="float:right;" class="sidebar" id="sidebar">
+    <div style="float:right;" id="sidebar" class="sidebar">
       <!-- start content sidebar -->
       <div class='span3'>
         <!-- var sidebar is not found -->
@@ -306,7 +306,7 @@ EOF;
 <!-- begin PaneRenderer -->
 <body class='container'>
   <!-- start content header -->
-  <div class='container subhead header' id='overview'>
+  <div id='overview' class='container subhead header'>
     <!-- var header is not found -->
   </div>
   <!-- end content header -->
@@ -316,7 +316,7 @@ EOF;
 This is Content test
     </div>
     <!-- end content content -->
-    <div style="float:right;" class="sidebar" id="sidebar">
+    <div style="float:right;" id="sidebar" class="sidebar">
       <!-- start content sidebar -->
       <div class='span3'>
         <!-- var sidebar is not found -->

@@ -34,30 +34,30 @@ class PaneFactory implements PaneFactoryInterface
         if (isset($config['begin'])) {
             $pane->setBegin((string) $config['begin']);
         } elseif(!isset($pane->tag) || empty($pane->tag)) {
-            $pane->setBegin('<!-- start pane -->' . PHP_EOL);
+            $pane->setBegin('<!-- start pane -->');
         } else {
             $attributeString = self::parseAttributes($pane, $builder);
             if (strlen($attributeString)) {
-                $pane->setBegin(sprintf('<%s%s>', $pane->tag, $attributeString) . PHP_EOL);
+                $pane->setBegin(sprintf('<%s%s>', $pane->tag, $attributeString));
             }
             else {
-                $pane->setBegin(sprintf('<%s>', $pane->tag) . PHP_EOL);
+                $pane->setBegin(sprintf('<%s>', $pane->tag));
             }
          }
 
         if (isset($config['wrapBegin'])) {
             $pane->setWrapBegin((string) $config['wrapBegin']);
         } elseif(!isset($pane->wrapTag) || empty($pane->wrapTag)) {
-            $pane->setWrapBegin('<!-- start pane -->' . PHP_EOL);
+            $pane->setWrapBegin('<!-- start pane -->');
         } else {
             if (!isset($attributeString)) {
                 $attributeString = self::parseAttributes($pane, $builder);
             }
             if (strlen($attributeString)) {
-                $pane->setWrapBegin(sprintf('<%s%s>', $pane->wrapTag, $attributeString) . PHP_EOL);
+                $pane->setWrapBegin(sprintf('<%s%s>', $pane->wrapTag, $attributeString));
             }
             else {
-                $pane->setWrapBegin(sprintf('<%s>', $pane->wrapTag) . PHP_EOL);
+                $pane->setWrapBegin(sprintf('<%s>', $pane->wrapTag));
             }
          }
 
@@ -106,6 +106,7 @@ class PaneFactory implements PaneFactoryInterface
                     break;
                 case "tag":
                 case "wrapTag":
+                case "containerTag":
                     if (is_string($v)) {
                         $pane->$k = preg_replace(array('/^[^a-z_:][^a-z_:]*/i', '/[^-a-z0-9_:]*/i'), '', $v);
                     } else {
