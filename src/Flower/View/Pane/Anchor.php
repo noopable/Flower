@@ -6,10 +6,8 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\Navigation;
+namespace Flower\View\Pane;
 
-use Flower\View\Pane\Pane;
-use Flower\View\Pane\PaneRenderer;
 use Zend\View\View;
 
 /**
@@ -17,8 +15,10 @@ use Zend\View\View;
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class Anchor extends Pane
+class Anchor extends ListPane
 {
+    public $wrapTag = 'li';
+
     public $tag = 'a';
 
     protected $defaultSubstituteTag = 'span';
@@ -34,19 +34,18 @@ class Anchor extends Pane
         $this->var = array($this, 'render');
     }
 
-    public function begin(PaneRenderer $paneRenderer)
+    public function begin($depth = null)
     {
+        //beginの判定をいつするかか。
         $this->setView($paneRenderer->getView());
         if ($this->tag == 'a') {
             //hrefの割り当てを試す
             $href = $this->getHref();
+            if (!isset($href)) {
+                $this->tag = $this->getSubstituteTag();
+            }
             $this->attributes['href'] = $href;
         }
-
-        if (!isset($href)) {
-            $this->tag = $this->getSubstituteTag();
-        }
-
     }
 
     public function getSubstituteTag()
