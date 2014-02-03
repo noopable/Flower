@@ -23,7 +23,7 @@ class ListPaneFactory extends PaneFactory
         if (isset($config['pane_class'])) {
             $pane = new $config['pane_class'];
         } else {
-            $pane = new self::$paneClass;
+            $pane = new static::$paneClass;
         }
 
         self::parseConfig($pane, $config);
