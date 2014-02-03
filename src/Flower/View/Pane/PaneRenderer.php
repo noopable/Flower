@@ -150,6 +150,7 @@ class PaneRenderer extends RecursiveIteratorIterator
             echo $indent . $pane->end($depth) . $this->linefeed;
             $this->commentEnable and print($indent . "<!-- end content Callable -->" . $this->linefeed);
         }
+        return $pane;
     }
 
     public function __toString()
