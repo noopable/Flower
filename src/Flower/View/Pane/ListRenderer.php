@@ -55,6 +55,7 @@ class ListRenderer extends PaneRenderer
         if (! $listPane instanceof ListPane) { // check interface ?
             return parent::current();
         }
+        $listPane->setPaneRenderer($this);
         $depth = $this->getDepth();
         $indent = str_repeat($this->indent, $depth + 1);
 
