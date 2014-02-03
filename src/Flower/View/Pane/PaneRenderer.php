@@ -159,7 +159,7 @@ class PaneRenderer extends RecursiveIteratorIterator
         //__toString() must not throw an exception
         try {
             foreach($this as $entry) {}
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             echo $ex;
         }
         return ob_get_clean();
