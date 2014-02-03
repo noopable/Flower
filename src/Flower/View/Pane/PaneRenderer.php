@@ -119,36 +119,37 @@ class PaneRenderer extends RecursiveIteratorIterator
         $depth = $this->getDepth();
         $indent = str_repeat($this->indent, $depth + 1);
         $innerIndent = $indent . $this->indent;
+        $pane = parent::current();
 
-        if (!isset(parent::current()->var) || (!$var = parent::current()->var)) {
-            echo $indent . parent::current()->begin($depth);
+        if (!isset($pane->var) || (!$var = $pane->var)) {
+            echo $indent . $pane->begin($depth);
             $this->commentEnable and print($innerIndent . "<!-- var is omitted -->" . $this->linefeed);
-            echo $indent . parent::current()->end($depth) . $this->linefeed;
+            echo $indent . $pane->end($depth) . $this->linefeed;
             return;
         }
 
         if (is_string($var)) {
             $var_comment = htmlspecialchars($var);
             $this->commentEnable and print($indent . "<!-- start content $var_comment -->" . $this->linefeed);
-            echo $indent . parent::current()->begin($depth) . $this->linefeed;
+            echo $indent . $pane->begin($depth) . $this->linefeed;
             if (isset($this->vars->$var)) {
                 echo $this->vars->$var . $this->linefeed;
             } else {
                 $this->commentEnable and print($innerIndent . "<!-- var $var_comment is not found -->" . $this->linefeed);
             }
-            echo $indent . parent::current()->end($depth) . $this->linefeed;
+            echo $indent . $pane->end($depth) . $this->linefeed;
             $this->commentEnable and print($indent . "<!-- end content $var_comment -->" . $this->linefeed);
         } elseif ($var instanceof Closure) {
             $this->commentEnable and print($indent . "<!-- start content Closure -->" . $this->linefeed);
-            echo $indent . parent::current()->begin($depth);
+            echo $indent . $pane->begin($depth);
             echo $var($this) . $this->linefeed;
-            echo $indent . parent::current()->end($depth) . $this->linefeed;
+            echo $indent . $pane->end($depth) . $this->linefeed;
             $this->commentEnable and print($indent . "<!-- end content Closure -->" . $this->linefeed);
         } elseif (is_callable($var)) {
             $this->commentEnable and print($indent . "<!-- start content Callable -->" . $this->linefeed);
-            echo $indent . parent::current()->begin($depth);
+            echo $indent . $pane->begin($depth);
             echo $var($this) . $this->linefeed;
-            echo $indent . parent::current()->end($depth) . $this->linefeed;
+            echo $indent . $pane->end($depth) . $this->linefeed;
             $this->commentEnable and print($indent . "<!-- end content Callable -->" . $this->linefeed);
         }
     }
