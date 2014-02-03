@@ -30,7 +30,13 @@ class Anchor extends ListPane
 
     public $href;
 
-    protected $route;
+    public $route;
+
+    public $controller;
+
+    public $action;
+
+    public $params = array();
 
     protected $view;
 

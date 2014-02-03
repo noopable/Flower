@@ -17,4 +17,23 @@ class AnchorPaneFactory extends ListPaneFactory
 {
     protected static $paneClass = 'Flower\View\Pane\Anchor';
 
+    public static function parseConfig(PaneInterface $pane, array $config)
+    {
+        parent::parseConfig($pane, $config);
+        //parse config
+        foreach ($config as $k => $v) {
+            switch ($k) {
+                case "route":
+                case "controller":
+                case "action":
+                    $pane->$k = (string) $v;
+                    break;
+                case "params":
+                    $pane->$k = (array) $v;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
