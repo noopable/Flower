@@ -50,22 +50,32 @@ class Anchor extends ListPane
 
     public function begin($depth = null)
     {
-        if ($this->tag == 'a') {
+        if ($href = $this->getHref()) {
             //hrefの割り当てを試す
-            $href = $this->getHref();
-            if (!isset($href)) {
-                $this->tag = $this->getSubstituteTag();
-            }
+            $tag = $this->tag;
             $this->attributes['href'] = $href;
+        } else {
+            $tag = $this->getSubstituteTag();
         }
         $attributeString = AnchorPaneFactory::attributesToAttributeString($this->attributes);
         if (strlen($attributeString)) {
-            $this->begin = sprintf('<%s%s>', $this->tag, $attributeString);
+            $this->begin = sprintf('<%s%s>', $tag, $attributeString);
         } else {
-            $this->begin = '<' . $this->tag . '>';
+            $this->begin = '<' . $tag . '>';
         }
 
         return $this->begin;
+    }
+
+    public function end($depth = null)
+    {
+        if ($this->getHref()) {
+            //hrefの割り当てを試す
+            $tag = $this->tag;
+        } else {
+            $tag = $this->getSubstituteTag();
+        }
+        return '</' . $tag . '>';
     }
 
     public function getSubstituteTag()
