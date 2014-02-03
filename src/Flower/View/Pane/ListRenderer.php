@@ -20,6 +20,7 @@ class ListRenderer extends PaneRenderer
 
     public function beginIteration()
     {
+        parent::getInnerIterator()->setPaneRenderer($this);
         $this->commentEnable and print("<!-- begin ListRenderer -->" . $this->linefeed);
         echo parent::getInnerIterator()->containerBegin($this->getDepth()) . $this->linefeed;
     }
@@ -62,7 +63,7 @@ class ListRenderer extends PaneRenderer
         $this->commentEnable and print($indent . "<!-- start content ListPane -->" . $this->linefeed);
         echo $indent . $listPane->wrapBegin($depth) . $this->linefeed;
         echo $indent . $listPane->begin($depth) . $this->linefeed;
-        echo $listPane->render($this) . $this->linefeed;
+        echo $listPane->render($this);
         echo $indent . $listPane->end($depth) . $this->linefeed;
         echo $indent . $listPane->wrapEnd($depth) . $this->linefeed;
         $this->commentEnable and print($indent . "<!-- end content ListPane -->" . $this->linefeed);

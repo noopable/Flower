@@ -64,6 +64,10 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
         $expected =
 '<!-- begin ListRenderer -->
 <ul>
+<li>
+<a href="No%20RouteStackInterface%20instance%20provided">
+content</a>
+</li>
 </ul>
 <!-- end ListRenderer -->
 ';
@@ -90,13 +94,18 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
         $expected =
 '<!-- begin ListRenderer -->
 <ul>
+<li>
+<a href="No%20RouteStackInterface%20instance%20provided">
+foo</a>
+<ul>
   <!-- start content ListPane -->
   <li>
   <a href="No%20RouteStackInterface%20instance%20provided">
-content
-  </a>
+content  </a>
   </li>
   <!-- end content ListPane -->
+</ul>
+</li>
 </ul>
 <!-- end ListRenderer -->
 ';
@@ -126,13 +135,18 @@ content
         $expected =
 '<!-- begin ListRenderer -->
 <ul>
+<li>
+<a href="No%20RouteStackInterface%20instance%20provided">
+foo</a>
+<ul>
   <!-- start content ListPane -->
   <li>
   <a href="No%20RouteStackInterface%20instance%20provided">
-content
-  </a>
+content  </a>
   </li>
   <!-- end content ListPane -->
+</ul>
+</li>
 </ul>
 <!-- end ListRenderer -->
 ';
@@ -162,20 +176,24 @@ content
         $expected =
 '<!-- begin ListRenderer -->
 <ul>
+<li>
+<a href="No%20RouteStackInterface%20instance%20provided">
+foo</a>
+<ul>
   <!-- start content ListPane -->
   <li>
   <a href="No%20RouteStackInterface%20instance%20provided">
-Label1
-  </a>
+Label1  </a>
   </li>
   <!-- end content ListPane -->
   <!-- start content ListPane -->
   <li>
   <a href="No%20RouteStackInterface%20instance%20provided">
-Label2
-  </a>
+Label2  </a>
   </li>
   <!-- end content ListPane -->
+</ul>
+</li>
 </ul>
 <!-- end ListRenderer -->
 ';
@@ -210,27 +228,30 @@ Label2
         $expected =
 '<!-- begin ListRenderer -->
 <ul>
+<li>
+<a href="No%20RouteStackInterface%20instance%20provided">
+foo</a>
+<ul>
   <!-- start content ListPane -->
   <li>
   <a href="No%20RouteStackInterface%20instance%20provided">
-Label1
-  </a>
+Label1  </a>
   </li>
   <!-- end content ListPane -->
   <!-- start content ListPane -->
   <li>
   <a href="No%20RouteStackInterface%20instance%20provided">
-Label2
-  </a>
+Label2  </a>
   </li>
   <!-- end content ListPane -->
   <!-- start content ListPane -->
   <li>
   <a href="No%20RouteStackInterface%20instance%20provided">
-Label3
-  </a>
+Label3  </a>
   </li>
   <!-- end content ListPane -->
+</ul>
+</li>
 </ul>
 <!-- end ListRenderer -->
 ';
@@ -272,27 +293,30 @@ Label3
         $expected =
 '<!-- begin ListRenderer -->
 <ul>
+<li>
+<a href="No%20RouteStackInterface%20instance%20provided">
+foo</a>
+<ul>
   <!-- start content ListPane -->
   <li>
   <a href="No%20RouteStackInterface%20instance%20provided">
-Label1
-  </a>
+Label1  </a>
   </li>
   <!-- end content ListPane -->
   <!-- start content ListPane -->
   <li>
   <a href="No%20RouteStackInterface%20instance%20provided">
-Label2
-  </a>
+Label2  </a>
   </li>
   <!-- end content ListPane -->
   <!-- start content ListPane -->
   <li>
   <a href="No%20RouteStackInterface%20instance%20provided">
-Label3
-  </a>
+Label3  </a>
   </li>
   <!-- end content ListPane -->
+</ul>
+</li>
 </ul>
 <!-- end ListRenderer -->
 ';
@@ -329,13 +353,18 @@ Label3
         $expected =
 '<!-- begin ListRenderer -->
 <ul>
+<li>
+<a href="No%20RouteMatch%20instance%20provided">
+foo</a>
+<ul>
   <!-- start content ListPane -->
   <li>
   <a href="No%20RouteMatch%20instance%20provided">
-content
-  </a>
+content  </a>
   </li>
   <!-- end content ListPane -->
+</ul>
+</li>
 </ul>
 <!-- end ListRenderer -->
 ';

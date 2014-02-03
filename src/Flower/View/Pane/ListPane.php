@@ -37,26 +37,67 @@ class ListPane extends Pane
 
     public $containerEnd;
 
+    protected $containerEndStack = array();
+
     public function containerBegin($depth = null)
     {
+        $renderSelf = false;
+        $hasChildren = false;
+        $response = '';
+        $containerEnd = '';
+        $indent = str_repeat($this->indent, (int) $depth);
+
         if ($depth === 0) {
-            return $this->containerBegin;
+            //第１階層はulでラップする。
+            $response = $indent . $this->containerBegin;
+            $containerEnd .= $indent . $this->containerEnd;
         }
-        $indent = str_repeat($this->indent, $depth);
-        return $this->wrapBegin . $this->linefeed .
-                $indent . $this->begin($depth) . $this->linefeed .
-                $this->render($this->getPaneRenderer()) . $this->linefeed .
-                $indent . $this->end($depth) . $this->linefeed .
-                $indent . $this->containerBegin;
+
+        if (!empty($this->_var)) {
+            $renderSelf = true;
+            //自要素を表示する
+            if (strlen($response)) {
+                $response .= $this->linefeed . $indent;
+            }
+            $response .= $this->wrapBegin . $this->linefeed . //<li>
+                $indent . $this->begin($depth) . $this->linefeed . //<span>
+                $this->render($this->getPaneRenderer())  . //content
+                $indent . $this->end($depth); //</span>
+        }
+        if ($this->valid()) {
+            $hasChildren = true;
+            //子要素をcontainerでラップする
+            $response .=  $this->linefeed .
+                    $indent . $this->containerBegin; //<ul>
+            if ($renderSelf) {
+                //自要素のラップを後で閉じる
+                if (empty($containerEnd)) {
+                    $containerEnd =
+                        $this->containerEnd . $this->linefeed . //</ul>
+                        $indent . $this->wrapEnd;
+                } else {
+                    $containerEnd =
+                        $this->containerEnd . $this->linefeed . //</ul>
+                        $indent . $this->wrapEnd . $this->linefeed .//</li>
+                        $indent . $containerEnd;//</ul>
+                }
+            }
+        } elseif ($renderSelf) {
+            //自要素のラップをすぐに閉じる
+            $response .=  $this->linefeed . $indent . $this->wrapEnd; //</li>
+        } else {
+            //子要素も自要素も表示しないなら何も表示しない
+            $this->containerEndStack[] = '';
+            return '';
+        }
+
+        $this->containerEndStack[] = $containerEnd;
+        return $response;
     }
 
     public function containerEnd($depth = null)
     {
-        if ($depth === 0) {
-            return $this->containerEnd;
-        }
-        $indent = str_repeat($this->indent, $depth);
-        return $this->containerEnd . $this->linefeed . $indent . $this->wrapEnd;
+        return array_pop($this->containerEndStack);
     }
 
     public function wrapBegin($depth = null)
