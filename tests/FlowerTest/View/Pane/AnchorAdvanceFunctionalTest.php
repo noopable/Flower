@@ -69,13 +69,13 @@ class AnchorAdvanceFunctionalTest extends \PHPUnit_Framework_TestCase
 <ul>
   <li>
   <a href="/application/">
-/application/
+Link Label 1.1
   </a>
   <ul>
     <!-- start content ListPane -->
     <li>
     <a href="/application/">
-/application/
+Link Label 1.1.1
     </a>
     </li>
     <!-- end content ListPane -->
@@ -87,34 +87,32 @@ class AnchorAdvanceFunctionalTest extends \PHPUnit_Framework_TestCase
         $expected = str_replace("\r\n","\n", $expected);
         $paneConfig = array(
             'classes' => 'container',
-            'var' => 'content',
+            'var' => 'Link Label 1',// this will be omitted
             'inner' => array(
                 'classes' => 'main',
-                'var' => 'anchor',
+                'var' => 'Link Label 1.1',
                 'inner' => array(
                     'classes' => 'main',
-                    'var' => 'content',
+                    'var' => 'Link Label 1.1.1',
                 ),
             ),
         );
         $renderer = $renderer = $this->helper->__invoke($paneConfig);
-        $renderer->setVar('content', 'foo');
-        $renderer->setVar('anchor', '<a href="dummy">from view script</a>');
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
     }
 
     public function testMultiInnerCommentOff()
     {
-        $expected = '<ul><li><a href="/application/">/application/</a><ul><li><a href="/application/">/application/</a></li></ul></li></ul>';
+        $expected = '<ul><li><a href="/application/">Link Label 1.1</a><ul><li><a href="/application/">Link Label 1.1.1</a></li></ul></li></ul>';
         $paneConfig = array(
             'classes' => 'container',
-            'var' => 'content',
+            'var' => 'Link Label 1',//this will be omitted
             'inner' => array(
                 'classes' => 'main',
-                'var' => 'anchor',
+                'var' => 'Link Label 1.1',
                 'inner' => array(
                     'classes' => 'main',
-                    'var' => 'content',
+                    'var' => 'Link Label 1.1.1',
                 ),
             ),
         );

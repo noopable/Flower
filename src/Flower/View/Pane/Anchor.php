@@ -123,7 +123,7 @@ class Anchor extends ListPane
             $options = array();
         }
         $reuseMatched = (bool) $this->getOption('reuse_matched_params');
-        
+
         /**
          *
          * @see Zend\View\Helper\Url
@@ -169,15 +169,12 @@ class Anchor extends ListPane
 
         switch ($this->getOption('render_policy')) {
             case 'view_partial':
-                $script = $this->getOption('render_script');
                 return $view->render($this->_var);
+            case 'raw':
+                return (string) $this->_var;
             case 'default':
             default:
-                if ($label = $this->getOption('label')) {
-                    return $view->escapeHtml($label);
-                } else {
-                    return $view->escapeHtml($this->getHref());
-                }
+                return $view->escapeHtml($this->_var);
         }
     }
 
