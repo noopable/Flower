@@ -8,7 +8,7 @@
 
 namespace Flower\View\Pane;
 
-use Flower\View\Pane\Exception\RuntimeException;
+//use Flower\View\Pane\Exception\RuntimeException;
 use Zend\View\Renderer\PhpRenderer as View;
 
 /**
@@ -107,12 +107,12 @@ class Anchor extends ListPane
             if (! isset($this->paneRenderer)) {
                 //__toString() must not throw an exception
                 //and if exceptions catched in upper layer, HTML structure will be broken
-                return 'PaneRenderer is not set' . __LINE__;
+                return 'PaneRenderer is not set' . __METHOD__;
             }
             $paneRenderer = $this->getPaneRenderer();
             $view = $paneRenderer->getView();
             if (!$view instanceof View) {
-                return 'PhpRenderer not found. Normally you may have it from helper.' . __LINE__;
+                return 'PhpRenderer not found. Normally you may have it from helper.' . __METHOD__;
                 //__toString() must not throw an exception
                 //throw new RuntimeException('PhpRenderer not found. Normally you may have it from helper.');
             }
@@ -168,7 +168,7 @@ class Anchor extends ListPane
         if ($view instanceof View) {
             $this->setView($view);
         } else {
-            return 'PhpRenderer not found. Normally you may have it from helper.:'  . __LINE__;
+            return 'PhpRenderer not found. Normally you may have it from helper.:' . __METHOD__;
             //__toString() must not throw an exception
             //throw new RuntimeException('PhpRenderer not found. Normally you may have it from helper.');
         }
