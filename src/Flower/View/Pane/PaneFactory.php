@@ -8,6 +8,8 @@
 
 namespace Flower\View\Pane;
 
+use Zend\Escaper\Escaper;
+
 /**
  * Description of PaneFactory
  *
@@ -55,8 +57,7 @@ class PaneFactory implements PaneFactoryInterface
             }
             if (strlen($attributeString)) {
                 $pane->setWrapBegin(sprintf('<%s%s>', $pane->wrapTag, $attributeString));
-            }
-            else {
+            } else {
                 $pane->setWrapBegin(sprintf('<%s>', $pane->wrapTag));
             }
          }
@@ -69,9 +70,9 @@ class PaneFactory implements PaneFactoryInterface
              $pane->setEnd('</' . $pane->tag . '>');
          }
 
-         if (isset($config['wrapEnd'])) {
+         if (isset ($config['wrapEnd'])) {
              $pane->setWrapEnd((string) $config['wrapEnd']);
-         } elseif(! strlen($pane->wrapTag)) {
+         } elseif (! strlen($pane->wrapTag)) {
              $pane->setWrapEnd('<!-- end pane -->');
          } else {
              $pane->setWrapEnd('</' . $pane->wrapTag . '>');
@@ -153,22 +154,42 @@ class PaneFactory implements PaneFactoryInterface
             $builder->addHtmlClass($pane->classes, $attributes);
         }
 
-        return self::attributesToAttributeString($attributes, $builder);
+        return self::attributesToAttributeString($attributes);
     }
 
-    public static function attributesToAttributeString(array $attributes, $builder)
+    public static function attributesToAttributeString(array $attributes)
     {
         $attributeString = '';
+        $escaper = self::getEscaper();
         foreach($attributes as $name => $attribute) {
+            $name = preg_replace(array('/^[^a-z_:][^a-z_:]*/i', '/[^-a-z0-9_:\.]*/i'), '', $name);
             if (is_string($attribute) || is_numeric($attribute)) {
-                $attributeArray = array_map(array($builder->getEscaper(), 'escapeHtmlAttr'), explode(' ', $attribute));
-                $attributeString .= ' ' . preg_replace(array('/^[^a-z_:][^a-z_:]*/i', '/[^-a-z0-9_:]*/i'), '', (string)$name)
-                                        . '="' . implode(' ', $attributeArray) . '"';
+                switch (strtolower($name)) {
+                    case 'href':
+                    case 'src':
+                        $delimiter = '/';
+                        $escapeMethod = 'escapeUrl';
+                        break;
+                    default:
+                        $delimiter = ' ';
+                        $escapeMethod = 'escapeHtmlAttr';
+                        break;
+                }
+                $attributeArray = array_map(array($escaper, $escapeMethod), explode($delimiter, $attribute));
+                $attributeString .= ' ' . $name . '="' . implode($delimiter, $attributeArray) . '"';
             } elseif (!$attribute) {
                 $attributeString .= ' ' . $name;
             }
         }
 
         return $attributeString;
+    }
+
+    public static function getEscaper()
+    {
+        if (!isset(self::$escaper)) {
+            self::$escaper = new Escaper;
+        }
+        return self::$escaper;
     }
 }

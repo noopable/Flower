@@ -10,7 +10,6 @@
 namespace Flower\View\Pane;
 
 use Zend\Stdlib\ArrayUtils;
-use Zend\Escaper\Escaper;
 use Flower\Exception\IllegalClassException;
 use Flower\View\Pane\Exception\PaneClassNotFoundException;
 use Flower\View\Pane\Exception\RuntimeException;
@@ -180,14 +179,6 @@ class Builder
             $class = 'span' . (string) (intval($size) % 36);
         }
         return $class;
-    }
-
-    public function getEscaper()
-    {
-        if (!isset($this->escaper)) {
-            $this->escaper = new Escaper;
-        }
-        return $this->escaper;
     }
 
 }

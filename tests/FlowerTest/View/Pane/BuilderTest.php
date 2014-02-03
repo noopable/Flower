@@ -262,15 +262,6 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Builder::getEscaper
-     */
-    public function testGetEscaper()
-    {
-        $this->assertInstanceOf('Zend\Escaper\Escaper', $this->object->getEscaper());
-        $this->assertInstanceOf('Zend\Escaper\Escaper', $this->object->getEscaper(), '大事なので２度確認しました');
-    }
-
-    /**
      * @covers Flower\View\Pane\Builder::addHtmlClass
      */
     public function testAddHtmlClass()

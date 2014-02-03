@@ -154,7 +154,7 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $pane->wrapBegin());
         $this->assertEquals('bar', $pane->wrapEnd());
     }
-    
+
     /**
      * @covers Flower\View\Pane\PaneFactory::factory
      */
@@ -183,5 +183,14 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('</foo>', $pane->end());
         $this->assertEquals(explode(' ', $classes), $pane->classes);
         $this->assertEquals($attributes, $pane->attributes);
+    }
+
+    /**
+     * @covers Flower\View\Pane\Builder::getEscaper
+     */
+    public function testGetEscaper()
+    {
+        $this->assertInstanceOf('Zend\Escaper\Escaper', PaneFactory::getEscaper());
+        $this->assertInstanceOf('Zend\Escaper\Escaper', PaneFactory::getEscaper(), '大事なので２度確認しました');
     }
 }
