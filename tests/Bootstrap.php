@@ -4,7 +4,6 @@ namespace FlowerTest;
  * This file is copy from zf2/tutorial/album and minor modify
 
  *  */
-use Zend\Console\Console;
 use Zend\Loader\AutoloaderFactory;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
@@ -65,7 +64,19 @@ class Bootstrap
         $serviceManager = new ServiceManager(new ServiceManagerConfig());
         $serviceManager->setService('ApplicationConfig', $config);
         $serviceManager->get('ModuleManager')->loadModules();
+        //$serviceManager->get('Application')->bootstrap();
         static::$serviceManager = $serviceManager;
+
+        /**
+         * 各テストで副作用が考えらるときは、static::$serviceManagerを使わず、Configだけ
+         * 移して個別に作成すること
+        $config = Bootstrap::getServiceManager()->get('ApplicationConfig');
+        $serviceManager = new ServiceManager(new ServiceManagerConfig());
+        $serviceManager->setService('ApplicationConfig', $config);
+        $serviceManager->get('ModuleManager')->loadModules();
+        $serviceManager->get('Application')->bootstrap();
+         *
+         */
     }
 
     public static function getServiceManager()
