@@ -318,9 +318,9 @@ EOD;
     /**
      * @covers Flower\View\PaneRenderer::current
      */
-    public function testCurrentVarIsOmitted()
+    public function testCurrentHasNoContent()
     {
-        $expected = '  <div class="container">    <!-- var is omitted -->  </div>';
+        $expected = '';
         $builder =new Builder;
         $pane = $builder->build(
                 array(

@@ -121,12 +121,10 @@ class PaneRenderer extends RecursiveIteratorIterator
         $innerIndent = $indent . $this->indent;
         $pane = parent::current();
 
-        if (!isset($pane->var) || (!$var = $pane->var)) {
-            echo $indent . $pane->begin($depth);
-            $this->commentEnable and print($innerIndent . "<!-- var is omitted -->" . $this->linefeed);
-            echo $indent . $pane->end($depth) . $this->linefeed;
+        if (!$pane->hasContent()) {
             return;
         }
+        $var = $pane->var;
 
         if (is_string($var)) {
             $var_comment = htmlspecialchars($var);
