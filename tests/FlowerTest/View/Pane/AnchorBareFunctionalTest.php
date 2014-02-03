@@ -91,7 +91,7 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
   <!-- start content ListPane -->
   <li>
   <a href="No%20RouteStackInterface%20instance%20provided">
-No RouteStackInterface instance provided
+content
   </a>
   </li>
   <!-- end content ListPane -->
@@ -109,7 +109,6 @@ No RouteStackInterface instance provided
         $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\Anchor')))->build($paneConfig);
         $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
         $renderer = new ListRenderer($pane);
-        $renderer->setVar('content', 'foo');
         $renderer->setView(new PhpRenderer);
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
     }
@@ -122,7 +121,7 @@ No RouteStackInterface instance provided
   <!-- start content ListPane -->
   <li>
   <a href="No%20RouteMatch%20instance%20provided">
-No RouteMatch instance provided
+content
   </a>
   </li>
   <!-- end content ListPane -->
@@ -142,7 +141,6 @@ No RouteMatch instance provided
         $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
 
         $renderer = $this->helper->__invoke($paneConfig);
-        $renderer->setVar('content', 'foo');
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
     }
 
