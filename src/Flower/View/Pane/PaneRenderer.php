@@ -103,7 +103,6 @@ class PaneRenderer extends RecursiveIteratorIterator
         $pane->setPaneRenderer($this);
         echo $indent . $pane->wrapBegin($depth);
         $this->endTagStack[] = $indent . $pane->wrapEnd($depth);
-
     }
 
     public function endChildren()
@@ -157,7 +156,12 @@ class PaneRenderer extends RecursiveIteratorIterator
     public function __toString()
     {
         ob_start();
-        foreach($this as $entry) {}
+        //__toString() must not throw an exception
+        try {
+            foreach($this as $entry) {}
+        } catch (Exception $ex) {
+            echo $ex;
+        }
         return ob_get_clean();
     }
 }
