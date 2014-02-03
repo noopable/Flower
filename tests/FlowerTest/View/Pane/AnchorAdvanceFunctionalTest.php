@@ -81,7 +81,6 @@ class AnchorAdvanceFunctionalTest extends \PHPUnit_Framework_TestCase
     <!-- end content ListPane -->
   </ul>
   </li>
-
 </ul>
 <!-- end ListRenderer -->
 ';

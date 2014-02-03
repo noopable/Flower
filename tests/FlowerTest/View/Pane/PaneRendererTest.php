@@ -143,7 +143,8 @@ EOD;
         $builder =new Builder;
         $expected =
 '<!-- begin PaneRenderer -->
-<div/>
+<div>
+</div>
 <!-- end PaneRenderer -->';
         $pane = $builder->build(array('var' => false));
         $paneRenderer = new PaneRenderer($pane);
@@ -252,7 +253,7 @@ EOD;
      */
     public function testBeginIteration()
     {
-        $expectedString = "\n<!-- begin PaneRenderer -->\n" . 'foo';
+        $expectedString = "\n<!-- begin PaneRenderer -->\n" . 'foo' . "\n";
         $builder =new Builder;
         $pane = $builder->build(array('wrapBegin' => 'foo'));
         $paneRenderer = new PaneRenderer($pane);
@@ -265,7 +266,7 @@ EOD;
      */
     public function testEndIteration()
     {
-        $expectedString = 'foo' . "\n<!-- end PaneRenderer -->\n" ;
+        $expectedString = "foo\n<!-- end PaneRenderer -->\n" ;
         $builder =new Builder;
         $pane = $builder->build(array('wrapEnd' => 'foo'));
         $paneRenderer = new PaneRenderer($pane);
@@ -285,7 +286,7 @@ EOD;
         $paneRenderer->beginChildren();
         echo " ";
         $paneRenderer->endChildren();
-        $this->expectOutputString('foo bar');
+        $this->expectOutputString("foo\n bar\n");
     }
 
     /**

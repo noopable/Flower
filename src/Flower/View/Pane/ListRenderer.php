@@ -37,7 +37,7 @@ class ListRenderer extends PaneRenderer
         $pane = parent::getInnerIterator();
         $pane->setPaneRenderer($this);
         echo $indent . $pane->containerBegin($depth) . $this->linefeed;
-        $this->endTagStack[] = $indent . $pane->containerEnd($depth) . $this->linefeed;
+        $this->endTagStack[] = $indent . $pane->containerEnd($depth);
     }
 
     public function endChildren()
