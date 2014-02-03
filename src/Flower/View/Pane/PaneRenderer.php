@@ -159,7 +159,7 @@ class PaneRenderer extends RecursiveIteratorIterator
         try {
             foreach($this as $entry) {}
         } catch (\Exception $ex) {
-            echo $ex;
+            echo $ex->getMessage();
         }
         return ob_get_clean();
     }
