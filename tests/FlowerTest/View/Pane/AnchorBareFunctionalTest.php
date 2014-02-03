@@ -113,6 +113,215 @@ content
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
     }
 
+    /**
+     * No RouteStackInterface instance provided
+     * Routerが設定されていない場合にhrefがこのように設定されます。
+     *
+     */
+    public function testSimpleInnerWithoutRouterUsePagesInsteadofInner()
+    {
+
+        $expected =
+'<!-- begin ListRenderer -->
+<ul>
+  <!-- start content ListPane -->
+  <li>
+  <a href="No%20RouteStackInterface%20instance%20provided">
+content
+  </a>
+  </li>
+  <!-- end content ListPane -->
+</ul>
+<!-- end ListRenderer -->
+';
+        $expected = str_replace("\r\n","\n", $expected);
+        $paneConfig = array(
+            'classes' => 'container',
+            'var' => 'foo',
+            'pages' => array(
+                'classes' => 'main',
+                'var' => 'content',
+            ));
+        $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\Anchor')))->build($paneConfig);
+        $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
+        $renderer = new ListRenderer($pane);
+        $renderer->setView(new PhpRenderer);
+        $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
+    }
+
+    /**
+     * No RouteStackInterface instance provided
+     * Routerが設定されていない場合にhrefがこのように設定されます。
+     *
+     */
+    public function testSimpleInnerWithoutRouterUsePagesAndInner()
+    {
+
+        $expected =
+'<!-- begin ListRenderer -->
+<ul>
+  <!-- start content ListPane -->
+  <li>
+  <a href="No%20RouteStackInterface%20instance%20provided">
+Label1
+  </a>
+  </li>
+  <!-- end content ListPane -->
+  <!-- start content ListPane -->
+  <li>
+  <a href="No%20RouteStackInterface%20instance%20provided">
+Label2
+  </a>
+  </li>
+  <!-- end content ListPane -->
+</ul>
+<!-- end ListRenderer -->
+';
+        $expected = str_replace("\r\n","\n", $expected);
+        $paneConfig = array(
+            'classes' => 'container',
+            'var' => 'foo',
+            'inner' => array(
+                'classes' => 'main',
+                'var' => 'Label1',
+                'order' => 10,
+            ),
+            'pages' => array(
+                'classes' => 'main',
+                'var' => 'Label2',
+            ),);
+        $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\Anchor')))->build($paneConfig);
+        $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
+        $renderer = new ListRenderer($pane);
+        $renderer->setView(new PhpRenderer);
+        $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
+    }
+
+    /**
+     * No RouteStackInterface instance provided
+     * Routerが設定されていない場合にhrefがこのように設定されます。
+     *
+     */
+    public function testSimpleInnerWithoutRouterUsePagesAndInnerMulti()
+    {
+
+        $expected =
+'<!-- begin ListRenderer -->
+<ul>
+  <!-- start content ListPane -->
+  <li>
+  <a href="No%20RouteStackInterface%20instance%20provided">
+Label1
+  </a>
+  </li>
+  <!-- end content ListPane -->
+  <!-- start content ListPane -->
+  <li>
+  <a href="No%20RouteStackInterface%20instance%20provided">
+Label2
+  </a>
+  </li>
+  <!-- end content ListPane -->
+  <!-- start content ListPane -->
+  <li>
+  <a href="No%20RouteStackInterface%20instance%20provided">
+Label3
+  </a>
+  </li>
+  <!-- end content ListPane -->
+</ul>
+<!-- end ListRenderer -->
+';
+        $expected = str_replace("\r\n","\n", $expected);
+        $paneConfig = array(
+            'classes' => 'container',
+            'var' => 'foo',
+            'inner' => array(
+                array(
+                    'classes' => 'main',
+                    'var' => 'Label1',
+                    'order' => 20,
+                ),
+                    array(
+                    'classes' => 'main',
+                    'var' => 'Label2',
+                    'order' => 10,
+                )
+            ),
+            'pages' => array(
+                'classes' => 'main',
+                'var' => 'Label3',
+            ),);
+        $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\Anchor')))->build($paneConfig);
+        $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
+        $renderer = new ListRenderer($pane);
+        $renderer->setView(new PhpRenderer);
+        $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
+    }
+
+    /**
+     * No RouteStackInterface instance provided
+     * Routerが設定されていない場合にhrefがこのように設定されます。
+     *
+     */
+    public function testSimpleInnerWithoutRouterUsePagesAndInnerMulti2()
+    {
+
+        $expected =
+'<!-- begin ListRenderer -->
+<ul>
+  <!-- start content ListPane -->
+  <li>
+  <a href="No%20RouteStackInterface%20instance%20provided">
+Label1
+  </a>
+  </li>
+  <!-- end content ListPane -->
+  <!-- start content ListPane -->
+  <li>
+  <a href="No%20RouteStackInterface%20instance%20provided">
+Label2
+  </a>
+  </li>
+  <!-- end content ListPane -->
+  <!-- start content ListPane -->
+  <li>
+  <a href="No%20RouteStackInterface%20instance%20provided">
+Label3
+  </a>
+  </li>
+  <!-- end content ListPane -->
+</ul>
+<!-- end ListRenderer -->
+';
+        $expected = str_replace("\r\n","\n", $expected);
+        $paneConfig = array(
+            'classes' => 'container',
+            'var' => 'foo',
+            'inner' => array(
+                'classes' => 'main',
+                'var' => 'Label3',
+            ),
+            'pages' => array(
+                array(
+                    'classes' => 'main',
+                    'var' => 'Label1',
+                    'order' => 20,
+                ),
+                    array(
+                    'classes' => 'main',
+                    'var' => 'Label2',
+                    'order' => 10,
+                )
+            ),
+        );
+        $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\Anchor')))->build($paneConfig);
+        $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
+        $renderer = new ListRenderer($pane);
+        $renderer->setView(new PhpRenderer);
+        $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
+    }
+
     public function testSimpleInnerWithoutRouteMatch()
     {
         $expected =
