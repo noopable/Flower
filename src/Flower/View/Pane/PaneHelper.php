@@ -30,6 +30,8 @@ class PaneHelper extends AbstractHelper
 
     public $defaultContent = 'content';
 
+    public $defaultPaneClass = 'Flower\View\Pane\Pane';
+
     public $paneRenderer = 'Flower\View\Pane\PaneRenderer';
 
     protected $builder;
@@ -124,7 +126,7 @@ class PaneHelper extends AbstractHelper
     public function setBuilder(Builder $builder = null)
     {
         if (null === $builder) {
-            $builder = new Builder;
+            $builder = new Builder(array('pane_class' => $this->defaultPaneClass));
         }
         $this->builder = $builder;
     }

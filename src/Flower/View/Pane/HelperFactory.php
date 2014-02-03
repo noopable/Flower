@@ -53,12 +53,12 @@ class HelperFactory implements FactoryInterface
                 $this->builderClass = $bOptions['builder_class'];
                 unset ($bOptions['builder_class']);
             }
+            if (!isset($bOptions['pane_class']) && isset($helper->defaultPaneClass)) {
+                $bOptions['pane_class'] = $helper->defaultPaneClass;
+            }
             $builder = new $this->builderClass($bOptions);
-        } else {
-            $builder = new $this->builderClass;
+            $helper->setBuilder($builder);
         }
-
-        $helper->setBuilder($builder);
 
         return $helper;
 
