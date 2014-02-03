@@ -22,6 +22,8 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
 
     public $id;
 
+    public $name;
+    
     /**
      *
      * @var array

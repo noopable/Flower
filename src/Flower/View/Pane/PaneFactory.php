@@ -92,6 +92,7 @@ class PaneFactory implements PaneFactoryInterface
             }
             switch ($k) {
                 case "label":
+                case "name":
                     $pane->$k = (string) $v;
                     break;
                 case "order":
@@ -147,6 +148,10 @@ class PaneFactory implements PaneFactoryInterface
 
         if (isset($pane->id)) {
             $attributes['id'] = $pane->id;
+        }
+
+        if (isset($pane->name)) {
+            $attributes['name'] = $pane->name;
         }
 
         if (isset($pane->size)) {

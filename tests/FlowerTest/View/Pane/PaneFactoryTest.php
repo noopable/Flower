@@ -17,6 +17,7 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         $paneConfig = array(
             'tag' => $tag = 'foo',
             'id' => $id = '30-cc2',
+            'name' => $name = '30-cc3',
             'order' => $order = 5,
             'size' => $size = 10,
             'var' => $var = 'header',
@@ -38,11 +39,12 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($tag, $pane->tag);
         $this->assertEquals($tag, $pane->wrapTag, 'if wrapTag is omitted ,wrapTag is same to tag');
         $this->assertEquals('cc2', $pane->id);
+        $this->assertEquals($name, $pane->name);
         $this->assertEquals($order, $pane->order);
         $this->assertEquals($size, $pane->size);
         $this->assertEquals($var, $pane->var);
-        $this->assertEquals('<foo foo="bar" baz="qux" id="cc2" class="span10 container row">', trim($pane->begin()));
-        $this->assertEquals('<foo foo="bar" baz="qux" id="cc2" class="span10 container row">', trim($pane->wrapBegin()));
+        $this->assertEquals('<foo foo="bar" baz="qux" id="cc2" name="30-cc3" class="span10 container row">', trim($pane->begin()));
+        $this->assertEquals('<foo foo="bar" baz="qux" id="cc2" name="30-cc3" class="span10 container row">', trim($pane->wrapBegin()));
         $this->assertEquals('</foo>', $pane->end());
         $this->assertEquals('</foo>', $pane->wrapEnd());
         $this->assertEquals(explode(' ', $classes), $pane->classes);
