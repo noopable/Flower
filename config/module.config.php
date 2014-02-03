@@ -149,6 +149,7 @@ return array(
         'factories' => array(
             'pane' => 'Flower\View\Pane\HelperFactory',
             'npList' =>  'Flower\View\Pane\ListHelperFactory',
+            'npNavi' =>   'Flower\View\Pane\AnchorHelperFactory',
         ),
         'invokables' => array(
             //'pane' => 'Flower\View\Pane\PaneHelper',
