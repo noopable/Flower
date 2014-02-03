@@ -68,8 +68,8 @@ class AnchorVariousFunctionalTest extends \PHPUnit_Framework_TestCase
 '<!-- begin ListRenderer -->
 <ul>
 <li>
-<a href="/application/">
-Link Label 1</a>
+<span class="container">
+Link Label 1</span>
 </li>
 </ul>
 <!-- end ListRenderer -->

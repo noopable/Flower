@@ -63,12 +63,8 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
     {
         $expected =
 '<!-- begin ListRenderer -->
-<ul>
-<li>
-<a href="No%20RouteStackInterface%20instance%20provided">
-content</a>
-</li>
-</ul>
+
+
 <!-- end ListRenderer -->
 ';
         $expected = str_replace("\r\n", "\n", $expected);

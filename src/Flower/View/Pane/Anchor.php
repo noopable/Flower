@@ -28,6 +28,14 @@ class Anchor extends ListPane
 
     protected $defaultSubstituteTag = 'span';
 
+    /**
+     * reset var as default innerHtml value
+     *
+     * @see Flower\View\Pane\Pane::var
+     * @var type
+     */
+    public $var = '';
+
     public $href;
 
     public $route;
