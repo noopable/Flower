@@ -150,4 +150,23 @@ class PaneTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Flower\View\Pane\PaneFactory', Pane::getFactoryClass());
     }
 
+    /**
+     * 
+     * @covers Flower\View\Pane\Pane::hasContent
+     */
+    public function testHasContent()
+    {
+        $varRef = TestTool::getPropertyRef($this->object, 'var');
+        $this->assertTrue($this->object->hasContent(), 'default var=content');
+        $varRef->setValue($this->object, null);
+        $this->assertFalse($this->object->hasContent(), 'var= null or not isset');
+        $this->object->var = '';
+        $this->assertFalse($this->object->hasContent(), 'var= ""');
+        $this->object->var = false;
+        $this->assertFalse($this->object->hasContent(), 'var= false');
+        $this->object->var = array();
+        $this->assertFalse($this->object->hasContent(), 'var= empty array is invalid');
+        $this->object->var = '0';
+        $this->assertTrue($this->object->hasContent(), 'var = "0" is valid');
+    }
 }

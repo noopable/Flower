@@ -23,7 +23,7 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
     public $id;
 
     public $name;
-    
+
     /**
      *
      * @var array
@@ -184,5 +184,11 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
     public function getPaneRenderer()
     {
         return $this->paneRenderer;
+    }
+
+    public function hasContent()
+    {
+        //empty() is true when '0'
+        return !empty($this->var) || '0' === $this->var;
     }
 }
