@@ -28,13 +28,10 @@ class ListPaneFactory extends PaneFactory
 
         self::parseConfig($pane, $config);
 
-        if (isset($pane->var)) {
+        if (isset($pane->var) && ($pane->var !== array($pane, 'render'))) {
             $pane->_var = $pane->var;
-        } else {
-            $pane->_var = 'content';
+            $pane->var = array($pane, 'render');
         }
-
-        $pane->var = array($pane, 'render');
 
         if (isset($config['begin'])) {
             $pane->setBegin((string) $config['begin']);

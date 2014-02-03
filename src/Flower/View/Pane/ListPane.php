@@ -74,7 +74,7 @@ class ListPane extends Pane
         $this->indent = $paneRenderer->indent;
         $this->linefeed = $paneRenderer->linefeed;
         $this->commentEnable = $paneRenderer->commentEnable;
-        
+
         $depth = $paneRenderer->getDepth();
         $indent = str_repeat($this->indent, $depth + 1);
         $innerIndent = $indent . $this->indent;

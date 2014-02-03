@@ -40,13 +40,6 @@ class Anchor extends ListPane
 
     protected $view;
 
-    public function __construct()
-    {
-        parent::__construct();
-        //default renderring policy => callback
-        $this->var = array($this, 'render');
-    }
-
     public function begin($depth = null)
     {
         if ($this->tag == 'a') {
@@ -164,13 +157,17 @@ class Anchor extends ListPane
         $this->linefeed = $paneRenderer->linefeed;
         $this->commentEnable = $paneRenderer->commentEnable;
 
-        $view = $paneRenderer->getView();
-        if ($view instanceof View) {
-            $this->setView($view);
+        if (isset($this->view)) {
+            $view = $this->view;
         } else {
-            return 'PhpRenderer not found. Normally you may have it from helper.:' . __METHOD__;
-            //__toString() must not throw an exception
-            //throw new RuntimeException('PhpRenderer not found. Normally you may have it from helper.');
+            $view = $paneRenderer->getView();
+            if ($view instanceof View) {
+                $this->setView($view);
+            } else {
+                return 'PhpRenderer not found. Normally you may have it from helper.:' . __METHOD__;
+                //__toString() must not throw an exception
+                //throw new RuntimeException('PhpRenderer not found. Normally you may have it from helper.');
+            }
         }
 
         switch ($this->getOption('render_policy')) {
@@ -178,9 +175,23 @@ class Anchor extends ListPane
                 return $view->render($this->_var);
             case 'raw':
                 return (string) $this->_var;
+            case 'callback':
+                if (is_callable($this->_var)) {
+                    return call_user_func($this->_var, $paneRenderer);
+                } else {
+                    //__toString() must not throw an exception
+                    return 'render_policy is callback. but var is not callable. in ' . __METHOD__;
+                }
             case 'default':
             default:
-                return $view->escapeHtml($this->_var);
+                if (isset($this->label)) {
+                    return $view->escapeHtml($this->label);
+                } else {
+                    if (is_string($this->_var)) {
+                        return $view->escapeHtml($this->_var);
+                    }
+                    return 'label is not set and var is not string';
+                }
         }
     }
 
