@@ -74,6 +74,8 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
         $pane = AnchorPaneFactory::factory($paneConfig, (new Builder));
         $renderer = new ListRenderer($pane);
         $renderer->setView((new PhpRenderer));
+        //__toString() must not throw an exception
+        //foreach ($renderer as $entry) {}
         $this->assertEquals($expected, str_replace("\r\n", "\n", (string) $renderer));
     }
 
