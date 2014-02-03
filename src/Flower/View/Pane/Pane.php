@@ -38,6 +38,8 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
 
     public $size;
 
+    public $label;
+
     public $var = 'content';
 
     public $begin;

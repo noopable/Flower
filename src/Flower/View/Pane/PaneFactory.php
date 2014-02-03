@@ -91,6 +91,9 @@ class PaneFactory implements PaneFactoryInterface
                 continue;
             }
             switch ($k) {
+                case "label":
+                    $pane->$k = (string) $v;
+                    break;
                 case "order":
                 case "size":
                     $pane->$k = (int) $v;
