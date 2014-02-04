@@ -79,7 +79,7 @@ Link Label 1</span>
             'classes' => 'container',
             'label' => 'Link Label 1',
         );
-        echo $renderer = $this->helper->__invoke($paneConfig);
+        $renderer = $this->helper->__invoke($paneConfig);
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
     }
 

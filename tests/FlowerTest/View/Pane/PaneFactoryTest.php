@@ -47,7 +47,7 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('<foo foo="bar" baz="qux" id="cc2" name="30-cc3" class="span10 container row">', trim($pane->wrapBegin()));
         $this->assertEquals('</foo>', $pane->end());
         $this->assertEquals('</foo>', $pane->wrapEnd());
-        $this->assertEquals(explode(' ', $classes), $pane->classes);
+        $this->assertEquals($classes, $pane->classes);
         $this->assertEquals($attributes, $pane->attributes);
     }
 
@@ -81,7 +81,7 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($order, $pane->order);
         $this->assertEquals($size, $pane->size);
         $this->assertEquals($var, $pane->var);
-        $this->assertEquals(explode(' ', $classes), $pane->classes);
+        $this->assertEquals($classes, $pane->classes);
         $this->assertEquals($attributes, $pane->attributes);
     }
 
@@ -115,7 +115,7 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($order, $pane->order);
         $this->assertEquals($size, $pane->size);
         $this->assertEquals($var, $pane->var);
-        $this->assertEquals(explode(' ', $classes), $pane->classes);
+        $this->assertEquals($classes, $pane->classes);
         $this->assertEquals($attributes, $pane->attributes);
         $this->assertEquals('foo', $pane->begin());
         $this->assertEquals('bar', $pane->end());
@@ -183,7 +183,7 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(10, $pane->size);
         $this->assertEquals('<foo foo-1="bar&quot;" baz2="qux&#x27;" id="cc3" class="span10 container row 2002&#x27;s&quot;">', trim($pane->begin()));
         $this->assertEquals('</foo>', $pane->end());
-        $this->assertEquals(explode(' ', $classes), $pane->classes);
+        $this->assertEquals($classes, $pane->classes);
         $this->assertEquals($attributes, $pane->attributes);
     }
 
@@ -194,5 +194,24 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('Zend\Escaper\Escaper', PaneFactory::getEscaper());
         $this->assertInstanceOf('Zend\Escaper\Escaper', PaneFactory::getEscaper(), '大事なので２度確認しました');
+    }
+
+    /**
+     * @covers Flower\View\Pane\Builder::addHtmlClass
+     */
+    public function testAddHtmlClass()
+    {
+        $attributes = array();
+
+        PaneFactory::addHtmlClass('foo', $attributes);
+        $this->assertEquals('foo', $attributes['class']);
+
+        //invoke twice
+        PaneFactory::addHtmlClass('bar', $attributes);
+        $this->assertEquals('foo bar', $attributes['class']);
+
+        //by array
+        PaneFactory::addHtmlClass(array('baz', 'qux'), $attributes);
+        $this->assertEquals('foo bar baz qux', $attributes['class']);
     }
 }

@@ -28,12 +28,6 @@ class AnchorHelperFactoryTest extends \PHPUnit_Framework_TestCase
                 'foo' => 'bar',
                 'baz' => 'qux',
             ),
-            /*
-             * normally autodetect
-            'pane_class' => 'FlowerTest\View\Pane\TestAsset\YetAnotherPane',
-            'begin' => 'foo',
-            'end' => 'bar',
-            */
         );
 
         $pane = AnchorPaneFactory::factory($paneConfig, $builder);
@@ -50,11 +44,12 @@ class AnchorHelperFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($controller, $pane->controller);
         $this->assertEquals($action, $pane->action);
         $this->assertEquals($params, $pane->params);
-        $this->assertEquals('<foo foo="bar" baz="qux" id="cc2" name="30-cc3" class="span10 container row" href="PaneRenderer%20is%20not%20setFlower%5CView%5CPane%5CAnchor%3A%3AgetHref">', trim($pane->begin()));
+        $this->assertEquals('<foo foo="bar" baz="qux" href="PaneRenderer%20is%20not%20setFlower%5CView%5CPane%5CAnchor%3A%3AgetHrefWithViewHelper" id="cc2" name="30-cc3" class="span10 container row">', trim($pane->begin()));
         $this->assertEquals('<li>', trim($pane->wrapBegin()));
         $this->assertEquals('</foo>', $pane->end());
         $this->assertEquals('</li>', $pane->wrapEnd());
-        $this->assertEquals(explode(' ', $classes), $pane->classes);
+        $this->assertEquals($classes, $pane->classes);
+        $attributes['href'] = 'PaneRenderer is not setFlower\View\Pane\Anchor::getHrefWithViewHelper';
         $this->assertEquals($attributes, $pane->attributes);
     }
 }

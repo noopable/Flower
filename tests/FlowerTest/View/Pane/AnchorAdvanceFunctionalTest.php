@@ -68,17 +68,17 @@ class AnchorAdvanceFunctionalTest extends \PHPUnit_Framework_TestCase
 '<!-- begin ListRenderer -->
 <ul>
 <li>
-<a href="/application/">
-Link Label 1</a>
+<span class="container">
+Link Label 1</span>
 <ul>
   <li>
-  <a href="/application/">
-Link Label 1.1  </a>
+  <span class="main">
+Link Label 1.1  </span>
   <ul>
     <!-- start content ListPane -->
     <li>
-    <a href="/application/">
-Link Label 1.1.1    </a>
+    <span class="main">
+Link Label 1.1.1    </span>
     </li>
     <!-- end content ListPane -->
   </ul>
@@ -107,7 +107,7 @@ Link Label 1.1.1    </a>
 
     public function testMultiInnerCommentOff()
     {
-        $expected = '<ul><li><a href="/application/">Link Label 1</a><ul><li><a href="/application/">Link Label 1.1</a><ul><li><a href="/application/">Link Label 1.1.1</a></li></ul></li></ul></li></ul>';
+        $expected = '<ul><li><span class="container">Link Label 1</span><ul><li><span class="main">Link Label 1.1</span><ul><li><span class="main">Link Label 1.1.1</span></li></ul></li></ul></li></ul>';
         $paneConfig = array(
             'classes' => 'container',
             'var' => 'Link Label 1',//this will be omitted

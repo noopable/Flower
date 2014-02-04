@@ -17,26 +17,14 @@ class ListPaneFactory extends PaneFactory
 {
     protected static $paneClass = 'Flower\View\Pane\ListPane';
 
-    public static function factory(array $config, Builder $builder)
+    public static function parseBeginEnd(PaneInterface $pane, array $config)
     {
-        /* @var $pane \Flower\View\Pane\PaneInterface  */
-        if (isset($config['pane_class'])) {
-            $pane = new $config['pane_class'];
-        } else {
-            $pane = new static::$paneClass;
-        }
-
-        static::parseConfig($pane, $config);
-
-        if (isset($pane->var) && ($pane->var !== array($pane, 'render'))) {
-            $pane->_var = $pane->var;
-            $pane->var = array($pane, 'render');
-        }
-
         if (isset($config['begin'])) {
             $pane->setBegin((string) $config['begin']);
+        } elseif(!isset($pane->tag) || empty($pane->tag)) {
+            $pane->setBegin('<!-- start pane -->');
         } else {
-            $attributeString = self::parseAttributes($pane, $builder);
+            $attributeString = self::parseAttributes($pane);
             if (strlen($attributeString)) {
                 $pane->setBegin(sprintf('<%s%s>', $pane->tag, $attributeString));
             }
@@ -45,30 +33,6 @@ class ListPaneFactory extends PaneFactory
             }
          }
 
-        if (isset($config['wrapBegin'])) {
-            $pane->setWrapBegin((string) $config['wrapBegin']);
-        } else {
-            $attributes = $pane->getOption('wrap_attributes');
-            if (is_array($attributes)) {
-                $attributeString = self::attributesToAttributeString($pane, $builder);
-                $pane->setWrapBegin(sprintf('<%s%s>', $pane->wrapTag, $attributeString));
-            } else {
-                $pane->setWrapBegin(sprintf('<%s>', $pane->wrapTag));
-            }
-        }
-
-        if (isset($config['containerBegin'])) {
-            $pane->containerBegin = (string) $config['containerBegin'];
-        } elseif(isset($pane->containerTag)) {
-            $attributes = $pane->getOption('container_attributes');
-            if (is_array($attributes)) {
-                $attributeString = self::attributesToAttributeString($pane, $builder);
-                $pane->containerBegin = sprintf('<%s%s>', $pane->containerTag, $attributeString);
-            } else {
-                $pane->containerBegin = sprintf('<%s>', $pane->containerTag);
-            }
-        }
-
          if (isset($config['end'])) {
              $pane->setEnd((string) $config['end']);
          } elseif(! strlen($pane->tag)) {
@@ -76,14 +40,60 @@ class ListPaneFactory extends PaneFactory
          } else {
              $pane->setEnd('</' . $pane->tag . '>');
          }
+    }
 
-         if (isset($config['wrapEnd'])) {
+    public static function parseWrapBeginEnd(PaneInterface $pane, array $config)
+    {
+        /*
+        if (isset($config['wrapBegin'])) {
+            $pane->setWrapBegin((string) $config['wrapBegin']);
+        } elseif(!isset($pane->wrapTag) || empty($pane->wrapTag)) {
+            $pane->setWrapBegin('<!-- start pane -->');
+        } else {
+            $attributeString = self::parseAttributes($pane);
+            if (strlen($attributeString)) {
+                $pane->setWrapBegin(sprintf('<%s%s>', $pane->wrapTag, $attributeString));
+            } else {
+                $pane->setWrapBegin(sprintf('<%s>', $pane->wrapTag));
+            }
+         }
+         *
+         */
+        if (isset($config['wrapBegin'])) {
+            $pane->setWrapBegin((string) $config['wrapBegin']);
+        } else {
+            $attributes = $pane->getOption('wrap_attributes');
+            if (is_array($attributes)) {
+                $attributeString = self::attributesToAttributeString($pane);
+                $pane->setWrapBegin(sprintf('<%s%s>', $pane->wrapTag, $attributeString));
+            } else {
+                $pane->setWrapBegin(sprintf('<%s>', $pane->wrapTag));
+            }
+        }
+
+
+         if (isset ($config['wrapEnd'])) {
              $pane->setWrapEnd((string) $config['wrapEnd']);
          } elseif (! strlen($pane->wrapTag)) {
              $pane->setWrapEnd('<!-- end pane -->');
          } else {
              $pane->setWrapEnd('</' . $pane->wrapTag . '>');
          }
+    }
+
+    public static function parseContainerBeginEnd(PaneInterface $pane, array $config)
+    {
+        if (isset($config['containerBegin'])) {
+            $pane->containerBegin = (string) $config['containerBegin'];
+        } elseif(isset($pane->containerTag)) {
+            $attributes = $pane->getOption('container_attributes');
+            if (is_array($attributes)) {
+                $attributeString = self::attributesToAttributeString($pane);
+                $pane->containerBegin = sprintf('<%s%s>', $pane->containerTag, $attributeString);
+            } else {
+                $pane->containerBegin = sprintf('<%s>', $pane->containerTag);
+            }
+        }
 
          if (isset($config['containerEnd'])) {
              $pane->containerEnd = (string) $config['containerEnd'];
@@ -92,6 +102,13 @@ class ListPaneFactory extends PaneFactory
          } else {
              $pane->containerEnd = '</' . $pane->containerTag . '>';
          }
-         return $pane;
+    }
+
+    public static function treatment(PaneInterface $pane)
+    {
+        if (isset($pane->var) && ($pane->var !== array($pane, 'render'))) {
+            $pane->_var = $pane->var;
+            $pane->var = array($pane, 'render');
+        }
     }
 }

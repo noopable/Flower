@@ -53,7 +53,7 @@ class ListPane extends Pane
             $containerEnd .= $indent . $this->containerEnd;
         }
 
-        if (!empty($this->_var)) {
+        if ($this->hasContent()) {
             $renderSelf = true;
             //自要素を表示する
             if (strlen($response)) {
@@ -138,5 +138,11 @@ class ListPane extends Pane
         }
 
         return $response;
+    }
+
+    public function hasContent()
+    {
+        //empty() is true when '0'
+        return !empty($this->_var) || '0' === $this->_var;
     }
 }

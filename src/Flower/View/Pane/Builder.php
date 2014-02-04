@@ -125,7 +125,11 @@ class Builder
             $factoryClass = $this->getDefaultPaneFactory();
         }
 
-        return call_user_func($factoryClass . '::factory', $config, $this);
+        if (isset($this->sizeToClassFunction) && !isset($config['size_to_class_function'])) {
+            $config['size_to_class_function'] = $this->sizeToClassFunction;
+        }
+
+        return call_user_func($factoryClass . '::factory', $config);
     }
 
     public function setDefaultPaneFactory($paneFactory)
@@ -160,41 +164,8 @@ class Builder
         return $this;
     }
 
-    /**
-     *
-     * @param type $class
-     * @param array $attributes
-     */
-    public function addHtmlClass($class, array &$attributes)
+    public function getSizeToClassFunction()
     {
-        if (is_array($class)) {
-            $class = implode(' ', $class);
-        }
-
-        if (!isset($attributes['class']) || !strlen($attributes['class'])) {
-            $attributes['class'] = $class;
-        } else {
-            $attributes['class'] .= ' ' . $class;
-        }
+        return $this->sizeToClassFunction;
     }
-
-    /**
-     * for util
-     * pane size to class
-     *
-     * @param mixed $size
-     * @return string $class
-     */
-    public function sizeToClass($size = 0)
-    {
-        if (is_callable($this->sizeToClassFunction)) {
-            $class = call_user_func($this->sizeToClassFunction, $size);
-        } else {
-            //default for twitter bootsrap 2
-            // convert to small decimal string
-            $class = 'span' . (string) (intval($size) % 36);
-        }
-        return $class;
-    }
-
 }

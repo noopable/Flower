@@ -50,32 +50,12 @@ class Anchor extends ListPane
 
     public function begin($depth = null)
     {
-        if ($href = $this->getHref()) {
-            //hrefの割り当てを試す
-            $tag = $this->tag;
-            $this->attributes['href'] = $href;
-        } else {
-            $tag = $this->getSubstituteTag();
-        }
-        $attributeString = AnchorPaneFactory::attributesToAttributeString($this->attributes);
-        if (strlen($attributeString)) {
-            $this->begin = sprintf('<%s%s>', $tag, $attributeString);
-        } else {
-            $this->begin = '<' . $tag . '>';
-        }
-
         return $this->begin;
     }
 
     public function end($depth = null)
     {
-        if ($this->getHref()) {
-            //hrefの割り当てを試す
-            $tag = $this->tag;
-        } else {
-            $tag = $this->getSubstituteTag();
-        }
-        return '</' . $tag . '>';
+        return $this->end;
     }
 
     public function getSubstituteTag()
@@ -113,60 +93,33 @@ class Anchor extends ListPane
             return $href;
         }
 
-        $view = $this->getView();
-        if (!$view instanceof View) {
-            if (! isset($this->paneRenderer)) {
-                //__toString() must not throw an exception
-                //and if exceptions catched in upper layer, HTML structure will be broken
-                return 'PaneRenderer is not set' . __METHOD__;
-            }
-            $paneRenderer = $this->getPaneRenderer();
-            $view = $paneRenderer->getView();
-            if (!$view instanceof View) {
-                return 'PhpRenderer not found. Normally you may have it from helper.' . __METHOD__;
-                //__toString() must not throw an exception
-                //throw new RuntimeException('PhpRenderer not found. Normally you may have it from helper.');
-            }
+        $route = $this->route;
+        $params = $this->params;
+        if (isset($this->controller)) {
+            $params['controller'] = $this->controller;
         }
-        $urlHelper = $view->plugin('url');
 
-        $route = $this->getOption('route');
-        $params = $this->getOption('params');
+        if (isset($this->action)) {
+            $params['action'] = $this->action;
+        }
+
+        if (empty($route) && empty($params)) {
+            return false;
+        }
         if (empty($params)) {
             $params = array();
         }
+
         $options = $this->getOption('route_options');
         if (empty($options)) {
             $options = array();
         }
+
         $reuseMatched = (bool) $this->getOption('reuse_matched_params');
 
-        /**
-         *
-         * @see Zend\View\Helper\Url
-         * @param  string               $name               Name of the route
-         * @param  array                $params             Parameters for the link
-         * @param  array|Traversable    $options            Options for the route
-         * @param  bool                 $reuseMatchedParams Whether to reuse matched parameters
-         */
-        try {
-            $this->href = $urlHelper($route, $params, $options, $reuseMatched);
-        } catch (\Exception $ex) {
-            /**
-             * No RouteStackInterface instance provided
-             *  Urlヘルパーにrouterがセットされていない場合
-             * No RouteMatch instance provided
-             *  RouteMatchが設定されていないがルート名が指定されていない場合
-             * RouteMatch does not contain a matched route name
-             *  RouteMatchにmatchedRouteNameが設定されていない場合
-             *
-             * ※いずれもMvcフローから呼ばれていない可能性が高い
-             *
-             */
-            $this->href = $ex->getMessage();
-        }
-        return $this->href;
+        $this->href = $this->getHrefWithViewHelper($route, $params, $options, $reuseMatched);
 
+        return $this->href;
     }
 
     public function render(PaneRenderer $paneRenderer)
@@ -213,4 +166,64 @@ class Anchor extends ListPane
         }
     }
 
+    public function hasContent()
+    {
+        //empty() is true when '0'
+        return !empty($this->_var) || '0' === $this->_var || !empty($this->label) || '0' === $this->label;
+    }
+
+    /**
+     * @see Zend\View\Helper\Url
+     *
+     * Generates an url given the name of a route.
+     *
+     * @see    Zend\Mvc\Router\RouteInterface::assemble()
+     * @param  string               $route               Name of the route
+     * @param  array                $params             Parameters for the link
+     * @param  array|Traversable    $options            Options for the route
+     * @param  bool                 $reuseMatched Whether to reuse matched parameters
+     * @return string Url                         For the link href attribute
+     * @throws Exception\RuntimeException         If no RouteStackInterface was provided
+     * @throws Exception\RuntimeException         If no RouteMatch was provided
+     * @throws Exception\RuntimeException         If RouteMatch didn't contain a matched route name
+     * @throws Exception\InvalidArgumentException If the params object was not an array or \Traversable object
+     */
+    public function getHrefWithViewHelper($route = null, $params = array(), $options = array(), $reuseMatched = false)
+    {
+        $view = $this->getView();
+        if (!$view instanceof View) {
+            if (! isset($this->paneRenderer)) {
+                //__toString() must not throw an exception
+                //and if exceptions catched in upper layer, HTML structure will be broken
+                return 'PaneRenderer is not set' . __METHOD__;
+            }
+            $paneRenderer = $this->getPaneRenderer();
+            $view = $paneRenderer->getView();
+            if (!$view instanceof View) {
+                return 'PhpRenderer not found. Normally you may have it from helper.' . __METHOD__;
+                //__toString() must not throw an exception
+                //throw new RuntimeException('PhpRenderer not found. Normally you may have it from helper.');
+            }
+        }
+
+        try {
+            $urlHelper = $view->plugin('url');
+            $this->href = $urlHelper($route, $params, $options, $reuseMatched);
+        } catch (\Exception $ex) {
+            //__toString() must not throw an exception
+            /**
+             * No RouteStackInterface instance provided
+             *  Urlヘルパーにrouterがセットされていない場合
+             * No RouteMatch instance provided
+             *  RouteMatchが設定されていないがルート名が指定されていない場合
+             * RouteMatch does not contain a matched route name
+             *  RouteMatchにmatchedRouteNameが設定されていない場合
+             *
+             * ※いずれもMvcフローから呼ばれていない可能性が高い
+             *
+             */
+            $this->href = $ex->getMessage();
+        }
+        return $this->href;
+    }
 }

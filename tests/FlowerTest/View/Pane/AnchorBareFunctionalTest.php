@@ -91,13 +91,13 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
 '<!-- begin ListRenderer -->
 <ul>
 <li>
-<a href="No%20RouteStackInterface%20instance%20provided">
-foo</a>
+<span class="container">
+foo</span>
 <ul>
   <!-- start content ListPane -->
   <li>
-  <a href="No%20RouteStackInterface%20instance%20provided">
-content  </a>
+  <span class="main">
+content  </span>
   </li>
   <!-- end content ListPane -->
 </ul>
@@ -132,13 +132,13 @@ content  </a>
 '<!-- begin ListRenderer -->
 <ul>
 <li>
-<a href="No%20RouteStackInterface%20instance%20provided">
-foo</a>
+<span class="container">
+foo</span>
 <ul>
   <!-- start content ListPane -->
   <li>
-  <a href="No%20RouteStackInterface%20instance%20provided">
-content  </a>
+  <span class="main">
+content  </span>
   </li>
   <!-- end content ListPane -->
 </ul>
@@ -173,19 +173,19 @@ content  </a>
 '<!-- begin ListRenderer -->
 <ul>
 <li>
-<a href="No%20RouteStackInterface%20instance%20provided">
-foo</a>
+<span class="container">
+foo</span>
 <ul>
   <!-- start content ListPane -->
   <li>
-  <a href="No%20RouteStackInterface%20instance%20provided">
-Label1  </a>
+  <span class="main">
+Label1  </span>
   </li>
   <!-- end content ListPane -->
   <!-- start content ListPane -->
   <li>
-  <a href="No%20RouteStackInterface%20instance%20provided">
-Label2  </a>
+  <span class="main">
+Label2  </span>
   </li>
   <!-- end content ListPane -->
 </ul>
@@ -225,25 +225,25 @@ Label2  </a>
 '<!-- begin ListRenderer -->
 <ul>
 <li>
-<a href="No%20RouteStackInterface%20instance%20provided">
-foo</a>
+<span class="container">
+foo</span>
 <ul>
   <!-- start content ListPane -->
   <li>
-  <a href="No%20RouteStackInterface%20instance%20provided">
-Label1  </a>
+  <span class="main">
+Label1  </span>
   </li>
   <!-- end content ListPane -->
   <!-- start content ListPane -->
   <li>
-  <a href="No%20RouteStackInterface%20instance%20provided">
-Label2  </a>
+  <span class="main">
+Label2  </span>
   </li>
   <!-- end content ListPane -->
   <!-- start content ListPane -->
   <li>
-  <a href="No%20RouteStackInterface%20instance%20provided">
-Label3  </a>
+  <span class="main">
+Label3  </span>
   </li>
   <!-- end content ListPane -->
 </ul>
@@ -290,25 +290,25 @@ Label3  </a>
 '<!-- begin ListRenderer -->
 <ul>
 <li>
-<a href="No%20RouteStackInterface%20instance%20provided">
-foo</a>
+<span class="container">
+foo</span>
 <ul>
   <!-- start content ListPane -->
   <li>
-  <a href="No%20RouteStackInterface%20instance%20provided">
-Label1  </a>
+  <span class="main">
+Label1  </span>
   </li>
   <!-- end content ListPane -->
   <!-- start content ListPane -->
   <li>
-  <a href="No%20RouteStackInterface%20instance%20provided">
-Label2  </a>
+  <span class="main">
+Label2  </span>
   </li>
   <!-- end content ListPane -->
   <!-- start content ListPane -->
   <li>
-  <a href="No%20RouteStackInterface%20instance%20provided">
-Label3  </a>
+  <span class="main">
+Label3  </span>
   </li>
   <!-- end content ListPane -->
 </ul>
@@ -350,13 +350,13 @@ Label3  </a>
 '<!-- begin ListRenderer -->
 <ul>
 <li>
-<a href="No%20RouteMatch%20instance%20provided">
-foo</a>
+<span class="container">
+foo</span>
 <ul>
   <!-- start content ListPane -->
   <li>
-  <a href="No%20RouteMatch%20instance%20provided">
-content  </a>
+  <span class="main">
+content  </span>
   </li>
   <!-- end content ListPane -->
 </ul>

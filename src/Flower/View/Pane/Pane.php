@@ -9,6 +9,7 @@
 
 namespace Flower\View\Pane;
 
+use Flower\View\Pane\RuntimeException;
 use Flower\RecursivePriorityQueue;
 
 /**
@@ -59,6 +60,12 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
     protected $wrapBegin;
 
     protected $wrapEnd;
+
+    /**
+     *
+     * @var Callable
+     */
+    protected $sizeToClassFunction;
 
     public $indent = "  ";
 
@@ -190,5 +197,37 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
     {
         //empty() is true when '0'
         return !empty($this->var) || '0' === $this->var;
+    }
+
+    public function setSizeToClassFunction($sizeToClassFunction)
+    {
+        if (!is_callable($sizeToClassFunction)) {
+            throw new RuntimeException('sizeToClassFunction should be callable');
+        }
+
+        $this->sizeToClassFunction = $sizeToClassFunction;
+    }
+
+    public function getSizeToClassFunction()
+    {
+        return $this->sizeToClassFunction;
+    }
+    /**
+     * for util
+     * pane size to class
+     *
+     * @param mixed $size
+     * @return string $class
+     */
+    public function sizeToClass($size = 0)
+    {
+        if (isset($this->sizeToClassFunction) && is_callable($this->sizeToClassFunction)) {
+            $class = call_user_func($this->sizeToClassFunction, $size);
+        } else {
+            //default for twitter bootsrap 2
+            // convert to small decimal string
+            $class = 'span' . (string) (intval($size) % 36);
+        }
+        return $class;
     }
 }

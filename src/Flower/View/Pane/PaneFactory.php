@@ -18,72 +18,37 @@ use Zend\Escaper\Escaper;
 class PaneFactory implements PaneFactoryInterface
 {
 
+    protected static $sizeToClassFunction;
+
     protected static $escaper;
 
     protected static $paneClass = 'Flower\View\Pane\Pane';
 
-    public static function factory(array $config, Builder $builder)
+    public static function factory(array $config)
     {
         /* @var $pane \Flower\View\Pane\PaneInterface  */
         if (isset($config['pane_class'])) {
             $pane = new $config['pane_class'];
         } else {
-            $pane = new self::$paneClass;
+            $pane = new static::$paneClass;
         }
 
         static::parseConfig($pane, $config);
 
-        if (isset($config['begin'])) {
-            $pane->setBegin((string) $config['begin']);
-        } elseif(!isset($pane->tag) || empty($pane->tag)) {
-            $pane->setBegin('<!-- start pane -->');
-        } else {
-            $attributeString = self::parseAttributes($pane, $builder);
-            if (strlen($attributeString)) {
-                $pane->setBegin(sprintf('<%s%s>', $pane->tag, $attributeString));
-            }
-            else {
-                $pane->setBegin(sprintf('<%s>', $pane->tag));
-            }
-         }
+        static::parseBeginEnd($pane, $config);
 
-        if (isset($config['wrapBegin'])) {
-            $pane->setWrapBegin((string) $config['wrapBegin']);
-        } elseif(!isset($pane->wrapTag) || empty($pane->wrapTag)) {
-            $pane->setWrapBegin('<!-- start pane -->');
-        } else {
-            if (!isset($attributeString)) {
-                $attributeString = self::parseAttributes($pane, $builder);
-            }
-            if (strlen($attributeString)) {
-                $pane->setWrapBegin(sprintf('<%s%s>', $pane->wrapTag, $attributeString));
-            } else {
-                $pane->setWrapBegin(sprintf('<%s>', $pane->wrapTag));
-            }
-         }
+        static::parseWrapBeginEnd($pane, $config);
 
-         if (isset($config['end'])) {
-             $pane->setEnd((string) $config['end']);
-         } elseif(! strlen($pane->tag)) {
-             $pane->setEnd('<!-- end pane -->');
-         } else {
-             $pane->setEnd('</' . $pane->tag . '>');
-         }
+        static::parseContainerBeginEnd($pane, $config);
 
-         if (isset ($config['wrapEnd'])) {
-             $pane->setWrapEnd((string) $config['wrapEnd']);
-         } elseif (! strlen($pane->wrapTag)) {
-             $pane->setWrapEnd('<!-- end pane -->');
-         } else {
-             $pane->setWrapEnd('</' . $pane->wrapTag . '>');
-         }
+        static::treatment($pane);
 
-         return $pane;
+        return $pane;
     }
 
     public static function parseConfig(PaneInterface $pane, array $config)
     {
-        //parse config
+        //parse config about pane
         foreach ($config as $k => $v) {
             if ($v instanceof PaneInterface) {
                 //direct pane insert ,ignore $type
@@ -91,6 +56,16 @@ class PaneFactory implements PaneFactoryInterface
                 continue;
             }
             switch ($k) {
+                case "size_to_class_function":
+                    if (is_callable($v) && method_exists($pane, 'setSizeToClassFunction')) {
+                        $pane->setSizeToClassFunction($v);
+                    }
+                    break;
+                case "classes":
+                    if (is_array($v) || is_string($v)) {
+                        $pane->$k = $v;
+                    }
+                    break;
                 case "label":
                 case "name":
                     $pane->$k = (string) $v;
@@ -118,7 +93,6 @@ class PaneFactory implements PaneFactoryInterface
                         $pane->$k = $v;
                     }
                     break;
-                case "classes":
                 case "attributes":
                     if (is_string($v)) {
                         $v = explode(' ', $v);
@@ -142,7 +116,60 @@ class PaneFactory implements PaneFactoryInterface
         }
     }
 
-    public static function parseAttributes(PaneInterface $pane, $builder)
+    public static function parseBeginEnd(PaneInterface $pane, array $config)
+    {
+        if (isset($config['begin'])) {
+            $pane->setBegin((string) $config['begin']);
+        } elseif(!isset($pane->tag) || empty($pane->tag)) {
+            $pane->setBegin('<!-- start pane -->');
+        } else {
+            $attributeString = self::parseAttributes($pane);
+            if (strlen($attributeString)) {
+                $pane->setBegin(sprintf('<%s%s>', $pane->tag, $attributeString));
+            }
+            else {
+                $pane->setBegin(sprintf('<%s>', $pane->tag));
+            }
+         }
+
+         if (isset($config['end'])) {
+             $pane->setEnd((string) $config['end']);
+         } elseif(! strlen($pane->tag)) {
+             $pane->setEnd('<!-- end pane -->');
+         } else {
+             $pane->setEnd('</' . $pane->tag . '>');
+         }
+    }
+
+    public static function parseWrapBeginEnd(PaneInterface $pane, array $config)
+    {
+        if (isset($config['wrapBegin'])) {
+            $pane->setWrapBegin((string) $config['wrapBegin']);
+        } elseif(!isset($pane->wrapTag) || empty($pane->wrapTag)) {
+            $pane->setWrapBegin('<!-- start pane -->');
+        } else {
+            $attributeString = self::parseAttributes($pane);
+            if (strlen($attributeString)) {
+                $pane->setWrapBegin(sprintf('<%s%s>', $pane->wrapTag, $attributeString));
+            } else {
+                $pane->setWrapBegin(sprintf('<%s>', $pane->wrapTag));
+            }
+         }
+
+         if (isset ($config['wrapEnd'])) {
+             $pane->setWrapEnd((string) $config['wrapEnd']);
+         } elseif (! strlen($pane->wrapTag)) {
+             $pane->setWrapEnd('<!-- end pane -->');
+         } else {
+             $pane->setWrapEnd('</' . $pane->wrapTag . '>');
+         }
+    }
+
+    public static function parseContainerBeginEnd(PaneInterface $pane, array $config)
+    {
+    }
+
+    public static function parseAttributes(PaneInterface $pane)
     {
         $attributes = $pane->attributes ?: array();
 
@@ -154,12 +181,12 @@ class PaneFactory implements PaneFactoryInterface
             $attributes['name'] = $pane->name;
         }
 
-        if (isset($pane->size)) {
-            $builder->addHtmlClass($builder->sizeToClass($pane->size), $attributes);
+        if (isset($pane->size) && method_exists($pane, 'sizeToClass')) {
+            self::addHtmlClass($pane->sizeToClass($pane->size), $attributes);
         }
 
         if (isset($pane->classes)) {
-            $builder->addHtmlClass($pane->classes, $attributes);
+            self::addHtmlClass($pane->classes, $attributes);
         }
 
         return self::attributesToAttributeString($attributes);
@@ -191,6 +218,28 @@ class PaneFactory implements PaneFactoryInterface
         }
 
         return $attributeString;
+    }
+
+    public static function treatment(PaneInterface $pane)
+    {
+    }
+
+    /**
+     *
+     * @param type $class
+     * @param array $attributes
+     */
+    public static function addHtmlClass($class, array &$attributes)
+    {
+        if (is_array($class)) {
+            $class = implode(' ', $class);
+        }
+
+        if (!isset($attributes['class']) || !strlen($attributes['class'])) {
+            $attributes['class'] = $class;
+        } else {
+            $attributes['class'] .= ' ' . $class;
+        }
     }
 
     public static function getEscaper()

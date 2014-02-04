@@ -17,6 +17,39 @@ class AnchorPaneFactory extends ListPaneFactory
 {
     protected static $paneClass = 'Flower\View\Pane\Anchor';
 
+    public static function parseBeginEnd(PaneInterface $pane, array $config)
+    {
+        if (isset($config['begin'])) {
+            $pane->setBegin((string) $config['begin']);
+        } elseif(!isset($pane->tag) || empty($pane->tag)) {
+            $pane->setBegin('<!-- start pane -->');
+        } else {
+            if ($href = $pane->getHref()) {
+                //hrefの割り当てを試す
+                $tag = $pane->tag;
+                $pane->attributes['href'] = $href;
+            } else {
+                $tag = $pane->getSubstituteTag();
+            }
+            
+            $attributeString = self::parseAttributes($pane);
+
+            if (isset($attributeString)) {
+                $pane->setBegin(sprintf('<%s%s>', $tag, $attributeString));
+            } else {
+                $pane->setBegin('<' . $tag . '>');
+            }
+         }
+
+         if (isset($config['end'])) {
+             $pane->setEnd((string) $config['end']);
+         } elseif(! strlen($pane->tag)) {
+             $pane->setEnd('<!-- end pane -->');
+         } else {
+             $pane->setEnd('</' . $tag . '>');
+         }
+    }
+
     public static function parseConfig(PaneInterface $pane, array $config)
     {
         parent::parseConfig($pane, $config);

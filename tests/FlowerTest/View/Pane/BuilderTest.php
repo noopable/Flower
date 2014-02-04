@@ -211,7 +211,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $pane = $this->object->build($paneConfig);
 
         $this->assertFalse($pane->hasChildren());
-        $this->assertEquals(array('container', 'row', '2003\'s'), $pane->classes);
+        $this->assertEquals('container row 2003\'s', $pane->classes);
         $this->assertEquals(array('foo' => 'bar', 'baz' => '2003\'s'), $pane->attributes);
         $children = $pane->current();
         $this->assertEquals($expected, trim($pane->begin()));
@@ -239,44 +239,4 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($factory, $this->object->getDefaultPaneFactory());
     }
 
-    /**
-     * @covers Flower\View\Pane\Builder::sizeToClass
-     */
-    public function testSizeToClass()
-    {
-
-        $reflection = new \ReflectionClass('Flower\View\Pane\Builder');
-        $method = $reflection->getMethod('sizeToClass');
-        $method->setAccessible(true);
-        $property = $reflection->getProperty('sizeToClassFunction');
-        $property->setAccessible(true);
-
-        //default action  tw bootstrap 2
-        $string1 = $method->invokeArgs($this->object, array(1));
-        $this->assertEquals('span1', $string1);
-
-        //custom function
-        $property->setValue($this->object, function ($size) {return (string) ($size * 2);} );
-        $string2 = $method->invokeArgs($this->object, array(2));
-        $this->assertEquals('4', $string2);
-    }
-
-    /**
-     * @covers Flower\View\Pane\Builder::addHtmlClass
-     */
-    public function testAddHtmlClass()
-    {
-        $attributes = array();
-
-        $this->object->addHtmlClass('foo', $attributes);
-        $this->assertEquals('foo', $attributes['class']);
-
-        //invoke twice
-        $this->object->addHtmlClass('bar', $attributes);
-        $this->assertEquals('foo bar', $attributes['class']);
-
-        //by array
-        $this->object->addHtmlClass(array('baz', 'qux'), $attributes);
-        $this->assertEquals('foo bar baz qux', $attributes['class']);
-    }
 }

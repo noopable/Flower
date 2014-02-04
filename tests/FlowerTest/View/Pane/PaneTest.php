@@ -151,7 +151,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * 
+     *
      * @covers Flower\View\Pane\Pane::hasContent
      */
     public function testHasContent()
@@ -168,5 +168,40 @@ class PaneTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->object->hasContent(), 'var= empty array is invalid');
         $this->object->var = '0';
         $this->assertTrue($this->object->hasContent(), 'var = "0" is valid');
+    }
+
+    /**
+     * @covers Flower\View\Pane\Pane::setSizeToClassFunction
+     */
+    public function testSetSizeToClassFunction()
+    {
+        $function = function ($size) {return (string) $size * 2;};
+        $this->object->setSizeToClassFunction($function);
+        $this->assertSame($function, TestTool::getPropertyValue($this->object, 'sizeToClassFunction'));
+    }
+
+    /**
+     * @depends testSetSizeToClassFunction
+     * @covers Flower\View\Pane\Pane::getSizeToClassFunction
+     */
+    public function testGetSizeToClassFunction()
+    {
+        $function = function ($size) {return (string) $size * 2;};
+        $this->object->setSizeToClassFunction($function);
+        $this->assertSame($function, $this->object->getSizeToClassFunction());
+    }
+
+    /**
+     * @depends testSetSizeToClassFunction
+     * @covers Flower\View\Pane\Pane::sizeToClass
+     */
+    public function testSizeToClass()
+    {
+        //default action  tw bootstrap 2
+        $this->assertEquals('span1', $this->object->sizeToClass(1));
+
+        //custom function
+        $this->object->setSizeToClassFunction(function ($size) {return (string) ($size * 2);} );
+        $this->assertEquals('4', $this->object->sizeToClass(2));
     }
 }
