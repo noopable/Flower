@@ -56,6 +56,9 @@ class PaneFactory implements PaneFactoryInterface
                 continue;
             }
             switch ($k) {
+                case "pane_id":
+                    $pane->setPaneId($v);
+                    break;
                 case "size_to_class_function":
                     if (is_callable($v) && method_exists($pane, 'setSizeToClassFunction')) {
                         $pane->setSizeToClassFunction($v);

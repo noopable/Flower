@@ -9,6 +9,7 @@
 
 namespace Flower\View\Pane;
 
+use ArrayObject;
 use Flower\View\Pane\RuntimeException;
 use Flower\RecursivePriorityQueue;
 
@@ -98,19 +99,27 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
 
     /**
      *
-     * @param type $value
+     * @param PaneInterface $pane
      * @param type $priority
      * @return type
      */
-    public function insert($value, $priority = null)
+    public function insert($pane, $priority = null)
     {
+        if (! $pane instanceof PaneInterface) {
+            throw new RuntimeException('Pane accept object only PaneInterface');
+        }
         if (null === $priority) {
-            if (is_object($value) && method_exists($value, 'getOrder')) {
-                $priority = $value->getOrder();
+            $priority = $pane->getOrder();
+        }
+
+        if ($paneId = $pane->getPaneId()) {
+            $registry = $this->getRegistry();
+            if (!isset($registry->$paneId)) {
+                $registry->$paneId = $pane;
             }
         }
 
-        return parent::insert($value, $priority);
+        return parent::insert($pane, $priority);
     }
 
     public function wrapBegin($depth = null)
@@ -220,7 +229,7 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
     public function getRegistry()
     {
         if (!isset($this->registry)) {
-            $this->registry = array();
+            $this->registry = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
         }
         return $this->registry;
     }

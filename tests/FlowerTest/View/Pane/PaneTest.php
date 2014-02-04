@@ -80,11 +80,15 @@ class PaneTest extends \PHPUnit_Framework_TestCase
         // Remove the following lines when you implement this test.
         //$this->assertTrue($this->object->current() instanceof \Flower\RecursivePriorityQueue);
         $this->assertFalse($this->object->hasChildren());
-        $this->object->insert(new \Flower\View\Pane\Pane, 100);
+        $child = new \Flower\View\Pane\Pane;
+        $child->setPaneId('foo');
+        $this->object->insert($child, 100);
         //RecursiveIterator must return a current entry has child
         $this->object->current()->insert(new \Flower\View\Pane\Pane);
         $this->assertTrue($this->object->hasChildren());
-
+        $registry = $this->object->getRegistry();
+        $this->assertTrue(isset($registry->foo));
+        $this->assertSame($child, $registry->foo);
     }
 
     /**

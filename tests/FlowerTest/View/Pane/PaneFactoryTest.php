@@ -15,6 +15,7 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new Builder;
         $paneConfig = array(
+            'pane_id' => $paneId = '123',
             'tag' => $tag = 'foo',
             'id' => $id = '30-cc2',
             'name' => $name = '30-cc3',
@@ -36,6 +37,7 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
 
         $pane = PaneFactory::factory($paneConfig, $builder);
         $this->assertInstanceOf('Flower\View\Pane\Pane', $pane);
+        $this->assertEquals($paneId, $pane->getPaneId());
         $this->assertEquals($tag, $pane->tag);
         $this->assertEquals($tag, $pane->wrapTag, 'if wrapTag is omitted ,wrapTag is same to tag');
         $this->assertEquals('cc2', $pane->id);
