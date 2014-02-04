@@ -26,7 +26,7 @@ class ListPaneFactory extends PaneFactory
             $pane = new static::$paneClass;
         }
 
-        self::parseConfig($pane, $config);
+        static::parseConfig($pane, $config);
 
         if (isset($pane->var) && ($pane->var !== array($pane, 'render'))) {
             $pane->_var = $pane->var;

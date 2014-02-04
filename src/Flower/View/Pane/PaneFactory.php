@@ -31,7 +31,7 @@ class PaneFactory implements PaneFactoryInterface
             $pane = new self::$paneClass;
         }
 
-        self::parseConfig($pane, $config);
+        static::parseConfig($pane, $config);
 
         if (isset($config['begin'])) {
             $pane->setBegin((string) $config['begin']);
