@@ -41,6 +41,27 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Flower\View\Pane\Pane::setPaneId
+     */
+    public function testSetPaneId()
+    {
+        $paneId = 'foo';
+        $this->object->setPaneId($paneId);
+        $this->assertEquals($paneId, TestTool::getPropertyValue($this->object, 'paneId'));
+    }
+
+    /**
+     * @depends testSetPaneId
+     * @covers Flower\View\Pane\Pane::getPaneId
+     */
+    public function testGetPaneId()
+    {
+        $paneId = 'foo';
+        $this->object->setPaneId($paneId);
+        $this->assertEquals($paneId,  $this->object->getPaneId());
+    }
+
+    /**
      * @covers Flower\View\Pane\Pane::getOrder
      */
     public function testGetOrder()

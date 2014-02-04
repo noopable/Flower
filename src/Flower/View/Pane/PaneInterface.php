@@ -22,6 +22,10 @@ interface PaneInterface extends RecursiveIterator
      */
     public static function getFactoryClass();
 
+    public function getPaneId();
+
+    public function setPaneId($paneId);
+
     public function getOrder();
 
     /**

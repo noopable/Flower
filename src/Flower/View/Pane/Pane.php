@@ -21,6 +21,8 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
 {
     protected static $factoryClass = 'Flower\View\Pane\PaneFactory';
 
+    protected $paneId;
+
     public $id;
 
     public $name;
@@ -77,6 +79,16 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
     public function __construct()
     {
         parent::__construct(RecursivePriorityQueue::HAS_CHILDREN_STRICT_CONTAINS);
+    }
+
+    public function setPaneId($paneId)
+    {
+        $this->paneId = $paneId;
+    }
+
+    public function getPaneId()
+    {
+        return $this->paneId;
     }
 
     public function getOrder()
