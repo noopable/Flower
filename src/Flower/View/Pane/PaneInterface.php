@@ -60,5 +60,9 @@ interface PaneInterface extends RecursiveIterator
 
     public function getPaneRenderer();
 
+    public function setRegistry($registry);
+
+    public function getRegistry();
+
     public function hasContent();
 }

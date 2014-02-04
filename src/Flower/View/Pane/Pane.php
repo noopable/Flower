@@ -61,6 +61,7 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
 
     protected $wrapEnd;
 
+    protected $registry;
     /**
      *
      * @var Callable
@@ -197,6 +198,19 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
     {
         //empty() is true when '0'
         return !empty($this->var) || '0' === $this->var;
+    }
+
+    public function setRegistry($registry)
+    {
+        $this->registry = $registry;
+    }
+
+    public function getRegistry()
+    {
+        if (!isset($this->registry)) {
+            $this->registry = array();
+        }
+        return $this->registry;
     }
 
     public function setSizeToClassFunction($sizeToClassFunction)

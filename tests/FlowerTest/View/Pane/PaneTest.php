@@ -171,6 +171,27 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Flower\View\Pane\Pane::setRegistry
+     */
+    public function testSetRegistry()
+    {
+        $registry = array('foo' => 'bar');
+        $this->object->setRegistry($registry);
+        $this->assertEquals($registry, TestTool::getPropertyValue($this->object, 'registry'));
+    }
+
+    /**
+     * @depends testSetRegistry
+     * @covers Flower\View\Pane\Pane::getRegistry
+     */
+    public function testGetRegistry()
+    {
+        $registry = array('foo' => 'bar');
+        $this->object->setRegistry($registry);
+        $this->assertEquals($registry, $this->object->getRegistry());
+    }
+
+    /**
      * @covers Flower\View\Pane\Pane::setSizeToClassFunction
      */
     public function testSetSizeToClassFunction()
