@@ -18,6 +18,7 @@ use Zend\EventManager\Event;
 class PaneEvent extends Event
 {
     const EVENT_BUILD_PANE = 'build_pane';
+    const EVENT_LOAD_CONFIG = 'load_config';
 
     /**
      * @var \Flower\Pane\PaneManager
@@ -58,6 +59,6 @@ class PaneEvent extends Event
     {
         return $this->paneId;
     }
-    
+
 }
 

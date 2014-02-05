@@ -15,6 +15,7 @@ use Flower\View\Pane\PaneClass\PaneInterface;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\ProvidesEvents;
 use Zend\View\Helper\AbstractHelper;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * Flower\View\Pane\PaneClass\Paneツリーを管理
@@ -29,7 +30,7 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
 
     protected $rendererClass = 'Flower\View\Pane\PaneRenderer';
 
-    protected $builder = 'Flower\View\Pane\Builder';
+    protected $builder = 'Flower\View\Pane\Builder\Builder';
 
     protected $config = array();
 
@@ -77,17 +78,31 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
     public function build($paneId)
     {
         $this->init();
-        $event = new PaneEvent(PaneEvent::EVENT_BUILD_PANE);
-        $event->setManager($this);
-        $event->setPaneId($paneId);
-        $event->setTarget($paneId);
-        $event->setParams($this->getConfig($paneId));
 
         $events = $this->getEventManager();
-        $res = $events->trigger($event);
+        /**
+         * Constructor
+         *
+         * Accept a target and its parameters.
+         *
+         * @param  string $name Event name
+         * @param  string|object $target
+         * @param  array|ArrayAccess $params
+         */
+        $loadEvent = new PaneEvent(PaneEvent::EVENT_LOAD_CONFIG);
+        $loadEvent->setManager($this);
+        $loadEvent->setPaneId($paneId);
+        $loadEvent->setTarget($paneId);
 
-        return $res->last();
+        $config = $events->trigger($loadEvent)->last();
 
+        $buildEvent = new PaneEvent(PaneEvent::EVENT_BUILD_PANE);
+        $buildEvent->setManager($this);
+        $buildEvent->setPaneId($paneId);
+        $buildEvent->setTarget($paneId);
+        $buildEvent->setParams($config);
+
+        return $events->trigger($buildEvent)->last();
     }
 
     public function render($paneId)
@@ -119,6 +134,22 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
             return $default;
         }
         return $this->config[$paneId];
+    }
+
+    public function onLoadConfig(PaneEvent $e)
+    {
+        $pre = $e->getTarget();
+        $config = $this->getPaneConfig($e->getPaneId());
+        if (is_array($pre)) {
+            /**
+             * ２階層目以下で値を上書きすることはできない。
+             * 基本的に１階層目はプロパティの変更が可能
+             * ２階層目以降は数値添字になるのでエントリーを追加する形になります。
+             */
+            $config = ArrayUtils::merge($pre, $config);
+        }
+        $e->setTarget($config);
+        return $config;
     }
 
     /**
@@ -158,8 +189,8 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
     public function attachDefaultListers()
     {
         $events = $this->getEventManager();
-        $events->attach(PaneEvent::EVENT_BUILD_PANE, $this->getBuilder());
-
+        $events->attach(PaneEvent::EVENT_BUILD_PANE, array($this->getBuilder(), 'onBuild'));
+        $events->attach(PaneEvent::EVENT_LOAD_CONFIG, array($this, 'onLoadConfig'));
         $this->defaultListenersWait = false;
     }
 
@@ -180,7 +211,7 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
     {
         $renderer = new $this->rendererClass($pane);
         if (!$view = $this->getView()) {
-            throw RuntimeException('Set PhpRenderer or use me via ViewHelper');
+            throw new RuntimeException('Set PhpRenderer or use me via ViewHelper');
         }
         $renderer->setVars($view->vars());
         $renderer->setView($view);
