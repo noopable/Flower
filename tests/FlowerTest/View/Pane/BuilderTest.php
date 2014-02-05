@@ -221,6 +221,35 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Flower\View\Pane\Builder\Builder::detectFactoryFromConfig
+     */
+    public function testDetectFactoryFromConfig()
+    {
+        $paneConfig = array(
+            'pane_class' => 'Flower\View\Pane\PaneClass\Anchor',
+        );
+        $factory = $this->object->detectFactoryFromConfig($paneConfig);
+        $this->assertEquals('Flower\View\Pane\Factory\AnchorPaneFactory', $factory);
+
+        $paneConfig = array(
+            'factory_class' => 'Flower\View\Pane\Factory\AnchorPaneFactory',
+        );
+        $factory = $this->object->detectFactoryFromConfig($paneConfig);
+        $this->assertEquals('Flower\View\Pane\Factory\AnchorPaneFactory', $factory);
+    }
+
+    /**
+     * @expectedException Flower\View\Pane\Exception\RuntimeException
+     */
+    public function testDetectFactoryFromInvalidConfig()
+    {
+        $paneConfig = array(
+            'factory_class' => 'Flower\View\Pane\PaneClass\Anchor',
+        );
+        $this->object->detectFactoryFromConfig($paneConfig);
+    }
+
+    /**
      * @covers Flower\View\Pane\Builder\Builder::setDefaultPaneFactory
      */
     public function testSetDefaultPaneFactory()

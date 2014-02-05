@@ -130,7 +130,11 @@ class Builder
             $this->factoryClass = $factory;
         }
 
-        $current = $this->createFromConfig($config);
+        if (isset($this->sizeToClassFunction) && !isset($config['size_to_class_function'])) {
+            $config['size_to_class_function'] = $this->sizeToClassFunction;
+        }
+
+        $current = call_user_func($this->factoryClass . '::factory', $config);
 
         if (!empty($innerConfig)) {
             if (ArrayUtils::isList($innerConfig)) {
@@ -177,20 +181,6 @@ class Builder
             }
             return $factoryClass;
         }
-    }
-
-
-    public function createFromConfig(array $config)
-    {
-        if (!isset($this->factoryClass)) {
-            $this->factoryClass = $this->getDefaultPaneFactory();
-        }
-
-        if (isset($this->sizeToClassFunction) && !isset($config['size_to_class_function'])) {
-            $config['size_to_class_function'] = $this->sizeToClassFunction;
-        }
-
-        return call_user_func($this->factoryClass . '::factory', $config);
     }
 
     public function setDefaultPaneFactory($paneFactory)
