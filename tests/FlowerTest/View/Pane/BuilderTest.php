@@ -2,7 +2,7 @@
 namespace FlowerTest\View\Pane;
 
 use Flower\Test\TestTool;
-use Flower\View\Pane\Pane;
+use Flower\View\Pane\PaneClass\Pane;
 use Flower\View\Pane\PaneEvent;
 use Flower\View\Pane\Builder;
 /**
@@ -37,7 +37,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPaneClassString()
     {
-        $class = 'Flower\View\Pane\Pane';
+        $class = 'Flower\View\Pane\PaneClass\Pane';
         $this->object->setPaneClass($class);
         $this->assertEquals($class, TestTool::getPropertyValue($this->object, 'paneClass'));
     }
@@ -62,7 +62,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($pane->hasChildren());
         $children = $pane->current();
-        $this->assertInstanceOf('Flower\View\Pane\PaneInterface', $children);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\PaneInterface', $children);
     }
 
     public function testBuildComplexCase()
@@ -124,7 +124,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($pane->hasChildren());
         $this->assertEquals('div', $pane->tag);
         $children = $pane->current();
-        $this->assertInstanceOf('Flower\View\Pane\PaneInterface', $children);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\PaneInterface', $children);
     }
 
     /**
@@ -143,7 +143,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($pane->hasChildren());
         $children = $pane->current();
-        $this->assertInstanceOf('Flower\View\Pane\PaneInterface', $pane);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\PaneInterface', $pane);
         $this->assertInstanceOf('FlowerTest\View\Pane\TestAsset\YetAnotherPane', $children);
     }
 
@@ -216,7 +216,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('foo' => 'bar', 'baz' => '2003\'s'), $pane->attributes);
         $children = $pane->current();
         $this->assertEquals($expected, trim($pane->begin()));
-        $this->assertInstanceOf('Flower\View\Pane\PaneInterface', $children);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\PaneInterface', $children);
 
     }
 
@@ -261,7 +261,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($pane, $event->getTarget());
         $this->assertFalse($pane->hasChildren());
         $children = $pane->current();
-        $this->assertInstanceOf('Flower\View\Pane\PaneInterface', $pane);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\PaneInterface', $pane);
         $this->assertInstanceOf('FlowerTest\View\Pane\TestAsset\YetAnotherPane', $children);
     }
 }

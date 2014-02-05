@@ -9,6 +9,7 @@
 namespace Flower\View\Pane;
 
 use Zend\Escaper\Escaper;
+use Flower\View\Pane\PaneClass\PaneInterface;
 
 /**
  * Description of PaneFactory
@@ -22,11 +23,11 @@ class PaneFactory implements PaneFactoryInterface
 
     protected static $escaper;
 
-    protected static $paneClass = 'Flower\View\Pane\Pane';
+    protected static $paneClass = 'Flower\View\Pane\PaneClass\Pane';
 
     public static function factory(array $config)
     {
-        /* @var $pane \Flower\View\Pane\PaneInterface  */
+        /* @var $pane \Flower\View\Pane\PaneClass\PaneInterface  */
         if (isset($config['pane_class'])) {
             $pane = new $config['pane_class'];
         } else {

@@ -9,7 +9,7 @@ class AnchorHelperFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testFactoryStandardTest()
     {
-        $builder = new Builder(array('pane_class' => 'Flower\View\Pane\Anchor'));
+        $builder = new Builder(array('pane_class' => 'Flower\View\Pane\PaneClass\Anchor'));
         $paneConfig = array(
             'tag' => $tag = 'foo',
             'id' => $id = '30-cc2',
@@ -31,7 +31,7 @@ class AnchorHelperFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $pane = AnchorPaneFactory::factory($paneConfig, $builder);
-        $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\Anchor', $pane);
         $this->assertEquals($tag, $pane->tag);
         $this->assertEquals('li', $pane->wrapTag, 'if wrapTag is omitted ,wrapTag is default value');
         $this->assertEquals('cc2', $pane->id);
@@ -44,12 +44,12 @@ class AnchorHelperFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($controller, $pane->controller);
         $this->assertEquals($action, $pane->action);
         $this->assertEquals($params, $pane->params);
-        $this->assertEquals('<foo foo="bar" baz="qux" href="PaneRenderer%20is%20not%20setFlower%5CView%5CPane%5CAnchor%3A%3AgetHrefWithViewHelper" id="cc2" name="30-cc3" class="span10 container row">', trim($pane->begin()));
+        $this->assertEquals('<foo foo="bar" baz="qux" href="PaneRenderer%20is%20not%20setFlower%5CView%5CPane%5CPaneClass%5CAnchor%3A%3AgetHrefWithViewHelper" id="cc2" name="30-cc3" class="span10 container row">', trim($pane->begin()));
         $this->assertEquals('<li>', trim($pane->wrapBegin()));
         $this->assertEquals('</foo>', $pane->end());
         $this->assertEquals('</li>', $pane->wrapEnd());
         $this->assertEquals($classes, $pane->classes);
-        $attributes['href'] = 'PaneRenderer is not setFlower\View\Pane\Anchor::getHrefWithViewHelper';
+        $attributes['href'] = 'PaneRenderer is not setFlower\View\Pane\PaneClass\Anchor::getHrefWithViewHelper';
         $this->assertEquals($attributes, $pane->attributes);
     }
 }

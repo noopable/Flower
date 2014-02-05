@@ -7,9 +7,10 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\View\Pane;
+namespace Flower\View\Pane\PaneClass;
 
 use ArrayObject;
+use Flower\View\Pane\PaneRenderer;
 use Flower\View\Pane\RuntimeException;
 use Flower\RecursivePriorityQueue;
 

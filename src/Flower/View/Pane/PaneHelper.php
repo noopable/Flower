@@ -9,6 +9,7 @@
 
 namespace Flower\View\Pane;
 
+use Flower\View\Pane\PaneClass\PaneInterface;
 use Zend\View\Helper\AbstractHelper;
 use RecursiveIterator;
 
@@ -30,7 +31,7 @@ class PaneHelper extends AbstractHelper
 
     public $defaultContent = 'content';
 
-    public $defaultPaneClass = 'Flower\View\Pane\Pane';
+    public $defaultPaneClass = 'Flower\View\Pane\PaneClass\Pane';
 
     public $paneRenderer = 'Flower\View\Pane\PaneRenderer';
 

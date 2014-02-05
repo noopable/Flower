@@ -98,7 +98,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
         // Remove the following lines when you implement this test.
         $paneConfig = include __DIR__ . '/TestAsset/2column.php';
         $pane = $this->helper->paneFactory($paneConfig);
-        $this->assertInstanceof('Flower\View\Pane\Pane', $pane);
+        $this->assertInstanceof('Flower\View\Pane\PaneClass\Pane', $pane);
     }
 
     /**

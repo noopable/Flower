@@ -8,7 +8,7 @@
 
 namespace FlowerTest\View\Pane\TestAsset;
 
-use Flower\View\Pane\Pane;
+use Flower\View\Pane\PaneClass\Pane;
 /**
  * Description of YetAnotherPane
  *

@@ -7,8 +7,9 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\View\Pane;
+namespace Flower\View\Pane\PaneClass;
 
+use Flower\View\Pane\PaneRenderer;
 use RecursiveIterator;
 
 /**

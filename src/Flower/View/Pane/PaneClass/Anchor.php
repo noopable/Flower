@@ -6,9 +6,9 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\View\Pane;
+namespace Flower\View\Pane\PaneClass;
 
-//use Flower\View\Pane\Exception\RuntimeException;
+use Flower\View\Pane\PaneRenderer;
 use Zend\View\Renderer\PhpRenderer as View;
 
 /**
@@ -31,7 +31,7 @@ class Anchor extends ListPane
     /**
      * reset var as default innerHtml value
      *
-     * @see Flower\View\Pane\Pane::var
+     * @see Flower\View\Pane\PaneClass\Pane::var
      * @var type
      */
     public $var = '';

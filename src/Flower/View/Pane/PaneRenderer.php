@@ -9,6 +9,8 @@
 
 namespace Flower\View\Pane;
 
+use Flower\View\Pane\PaneClass\CallbackRenderInterface;
+use Flower\View\Pane\PaneClass\PaneInterface;
 use RecursiveIteratorIterator;
 use Closure;
 

@@ -9,6 +9,8 @@
 
 namespace Flower\View\Pane;
 
+use Flower\View\Pane\PaneClass\PaneInterface;
+
 /**
  *
  * @author tomoaki

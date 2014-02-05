@@ -13,6 +13,7 @@ use Zend\Stdlib\ArrayUtils;
 use Flower\Exception\IllegalClassException;
 use Flower\View\Pane\Exception\PaneClassNotFoundException;
 use Flower\View\Pane\Exception\RuntimeException;
+use Flower\View\Pane\PaneClass\PaneInterface;
 
 /**
  * Paneツリーの定義配列からPaneオブジェクトツリーをビルドします。
@@ -26,7 +27,7 @@ use Flower\View\Pane\Exception\RuntimeException;
 class Builder
 {
 
-    protected $paneClass = 'Flower\View\Pane\Pane';
+    protected $paneClass = 'Flower\View\Pane\PaneClass\Pane';
 
     protected $sizeToClassFunction;
 
@@ -137,7 +138,7 @@ class Builder
             if (! class_exists($config['pane_class'])) {
                 throw new PaneClassNotFoundException('class not exists ' . $config['pane_class']);
             }
-            if (! is_a($config['pane_class'], 'Flower\View\Pane\PaneInterface', true)) {
+            if (! is_a($config['pane_class'], 'Flower\View\Pane\PaneClass\PaneInterface', true)) {
                 throw new RuntimeException($config['pane_class'] . ' is not instance of PaneInterface');
             }
             $factoryClass = call_user_func($config['pane_class'] . '::getFactoryClass');
@@ -173,7 +174,7 @@ class Builder
         if ($pane instanceof PaneInterface) {
             $this->paneClass = get_class($pane);
         } elseif (is_string($pane)) {
-            if (!is_subclass_of($pane, 'Flower\View\Pane\PaneInterface', true)) {
+            if (!is_subclass_of($pane, 'Flower\View\Pane\PaneClass\PaneInterface', true)) {
                 throw new IllegalClassException('Specified class name is ' .  $pane . ' but not implements PaneInterface');
             }
             $this->paneClass = $pane;

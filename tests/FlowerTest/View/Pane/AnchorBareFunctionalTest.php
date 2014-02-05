@@ -56,7 +56,7 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Flower\View\Pane\AnchorHelper', $this->helper);
 
         $builder = $this->helper->getBuilder();
-        $this->assertEquals('Flower\View\Pane\Anchor', TestTool::getPropertyValue($builder, 'paneClass'));
+        $this->assertEquals('Flower\View\Pane\PaneClass\Anchor', TestTool::getPropertyValue($builder, 'paneClass'));
     }
 
     public function testSimple()
@@ -111,8 +111,8 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
                 'classes' => 'main',
                 'var' => 'content',
             ));
-        $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\Anchor')))->build($paneConfig);
-        $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
+        $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\PaneClass\Anchor')))->build($paneConfig);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\Anchor', $pane);
         $renderer = new PaneRenderer($pane);
         $renderer->setView(new PhpRenderer);
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
@@ -150,8 +150,8 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
                 'classes' => 'main',
                 'var' => 'content',
             ));
-        $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\Anchor')))->build($paneConfig);
-        $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
+        $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\PaneClass\Anchor')))->build($paneConfig);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\Anchor', $pane);
         $renderer = new PaneRenderer($pane);
         $renderer->setView(new PhpRenderer);
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
@@ -199,8 +199,8 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
                 'classes' => 'main',
                 'var' => 'Label2',
             ),);
-        $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\Anchor')))->build($paneConfig);
-        $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
+        $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\PaneClass\Anchor')))->build($paneConfig);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\Anchor', $pane);
         $renderer = new PaneRenderer($pane);
         $renderer->setView(new PhpRenderer);
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
@@ -260,8 +260,8 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
                 'classes' => 'main',
                 'var' => 'Label3',
             ),);
-        $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\Anchor')))->build($paneConfig);
-        $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
+        $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\PaneClass\Anchor')))->build($paneConfig);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\Anchor', $pane);
         $renderer = new PaneRenderer($pane);
         $renderer->setView(new PhpRenderer);
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
@@ -322,8 +322,8 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
                 )
             ),
         );
-        $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\Anchor')))->build($paneConfig);
-        $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
+        $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\PaneClass\Anchor')))->build($paneConfig);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\Anchor', $pane);
         $renderer = new PaneRenderer($pane);
         $renderer->setView(new PhpRenderer);
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
@@ -357,7 +357,7 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
             ));
 
         $pane = $this->helper->paneFactory($paneConfig);
-        $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\Anchor', $pane);
 
         $renderer = $this->helper->__invoke($paneConfig);
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));

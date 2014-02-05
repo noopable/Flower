@@ -36,7 +36,7 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $pane = PaneFactory::factory($paneConfig, $builder);
-        $this->assertInstanceOf('Flower\View\Pane\Pane', $pane);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\Pane', $pane);
         $this->assertEquals($paneId, $pane->getPaneId());
         $this->assertEquals($tag, $pane->tag);
         $this->assertEquals($tag, $pane->wrapTag, 'if wrapTag is omitted ,wrapTag is same to tag');
@@ -112,7 +112,7 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $pane = PaneFactory::factory($paneConfig, $builder);
-        $this->assertInstanceOf('Flower\View\Pane\Pane', $pane);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\Pane', $pane);
         $this->assertEquals($tag, $pane->tag);
         $this->assertEquals($order, $pane->order);
         $this->assertEquals($size, $pane->size);
@@ -178,7 +178,7 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $pane = PaneFactory::factory($paneConfig, $builder);
-        $this->assertInstanceOf('Flower\View\Pane\Pane', $pane);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\Pane', $pane);
         $this->assertEquals('foo', $pane->tag);
         $this->assertEquals('cc3', $pane->id);
         $this->assertEquals(5, $pane->order);

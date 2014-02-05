@@ -16,7 +16,7 @@ class ListPaneFunctionalTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->builder = new Builder(array('pane_class' => 'Flower\View\Pane\ListPane'));
+        $this->builder = new Builder(array('pane_class' => 'Flower\View\Pane\PaneClass\ListPane'));
     }
 
     public function testNoContents()
@@ -99,7 +99,7 @@ foo
                 'var' => 'content',
             ));
         $pane = $this->builder->build($paneConfig);
-        $this->assertInstanceOf('Flower\View\Pane\ListPane', $pane);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\ListPane', $pane);
         $renderer = new PaneRenderer($pane);
         $renderer->setVar('content', 'foo');
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
@@ -167,7 +167,7 @@ foo
             ),
         );
         $pane = $this->builder->build($paneConfig);
-        $this->assertInstanceOf('Flower\View\Pane\ListPane', $pane);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\ListPane', $pane);
         $renderer = new PaneRenderer($pane);
         $renderer->setVar('level0', '-0-');
         $renderer->setVar('level1', '-1-');
@@ -191,7 +191,7 @@ foo
             ),
         );
         $pane = $this->builder->build($paneConfig);
-        $this->assertInstanceOf('Flower\View\Pane\ListPane', $pane);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\ListPane', $pane);
         $renderer = new PaneRenderer($pane);
         $renderer->commentEnable = false;
         $renderer->indent = "";

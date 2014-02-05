@@ -8,6 +8,8 @@
 
 namespace Flower\View\Pane;
 
+use Flower\View\Pane\PaneClass\PaneInterface;
+
 /**
  * Description of AnchorPaneFactory
  *
@@ -15,7 +17,7 @@ namespace Flower\View\Pane;
  */
 class AnchorPaneFactory extends ListPaneFactory
 {
-    protected static $paneClass = 'Flower\View\Pane\Anchor';
+    protected static $paneClass = 'Flower\View\Pane\PaneClass\Anchor';
 
     public static function parseBeginEnd(PaneInterface $pane, array $config)
     {
@@ -31,7 +33,7 @@ class AnchorPaneFactory extends ListPaneFactory
             } else {
                 $tag = $pane->getSubstituteTag();
             }
-            
+
             $attributeString = self::parseAttributes($pane);
 
             if (isset($attributeString)) {

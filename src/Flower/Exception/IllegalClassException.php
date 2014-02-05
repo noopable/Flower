@@ -13,5 +13,5 @@ namespace Flower\Exception;
  *
  * @author tomoaki
  */
-class IllegalClassException implements ExceptionInterface{
+class IllegalClassException extends RuntimeException implements ExceptionInterface{
 }

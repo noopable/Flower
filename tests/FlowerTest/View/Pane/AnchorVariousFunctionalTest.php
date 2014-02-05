@@ -59,7 +59,7 @@ class AnchorVariousFunctionalTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Flower\View\Pane\AnchorHelper', $this->helper);
 
         $builder = $this->helper->getBuilder();
-        $this->assertEquals('Flower\View\Pane\Anchor', TestTool::getPropertyValue($builder, 'paneClass'));
+        $this->assertEquals('Flower\View\Pane\PaneClass\Anchor', TestTool::getPropertyValue($builder, 'paneClass'));
     }
 
     public function testUseLabel()

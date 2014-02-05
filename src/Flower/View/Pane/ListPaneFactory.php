@@ -8,6 +8,8 @@
 
 namespace Flower\View\Pane;
 
+use Flower\View\Pane\PaneClass\PaneInterface;
+
 /**
  * Description of ListPaneFactory
  *
@@ -15,7 +17,7 @@ namespace Flower\View\Pane;
  */
 class ListPaneFactory extends PaneFactory
 {
-    protected static $paneClass = 'Flower\View\Pane\ListPane';
+    protected static $paneClass = 'Flower\View\Pane\PaneClass\ListPane';
 
     public static function parseBeginEnd(PaneInterface $pane, array $config)
     {

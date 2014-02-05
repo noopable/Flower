@@ -15,5 +15,5 @@ namespace Flower\View\Pane;
  */
 class AnchorHelper extends PaneHelper
 {
-    public $defaultPaneClass = 'Flower\View\Pane\Anchor';
+    public $defaultPaneClass = 'Flower\View\Pane\PaneClass\Anchor';
 }

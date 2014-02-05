@@ -10,12 +10,13 @@ namespace Flower\View\Pane;
 
 use ArrayObject;
 use Flower\View\Pane\Exception\RuntimeException;
+use Flower\View\Pane\PaneClass\PaneInterface;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\ProvidesEvents;
 use Zend\View\Helper\AbstractHelper;
 
 /**
- * Flower\View\Pane\Paneツリーを管理
+ * Flower\View\Pane\PaneClass\Paneツリーを管理
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
