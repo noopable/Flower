@@ -1,7 +1,7 @@
 <?php
 namespace Flower\View\Pane;
 
-use Flower\View\Pane\AnchorPaneFactory;
+use Flower\View\Pane\Factory\AnchorPaneFactory;
 use Flower\View\Pane\Builder\Builder;
 
 /**

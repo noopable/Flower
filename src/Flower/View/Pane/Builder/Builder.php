@@ -34,7 +34,7 @@ class Builder
 
     protected $escaper;
 
-    protected $defaultPaneFactory = 'Flower\View\Pane\PaneFactory';
+    protected $defaultPaneFactory = 'Flower\View\Pane\Factory\PaneFactory';
 
     public function __construct($options = array())
     {
@@ -156,7 +156,7 @@ class Builder
 
     public function setDefaultPaneFactory($paneFactory)
     {
-        if (!is_subclass_of($paneFactory, 'Flower\View\Pane\PaneFactoryInterface', true)) {
+        if (!is_subclass_of($paneFactory, 'Flower\View\Pane\Factory\PaneFactoryInterface', true)) {
             throw new RuntimeException('defaultPaneFactory should implement PaneFactoryInterface :' . $paneFactory);
         }
         if ($paneFactory instanceof PaneFactoryInterface) {

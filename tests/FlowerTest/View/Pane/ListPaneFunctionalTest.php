@@ -3,7 +3,7 @@ namespace FlowerTest\View\Pane;
 
 
 use Flower\View\Pane\Builder\Builder;
-use Flower\View\Pane\ListPaneFactory;
+use Flower\View\Pane\Factory\ListPaneFactory;
 use Flower\View\Pane\PaneRenderer;
 
 /**

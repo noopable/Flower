@@ -18,7 +18,7 @@ use Zend\View\Renderer\PhpRenderer as View;
  */
 class Anchor extends ListPane
 {
-    protected static $factoryClass = 'Flower\View\Pane\AnchorPaneFactory';
+    protected static $factoryClass = 'Flower\View\Pane\Factory\AnchorPaneFactory';
 
     public $containerTag = 'ul';
 

@@ -225,7 +225,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetDefaultPaneFactory()
     {
-        $factory = 'Flower\View\Pane\PaneFactory';
+        $factory = 'Flower\View\Pane\Factory\PaneFactory';
         $this->object->setDefaultPaneFactory($factory);
         $this->assertEquals($factory, TestTool::getPropertyValue($this->object, 'defaultPaneFactory'));
     }
@@ -235,7 +235,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDefaultPaneFactory()
     {
-        $factory = 'Flower\View\Pane\PaneFactory';
+        $factory = 'Flower\View\Pane\Factory\PaneFactory';
         $this->object->setDefaultPaneFactory($factory);
         $this->assertEquals($factory, $this->object->getDefaultPaneFactory());
     }

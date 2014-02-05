@@ -21,7 +21,7 @@ use Flower\RecursivePriorityQueue;
  */
 class Pane extends RecursivePriorityQueue implements PaneInterface
 {
-    protected static $factoryClass = 'Flower\View\Pane\PaneFactory';
+    protected static $factoryClass = 'Flower\View\Pane\Factory\PaneFactory';
 
     protected $paneId;
 

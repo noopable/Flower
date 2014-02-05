@@ -19,7 +19,7 @@ use RecursiveIterator;
 interface PaneInterface extends RecursiveIterator
 {
     /**
-     * @return PaneFactoryInterface
+     * @return \Flower\View\Pane\Factory\PaneFactoryInterface
      */
     public static function getFactoryClass();
 
