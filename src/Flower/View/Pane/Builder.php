@@ -45,6 +45,26 @@ class Builder
         }
     }
 
+    /**
+     * 親PaneはgetTargetで与えられる。
+     * もし文字列ならPaneIdである。
+     * @param \Flower\View\Pane\PaneEvent $e
+     * @return type
+     */
+    public function onBuild(PaneEvent $e)
+    {
+        $target = $e->getTarget();
+
+        if ($target instanceof PaneInterface) {
+            $pane = $this->build($e->getParams(), $target);
+        } else {
+            $pane = $this->build($e->getParams());
+        }
+
+        $e->setTarget($pane);
+
+        return $pane;
+    }
 
     /**
      * これから作成しようとするPaneの設定を$configに配列で渡す。

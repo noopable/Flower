@@ -28,4 +28,6 @@ interface BuilderInterface
      * @return PaneInterface
      */
     public function build(array $config, PaneInterface $current = null);
+
+    public function onBuild(PaneEvent $e);
 }
