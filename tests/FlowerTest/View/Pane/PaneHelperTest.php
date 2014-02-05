@@ -106,7 +106,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
      */
     public function test__invokeDefaultPane() {
         //default pane
-        $expected = str_replace(array("\n", "\r"), '', '<!-- begin Renderer -->
+        $expected = str_replace("\r\n", "\n", '<!-- begin Renderer -->
 <!-- start pane -->
   <!-- start content content -->
   <div class="container">
@@ -118,7 +118,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
 ');
         $res = $this->helper->__invoke();
         $this->assertInstanceOf('Flower\View\Pane\PaneRenderer', $res);
-        $this->assertEquals($expected, str_replace(array("\n", "\r"), '', (string) $res));
+        $this->assertEquals($expected, (string) $res);
     }
 
     /**
@@ -133,9 +133,8 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
             ),
         );
         //default pane
-        $expected = str_replace(array("\n", "\r"), '',
-'
-<!-- begin Renderer -->
+        $expected = str_replace("\r\n", "\n",
+'<!-- begin Renderer -->
 <span>
   <!-- start content content -->
   <div class="container foo">
@@ -147,7 +146,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
 ');
         $res = $this->helper->__invoke($paneConfig);
         $this->assertInstanceOf('Flower\View\Pane\PaneRenderer', $res);
-        $this->assertEquals($expected, str_replace(array("\n", "\r"), '', (string) $res));
+        $this->assertEquals($expected, str_replace("\r\n", "\n", (string) $res));
     }
 
     public function testDefaultPane()

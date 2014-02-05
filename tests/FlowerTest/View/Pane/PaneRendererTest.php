@@ -300,7 +300,7 @@ EOD;
   </div>
   <!-- end content content -->
 ';
-        $expected = str_replace(array("\n", "\r"), '', $expected);
+        $expected = str_replace("\r\n", "\n", $expected);
         $builder =new Builder;
         $pane = $builder->build(
                 array(
@@ -311,7 +311,7 @@ EOD;
         ob_start();
         $paneRenderer->current();
         $res = ob_get_clean();
-        $res = str_replace(array("\n", "\r"), '', $res);
+        $res = str_replace("\r\n", "\n", $res);
         $this->assertEquals($expected, $res);
     }
 
@@ -334,7 +334,7 @@ EOD;
         ob_start();
         $paneRenderer->current();
         $res = ob_get_clean();
-        $res = str_replace(array("\n", "\r"), '', $res);
+        $res = str_replace("\r\n", "\n", $res);
         $this->assertEquals($expected, $res);
     }
 
@@ -349,7 +349,7 @@ article
   </div>
   <!-- end content varName -->
 ';
-        $expected = str_replace(array("\n", "\r"), '', $expected);
+        $expected = str_replace("\r\n", "\n", $expected);
         $builder =new Builder;
         $pane = $builder->build(
                 array(
@@ -364,7 +364,7 @@ article
         ob_start();
         $paneRenderer->current();
         $res = ob_get_clean();
-        $res = str_replace(array("\n", "\r"), '', $res);
+        $res = str_replace("\r\n", "\n", $res);
         $this->assertEquals($expected, $res);
     }
 
@@ -379,7 +379,7 @@ article
   </div>
   <!-- end content Closure -->
 ';
-        $expected = str_replace(array("\n", "\r"), '', $expected);
+        $expected = str_replace("\r\n", "\n", $expected);
         $builder =new Builder;
         $pane = $builder->build(
                 array(
@@ -394,7 +394,7 @@ article
         ob_start();
         $paneRenderer->current();
         $res = ob_get_clean();
-        $res = str_replace(array("\n", "\r"), '', $res);
+        $res = str_replace("\r\n", "\n", $res);
         $this->assertEquals($expected, $res);
     }
 
@@ -413,7 +413,7 @@ article
   </div>
   <!-- end content Callable -->
 ';
-        $expected = str_replace(array("\n", "\r"), '', $expected);
+        $expected = str_replace("\r\n", "\n", $expected);
         $builder =new Builder;
         $pane = $builder->build(
                 array(
@@ -427,7 +427,6 @@ article
         ob_start();
         $paneRenderer->current();
         $res = ob_get_clean();
-        $res = str_replace(array("\n", "\r"), '', $res);
         $this->assertEquals($expected, $res);
     }
 

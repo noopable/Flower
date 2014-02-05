@@ -145,13 +145,13 @@ class PaneRenderer extends RecursiveIteratorIterator
             $this->commentEnable and print($indent . "<!-- end content $var_comment -->" . $this->linefeed);
         } elseif ($var instanceof Closure) {
             $this->commentEnable and print($indent . "<!-- start content Closure -->" . $this->linefeed);
-            echo $indent . $pane->begin($depth);
+            echo $indent . $pane->begin($depth) . $this->linefeed;
             echo $var($this) . $this->linefeed;
             echo $indent . $pane->end($depth) . $this->linefeed;
             $this->commentEnable and print($indent . "<!-- end content Closure -->" . $this->linefeed);
         } elseif (is_callable($var)) {
             $this->commentEnable and print($indent . "<!-- start content Callable -->" . $this->linefeed);
-            echo $indent . $pane->begin($depth);
+            echo $indent . $pane->begin($depth) . $this->linefeed;
             echo $var($this) . $this->linefeed;
             echo $indent . $pane->end($depth) . $this->linefeed;
             $this->commentEnable and print($indent . "<!-- end content Callable -->" . $this->linefeed);
