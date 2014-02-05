@@ -46,21 +46,6 @@ class ListPaneFactory extends PaneFactory
 
     public static function parseWrapBeginEnd(PaneInterface $pane, array $config)
     {
-        /*
-        if (isset($config['wrapBegin'])) {
-            $pane->setWrapBegin((string) $config['wrapBegin']);
-        } elseif(!isset($pane->wrapTag) || empty($pane->wrapTag)) {
-            $pane->setWrapBegin('<!-- start pane -->');
-        } else {
-            $attributeString = self::parseAttributes($pane);
-            if (strlen($attributeString)) {
-                $pane->setWrapBegin(sprintf('<%s%s>', $pane->wrapTag, $attributeString));
-            } else {
-                $pane->setWrapBegin(sprintf('<%s>', $pane->wrapTag));
-            }
-         }
-         *
-         */
         if (isset($config['wrapBegin'])) {
             $pane->setWrapBegin((string) $config['wrapBegin']);
         } else {
@@ -72,7 +57,6 @@ class ListPaneFactory extends PaneFactory
                 $pane->setWrapBegin(sprintf('<%s>', $pane->wrapTag));
             }
         }
-
 
          if (isset ($config['wrapEnd'])) {
              $pane->setWrapEnd((string) $config['wrapEnd']);
