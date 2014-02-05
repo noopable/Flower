@@ -28,6 +28,15 @@ use Flower\View\Pane\PaneEvent;
 class Builder
 {
 
+    /**
+     *　レンダリング中に動的に変化することがある。
+     * コンフィグで指定された場合、その子クラスに対してデフォルトファクトリとして
+     * 動作させる。
+     *
+     * @var type
+     */
+    protected $factoryClass;
+
     protected $paneClass = 'Flower\View\Pane\PaneClass\Pane';
 
     protected $sizeToClassFunction;
@@ -111,6 +120,16 @@ class Builder
             unset($config['inner']);
         }
 
+        if (!isset($this->factoryClass)) {
+            $this->factoryClass = $this->getDefaultPaneFactory();
+        }
+
+        $factory = $this->detectFactoryFromConfig($config);
+        if (strlen($factory)) {
+            $factoryPre = $this->factoryClass;
+            $this->factoryClass = $factory;
+        }
+
         $current = $this->createFromConfig($config);
 
         if (!empty($innerConfig)) {
@@ -128,14 +147,24 @@ class Builder
              $parent->insert($current, $current->getOrder());
          }
 
+         if (isset($factoryPre)) {
+             $this->factoryClass = $factoryPre;
+         }
+
          return $current;
     }
 
-    public function createFromConfig(array $config)
+    public function detectFactoryFromConfig(array $config)
     {
         if (isset($config['factory_class'])) {
             $factoryClass = $config['factory_class'];
-        } elseif (isset($config['pane_class'])) {
+            if (! is_subclass_of($factoryClass, 'Flower\View\Pane\Factory\PaneFactoryInterface', true)) {
+                throw new RuntimeException($factoryClass . ' does not implements FactoryInterface');
+            }
+            return $factoryClass;
+        }
+
+        if (isset($config['pane_class'])) {
             if (! class_exists($config['pane_class'])) {
                 throw new PaneClassNotFoundException('class not exists ' . $config['pane_class']);
             }
@@ -143,15 +172,25 @@ class Builder
                 throw new RuntimeException($config['pane_class'] . ' is not instance of PaneInterface');
             }
             $factoryClass = call_user_func($config['pane_class'] . '::getFactoryClass');
-        } else {
-            $factoryClass = $this->getDefaultPaneFactory();
+            if (! is_subclass_of($factoryClass, 'Flower\View\Pane\Factory\PaneFactoryInterface', true)) {
+                throw new RuntimeException($factoryClass . ' does not implements FactoryInterface');
+            }
+            return $factoryClass;
+        }
+    }
+
+
+    public function createFromConfig(array $config)
+    {
+        if (!isset($this->factoryClass)) {
+            $this->factoryClass = $this->getDefaultPaneFactory();
         }
 
         if (isset($this->sizeToClassFunction) && !isset($config['size_to_class_function'])) {
             $config['size_to_class_function'] = $this->sizeToClassFunction;
         }
 
-        return call_user_func($factoryClass . '::factory', $config);
+        return call_user_func($this->factoryClass . '::factory', $config);
     }
 
     public function setDefaultPaneFactory($paneFactory)
