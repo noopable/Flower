@@ -25,7 +25,7 @@ class HelperFactory implements FactoryInterface
 
     protected $helperClass = 'Flower\View\Pane\PaneHelper';
 
-    protected $builderClass = 'Flower\View\Pane\Builder';
+    protected $builderClass = 'Flower\View\Pane\Builder\Builder';
     /**
      * @param  ServiceLocatorInterface $serviceLocator
      */

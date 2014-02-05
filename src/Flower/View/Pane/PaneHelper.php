@@ -9,6 +9,7 @@
 
 namespace Flower\View\Pane;
 
+use Flower\View\Pane\Builder\Builder;
 use Flower\View\Pane\PaneClass\PaneInterface;
 use Zend\View\Helper\AbstractHelper;
 use RecursiveIterator;

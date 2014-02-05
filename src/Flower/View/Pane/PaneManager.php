@@ -9,6 +9,7 @@
 namespace Flower\View\Pane;
 
 use ArrayObject;
+use Flower\View\Pane\Builder\Builder;
 use Flower\View\Pane\Exception\RuntimeException;
 use Flower\View\Pane\PaneClass\PaneInterface;
 use Zend\EventManager\EventManagerAwareInterface;
@@ -124,7 +125,7 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
      * MvcではサービスファクトリでサービスでBuilderOptionを取得してから
      * Builderを設定する
      *
-     * @param \Flower\View\Pane\Builder $builder
+     * @param \Flower\View\Pane\Builder\Builder $builder
      */
     public function setBuilder(Builder $builder)
     {

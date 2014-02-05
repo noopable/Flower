@@ -2,7 +2,7 @@
 namespace FlowerTest\View\Pane;
 
 
-use Flower\View\Pane\Builder;
+use Flower\View\Pane\Builder\Builder;
 use Flower\View\Pane\ListPaneFactory;
 use Flower\View\Pane\PaneRenderer;
 

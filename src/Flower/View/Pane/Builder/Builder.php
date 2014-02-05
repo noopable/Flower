@@ -7,13 +7,14 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\View\Pane;
+namespace Flower\View\Pane\Builder;
 
 use Zend\Stdlib\ArrayUtils;
 use Flower\Exception\IllegalClassException;
 use Flower\View\Pane\Exception\PaneClassNotFoundException;
 use Flower\View\Pane\Exception\RuntimeException;
 use Flower\View\Pane\PaneClass\PaneInterface;
+use Flower\View\Pane\PaneEvent;
 
 /**
  * Paneツリーの定義配列からPaneオブジェクトツリーをビルドします。

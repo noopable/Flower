@@ -11,7 +11,7 @@ namespace FlowerTest\View;
 
 use Flower\Test\TestTool;
 use Flower\View\Pane\PaneRenderer;
-use Flower\View\Pane\Builder;
+use Flower\View\Pane\Builder\Builder;
 use RecursiveIteratorIterator;
 
 /**

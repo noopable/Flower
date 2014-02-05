@@ -2,7 +2,7 @@
 namespace FlowerTest\View\Pane;
 
 use Flower\Test\TestTool;
-use Flower\View\Pane\Builder;
+use Flower\View\Pane\Builder\Builder;
 use Flower\View\Pane\AnchorPaneFactory;
 use Flower\View\Pane\PaneRenderer;
 use FlowerTest\Bootstrap;
