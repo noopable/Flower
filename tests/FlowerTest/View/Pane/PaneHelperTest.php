@@ -106,7 +106,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
      */
     public function test__invokeDefaultPane() {
         //default pane
-        $expected = str_replace(array("\n", "\r"), '', '<!-- begin PaneRenderer -->
+        $expected = str_replace(array("\n", "\r"), '', '<!-- begin Renderer -->
 <!-- start pane -->
   <!-- start content content -->
   <div class="container">
@@ -114,7 +114,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
   </div>
   <!-- end content content -->
 <!-- end pane -->
-<!-- end PaneRenderer -->
+<!-- end Renderer -->
 ');
         $res = $this->helper->__invoke();
         $this->assertInstanceOf('Flower\View\Pane\PaneRenderer', $res);
@@ -135,7 +135,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
         //default pane
         $expected = str_replace(array("\n", "\r"), '',
 '
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 <span>
   <!-- start content content -->
   <div class="container foo">
@@ -143,7 +143,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
   </div>
   <!-- end content content -->
 </span>
-<!-- end PaneRenderer -->
+<!-- end Renderer -->
 ');
         $res = $this->helper->__invoke($paneConfig);
         $this->assertInstanceOf('Flower\View\Pane\PaneRenderer', $res);
@@ -154,7 +154,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
     {
         $data = $this->helper->__invoke();
         $expected = <<<EOF
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 <!-- start pane -->
   <!-- start content content -->
   <div class='container'>
@@ -163,7 +163,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
   <!-- end content content -->
 <!-- end pane -->
 
-<!-- end PaneRenderer -->
+<!-- end Renderer -->
 
 EOF;
         $this->assertXmlStringEqualsXmlString($expected, (string) $data);
@@ -177,7 +177,7 @@ EOF;
     public function testCallTwiceDefaultPane()
     {
         $expected = <<<EOF
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 <!-- start pane -->
   <!-- start content content -->
   <div class='container'>
@@ -186,7 +186,7 @@ EOF;
   <!-- end content content -->
 <!-- end pane -->
 
-<!-- end PaneRenderer -->
+<!-- end Renderer -->
 
 EOF;
         $data = $this->helper->__invoke();
@@ -205,7 +205,7 @@ EOF;
     public function testRenderTwiceDefaultPane()
     {
         $expected = <<<EOF
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 <!-- start pane -->
   <!-- start content content -->
   <div class='container'>
@@ -214,7 +214,7 @@ EOF;
   <!-- end content content -->
 <!-- end pane -->
 
-<!-- end PaneRenderer -->
+<!-- end Renderer -->
 
 EOF;
         $data = $this->helper->__invoke();
@@ -233,7 +233,7 @@ EOF;
         $this->renderer->setVars(array('content' => 'This is Content test'));
         $data = $this->helper->__invoke();
         $expected = <<<EOF
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 <!-- start pane -->
   <!-- start content content -->
   <div class='container'>
@@ -242,7 +242,7 @@ This is Content test
   <!-- end content content -->
 <!-- end pane -->
 
-<!-- end PaneRenderer -->
+<!-- end Renderer -->
 
 EOF;
         $this->assertXmlStringEqualsXmlString($expected, (string) $data);
@@ -254,7 +254,7 @@ EOF;
         $this->renderer->setVars(array('content' => 'This is Content test'));
         $data = $this->helper->__invoke($pane);
         $expected = <<<EOF
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 <body class='container'>
   <!-- start content header -->
   <div id='overview' class='container subhead header'>
@@ -303,7 +303,7 @@ EOF;
         $this->renderer->setVars($vars);
         $data = $this->helper->__invoke($pane);
         $expected = <<<EOF
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 <body class='container'>
   <!-- start content header -->
   <div id='overview' class='container subhead header'>

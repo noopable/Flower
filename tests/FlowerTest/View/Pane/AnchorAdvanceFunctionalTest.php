@@ -65,28 +65,25 @@ class AnchorAdvanceFunctionalTest extends \PHPUnit_Framework_TestCase
     public function testMultiInner()
     {
         $expected =
-'<!-- begin ListRenderer -->
+'<!-- begin Renderer -->
 <ul>
 <li>
-<span class="container">
-Link Label 1</span>
+  <span class="container">Link Label 1</span>
 <ul>
   <li>
-  <span class="main">
-Link Label 1.1  </span>
+    <span class="main">Link Label 1.1</span>
   <ul>
-    <!-- start content ListPane -->
+    <!-- start content CallbackRender -->
     <li>
-    <span class="main">
-Link Label 1.1.1    </span>
+    <span class="main">Link Label 1.1.1</span>
     </li>
-    <!-- end content ListPane -->
+    <!-- end content CallbackRender -->
   </ul>
   </li>
 </ul>
 </li>
 </ul>
-<!-- end ListRenderer -->
+<!-- end Renderer -->
 ';
         $expected = str_replace("\r\n","\n", $expected);
         $paneConfig = array(

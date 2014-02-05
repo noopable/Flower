@@ -48,21 +48,28 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
 
     public $var = 'content';
 
-    public $begin;
-
-    public $end;
+    public $tag = 'div';
 
     public $wrapTag;
 
-    public $tag = 'div';
+    public $containerTag;
 
     protected $options;
 
     protected $paneRenderer;
 
+    protected $containerBegin;
+
+    protected $containerEnd;
+
     protected $wrapBegin;
 
     protected $wrapEnd;
+
+    public $begin;
+
+    public $end;
+
 
     protected $registry;
     /**
@@ -122,20 +129,36 @@ class Pane extends RecursivePriorityQueue implements PaneInterface
         return parent::insert($pane, $priority);
     }
 
+    public function containerBegin($depth = null)
+    {
+        if (!isset($this->containerBegin)) {
+            return $this->wrapBegin($depth);
+        }
+        return $this->containerBegin;
+    }
+
+    public function containerEnd($depth = null)
+    {
+        if (!isset($this->containerEnd)) {
+            return $this->wrapEnd($depth);
+        }
+        return $this->containerEnd;
+    }
+
     public function wrapBegin($depth = null)
     {
-        if (isset($this->wrapBegin)) {
-            return $this->wrapBegin;
+        if (! isset($this->wrapBegin)) {
+            return $this->begin($depth);
         }
-        return $this->begin;
+        return $this->wrapBegin;
     }
 
     public function wrapEnd($depth = null)
     {
-        if (isset($this->wrapEnd)) {
-            return $this->wrapEnd;
+        if (! isset($this->wrapEnd)) {
+            return $this->end($depth);
         }
-        return $this->end;
+        return $this->wrapEnd;
     }
 
     public function begin($depth = null)

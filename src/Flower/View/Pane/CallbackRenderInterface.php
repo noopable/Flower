@@ -9,11 +9,10 @@
 namespace Flower\View\Pane;
 
 /**
- * Description of ListPaneHelper
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class AnchorHelper extends PaneHelper
+interface CallbackRenderInterface
 {
-    public $defaultPaneClass = 'Flower\View\Pane\Anchor';
+    public function render(PaneRenderer $renderer);
 }

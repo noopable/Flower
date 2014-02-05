@@ -48,16 +48,6 @@ class Anchor extends ListPane
 
     protected $view;
 
-    public function begin($depth = null)
-    {
-        return $this->begin;
-    }
-
-    public function end($depth = null)
-    {
-        return $this->end;
-    }
-
     public function getSubstituteTag()
     {
         $substitute = $this->getOption('substitute_tag');
@@ -122,12 +112,16 @@ class Anchor extends ListPane
         return $this->href;
     }
 
-    public function render(PaneRenderer $paneRenderer)
+    public function _render(PaneRenderer $paneRenderer)
     {
+        $depth = $paneRenderer->getDepth();
         $this->indent = $paneRenderer->indent;
+        $indent = str_repeat($this->indent, $depth + 1);
         $this->linefeed = $paneRenderer->linefeed;
         $this->commentEnable = $paneRenderer->commentEnable;
 
+        $response = '';
+        $response .= $indent . $this->begin($depth);
         if (isset($this->view)) {
             $view = $this->view;
         } else {
@@ -143,12 +137,15 @@ class Anchor extends ListPane
 
         switch ($this->getOption('render_policy')) {
             case 'view_partial':
-                return $view->render($this->_var);
+                $response .= $view->render($this->_var);
+                break;
             case 'raw':
-                return (string) $this->_var;
+                $response .=  (string) $this->_var;
+                break;
             case 'callback':
                 if (is_callable($this->_var)) {
-                    return call_user_func($this->_var, $paneRenderer);
+                    $response .= call_user_func($this->_var, $paneRenderer);
+                    break;
                 } else {
                     //__toString() must not throw an exception
                     return 'render_policy is callback. but var is not callable. in ' . __METHOD__;
@@ -156,14 +153,19 @@ class Anchor extends ListPane
             case 'default':
             default:
                 if (isset($this->label)) {
-                    return $view->escapeHtml($this->label);
+                    $response .= $view->escapeHtml($this->label);
+                    break;
                 } else {
-                    if (is_string($this->_var)) {
-                        return $view->escapeHtml($this->_var);
+                    if (! is_string($this->_var)) {
+                        return 'label is not set and var is not string';
                     }
-                    return 'label is not set and var is not string';
+                    $response .= $view->escapeHtml($this->_var);
+                    break;
                 }
         }
+
+        $response .= $this->end($depth);
+        return $response;
     }
 
     public function hasContent()

@@ -65,14 +65,13 @@ class AnchorVariousFunctionalTest extends \PHPUnit_Framework_TestCase
     public function testUseLabel()
     {
         $expected =
-'<!-- begin ListRenderer -->
+'<!-- begin Renderer -->
 <ul>
 <li>
-<span class="container">
-Link Label 1</span>
+  <span class="container">Link Label 1</span>
 </li>
 </ul>
-<!-- end ListRenderer -->
+<!-- end Renderer -->
 ';
         $expected = str_replace("\r\n","\n", $expected);
         $paneConfig = array(

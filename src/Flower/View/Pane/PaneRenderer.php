@@ -83,16 +83,15 @@ class PaneRenderer extends RecursiveIteratorIterator
 
     public function beginIteration()
     {
-        $pane = parent::getInnerIterator();
-        $pane->setPaneRenderer($this);
-        $this->commentEnable and print($this->linefeed . "<!-- begin PaneRenderer -->" . $this->linefeed);
-        echo $pane->wrapBegin($this->getDepth()) . $this->linefeed;
+        parent::getInnerIterator()->setPaneRenderer($this);
+        $this->commentEnable and print("<!-- begin Renderer -->" . $this->linefeed);
+        echo parent::getInnerIterator()->containerBegin($this->getDepth()) . $this->linefeed;
     }
 
     public function endIteration()
     {
-        echo parent::getInnerIterator()->wrapEnd($this->getDepth()) . $this->linefeed;
-        $this->commentEnable and print("<!-- end PaneRenderer -->" . $this->linefeed);
+        echo parent::getInnerIterator()->containerEnd($this->getDepth()) . $this->linefeed;
+        $this->commentEnable and print( "<!-- end Renderer -->" . $this->linefeed);
     }
 
     public function beginChildren()
@@ -101,8 +100,8 @@ class PaneRenderer extends RecursiveIteratorIterator
         $indent = str_repeat($this->indent, $depth);
         $pane = parent::getInnerIterator();
         $pane->setPaneRenderer($this);
-        echo $indent . $pane->wrapBegin($depth) . $this->linefeed;
-        $this->endTagStack[] = $indent . $pane->wrapEnd($depth);
+        echo $indent . $pane->containerBegin($depth) . $this->linefeed;
+        $this->endTagStack[] = $indent . $pane->containerEnd($depth);
     }
 
     public function endChildren()
@@ -116,14 +115,19 @@ class PaneRenderer extends RecursiveIteratorIterator
             return;
         }
 
-        $depth = $this->getDepth();
-        $indent = str_repeat($this->indent, $depth + 1);
-        $innerIndent = $indent . $this->indent;
         $pane = parent::current();
-
         if (!$pane->hasContent()) {
             return;
         }
+
+        if ($pane instanceof CallbackRenderInterface ){
+            echo $pane->render($this);
+            return;
+        }
+
+        $depth = $this->getDepth();
+        $indent = str_repeat($this->indent, $depth + 1);
+        $innerIndent = $indent . $this->indent;
         $var = $pane->var;
 
         if (is_string($var)) {

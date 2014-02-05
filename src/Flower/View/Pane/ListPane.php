@@ -15,7 +15,7 @@ use Flower\View\Pane\PaneRenderer;
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class ListPane extends Pane
+class ListPane extends Pane implements CallbackRenderInterface
 {
     protected static $factoryClass = 'Flower\View\Pane\ListPaneFactory';
 
@@ -60,9 +60,7 @@ class ListPane extends Pane
                 $response .= $this->linefeed . $indent;
             }
             $response .= $this->wrapBegin . $this->linefeed . //<li>
-                $indent . $this->begin($depth) . $this->linefeed . //<span>
-                $this->render($this->getPaneRenderer())  . //content
-                $indent . $this->end($depth); //</span>
+                $this->_render($this->getPaneRenderer()); //content
         }
         if ($this->valid()) {
             $hasChildren = true;
@@ -118,8 +116,28 @@ class ListPane extends Pane
 
         $depth = $paneRenderer->getDepth();
         $indent = str_repeat($this->indent, $depth + 1);
+
+        $response = '';
+        $response .= $this->commentEnable ? $indent . "<!-- start content CallbackRender -->" . $this->linefeed : '';
+        $response .= $indent . $this->wrapBegin($depth) . $this->linefeed;
+        $response .= $this->_render($paneRenderer) . $this->linefeed;
+        $response .= $indent . $this->wrapEnd($depth) . $this->linefeed;
+        $response .= $this->commentEnable ? $indent . "<!-- end content CallbackRender -->" . $this->linefeed : '';
+        return $response;
+    }
+
+    public function _render(PaneRenderer $paneRenderer)
+    {
+        $this->indent = $paneRenderer->indent;
+        $this->linefeed = $paneRenderer->linefeed;
+        $this->commentEnable = $paneRenderer->commentEnable;
+
+        $depth = $paneRenderer->getDepth();
+        $indent = str_repeat($this->indent, $depth + 1);
         $innerIndent = $indent . $this->indent;
         $response = '';
+
+        $response .= $indent . $this->begin($depth) . $this->linefeed;
 
         $var = $this->_var;
         if (is_string($var)) {
@@ -136,6 +154,8 @@ class ListPane extends Pane
             $response .= $var($paneRenderer) . $this->linefeed;
             $response .= $this->commentEnable ? $indent . "<!-- end content Closure -->" . $this->linefeed : "";
         }
+
+        $response .= $indent . $this->end($depth);
 
         return $response;
     }

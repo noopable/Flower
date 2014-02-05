@@ -49,7 +49,7 @@ class PaneRendererTest extends \PHPUnit_Framework_TestCase
         $pane = $builder->build($paneConfig);
         $paneRenderer = new PaneRenderer($pane);
         $expected = <<<EOD
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 <body class='container'>
   <!-- start content header -->
   <div class='container subhead header' id='overview'>
@@ -79,7 +79,7 @@ class PaneRendererTest extends \PHPUnit_Framework_TestCase
   </div>
 </body>
 
-<!-- end PaneRenderer -->
+<!-- end Renderer -->
 EOD;
         $this->assertXmlStringEqualsXmlString($expected, (string) $paneRenderer);
     }
@@ -91,7 +91,7 @@ EOD;
         $pane = $builder->build($paneConfig);
         $paneRenderer = new PaneRenderer($pane);
         $expected = <<<EOD
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 <!-- start pane -->
 <div class="container">
   <!-- start content header -->
@@ -133,7 +133,7 @@ EOD;
   </div>
 </div>
 <!-- end pane -->
-<!-- end PaneRenderer -->
+<!-- end Renderer -->
 EOD;
         $this->assertXmlStringEqualsXmlString($expected, (string) $paneRenderer);
     }
@@ -142,10 +142,10 @@ EOD;
     {
         $builder =new Builder;
         $expected =
-'<!-- begin PaneRenderer -->
+'<!-- begin Renderer -->
 <div>
 </div>
-<!-- end PaneRenderer -->';
+<!-- end Renderer -->';
         $pane = $builder->build(array('var' => false));
         $paneRenderer = new PaneRenderer($pane);
         $this->assertXmlStringEqualsXmlString($expected, (string) $paneRenderer, 'checking var = false');
@@ -161,10 +161,10 @@ EOD;
     {
         $builder =new Builder;
         $expected = str_replace(array("\r\n","\n","\r"), '',
-'<!-- begin PaneRenderer -->
+'<!-- begin Renderer -->
 <div ng-view>
 </div>
-<!-- end PaneRenderer -->'
+<!-- end Renderer -->'
 );
 
         $pane = $builder->build(array('attributes' => ['ng-view' => null]));
@@ -253,7 +253,7 @@ EOD;
      */
     public function testBeginIteration()
     {
-        $expectedString = "\n<!-- begin PaneRenderer -->\n" . 'foo' . "\n";
+        $expectedString = "<!-- begin Renderer -->\n" . 'foo' . "\n";
         $builder =new Builder;
         $pane = $builder->build(array('wrapBegin' => 'foo'));
         $paneRenderer = new PaneRenderer($pane);
@@ -266,7 +266,7 @@ EOD;
      */
     public function testEndIteration()
     {
-        $expectedString = "foo\n<!-- end PaneRenderer -->\n" ;
+        $expectedString = "foo\n<!-- end Renderer -->\n" ;
         $builder =new Builder;
         $pane = $builder->build(array('wrapEnd' => 'foo'));
         $paneRenderer = new PaneRenderer($pane);
@@ -442,9 +442,9 @@ article
         //$this->assertTrue($paneRenderer->valid());
         //$paneRenderer->current();
         $expected = '
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 foobar
-<!-- end PaneRenderer -->
+<!-- end Renderer -->
 ';
         $this->assertEquals(str_replace(array("\n","\r"),'', $expected), str_replace(array("\n","\r"), '', (string) $paneRenderer));
     }
@@ -472,7 +472,7 @@ foobar
         //$this->assertTrue($paneRenderer->valid());
         //$paneRenderer->current();
         $expected = '
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 <div class="container">
   <!-- start content varName -->
   <span class="main">
@@ -480,7 +480,7 @@ article
   </span>
   <!-- end content varName -->
 </div>
-<!-- end PaneRenderer -->
+<!-- end Renderer -->
 ';
         $this->assertEquals(str_replace(array("\n","\r"),'', $expected), str_replace(array("\n","\r"), '', (string) $paneRenderer));
     }
@@ -515,7 +515,7 @@ article
         //$this->assertTrue($paneRenderer->valid());
         //$paneRenderer->current();
         $expected = '
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 <div class="container">
   <!-- start content varName -->
   <span class="main">
@@ -528,7 +528,7 @@ bar
   </p>
   <!-- end content foo -->
 </div>
-<!-- end PaneRenderer -->
+<!-- end Renderer -->
 ';
         $this->assertEquals(str_replace(array("\n","\r"),'', $expected), str_replace(array("\n","\r"), '', (string) $paneRenderer));
     }
@@ -555,7 +555,7 @@ bar
         //$this->assertTrue($paneRenderer->valid());
         //$paneRenderer->current();
         $expected = '
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 <span class="container">
   <!-- start content varName -->
   <span class="main">
@@ -563,7 +563,7 @@ article
   </span>
   <!-- end content varName -->
 </span>
-<!-- end PaneRenderer -->
+<!-- end Renderer -->
 ';
         $this->assertEquals(str_replace(array("\n","\r"),'', $expected), str_replace(array("\n","\r"), '', (string) $paneRenderer));
     }
@@ -589,7 +589,7 @@ article
         //$this->assertTrue($paneRenderer->valid());
         //$paneRenderer->current();
         $expected = '
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 <!-- start pane -->
   <!-- start content varName -->
   <span class="main">
@@ -597,7 +597,7 @@ article
   </span>
   <!-- end content varName -->
 <!-- end pane -->
-<!-- end PaneRenderer -->
+<!-- end Renderer -->
 ';
         $this->assertEquals(str_replace(array("\n","\r"),'', $expected), str_replace(array("\n","\r"), '', (string) $paneRenderer));
     }
@@ -650,7 +650,7 @@ article
         //$this->assertTrue($paneRenderer->valid());
         //$paneRenderer->current();
         $expected = '
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 <div id="a0" class="container">
   <div id="a1" class="main">
     <!-- start content varName -->
@@ -669,7 +669,7 @@ bar
   </span>
   <!-- end content foo -->
 </div>
-<!-- end PaneRenderer -->
+<!-- end Renderer -->
 ';
         $this->assertEquals(str_replace(array("\n","\r"),'', $expected), str_replace(array("\n","\r"), '', (string) $paneRenderer));
     }
@@ -724,7 +724,7 @@ bar
         //$this->assertTrue($paneRenderer->valid());
         //$paneRenderer->current();
         $expected = '
-<!-- begin PaneRenderer -->
+<!-- begin Renderer -->
 <div id="a0" class="container">
   <!-- start content varName -->
   <span id="a1" class="main">
@@ -748,7 +748,7 @@ bar
   </p>
   <!-- end content foo -->
 </div>
-<!-- end PaneRenderer -->
+<!-- end Renderer -->
 ';
         $this->assertEquals(str_replace(array("\n","\r"),'', $expected), str_replace(array("\n","\r"), '', (string) $paneRenderer));
     }

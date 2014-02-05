@@ -4,7 +4,7 @@ namespace FlowerTest\View\Pane;
 use Flower\Test\TestTool;
 use Flower\View\Pane\Builder;
 use Flower\View\Pane\AnchorPaneFactory;
-use Flower\View\Pane\ListRenderer;
+use Flower\View\Pane\PaneRenderer;
 use FlowerTest\Bootstrap;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
@@ -62,17 +62,17 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
     public function testSimple()
     {
         $expected =
-'<!-- begin ListRenderer -->
+'<!-- begin Renderer -->
 
 
-<!-- end ListRenderer -->
+<!-- end Renderer -->
 ';
         $expected = str_replace("\r\n", "\n", $expected);
         $paneConfig = array(
             'id' => 'foo',
         );
         $pane = AnchorPaneFactory::factory($paneConfig, (new Builder));
-        $renderer = new ListRenderer($pane);
+        $renderer = new PaneRenderer($pane);
         $renderer->setView((new PhpRenderer));
         //__toString() must not throw an exception
         //foreach ($renderer as $entry) {}
@@ -88,22 +88,20 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
     {
 
         $expected =
-'<!-- begin ListRenderer -->
+'<!-- begin Renderer -->
 <ul>
 <li>
-<span class="container">
-foo</span>
+  <span class="container">foo</span>
 <ul>
-  <!-- start content ListPane -->
+  <!-- start content CallbackRender -->
   <li>
-  <span class="main">
-content  </span>
+  <span class="main">content</span>
   </li>
-  <!-- end content ListPane -->
+  <!-- end content CallbackRender -->
 </ul>
 </li>
 </ul>
-<!-- end ListRenderer -->
+<!-- end Renderer -->
 ';
         $expected = str_replace("\r\n","\n", $expected);
         $paneConfig = array(
@@ -115,7 +113,7 @@ content  </span>
             ));
         $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\Anchor')))->build($paneConfig);
         $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
-        $renderer = new ListRenderer($pane);
+        $renderer = new PaneRenderer($pane);
         $renderer->setView(new PhpRenderer);
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
     }
@@ -129,22 +127,20 @@ content  </span>
     {
 
         $expected =
-'<!-- begin ListRenderer -->
+'<!-- begin Renderer -->
 <ul>
 <li>
-<span class="container">
-foo</span>
+  <span class="container">foo</span>
 <ul>
-  <!-- start content ListPane -->
+  <!-- start content CallbackRender -->
   <li>
-  <span class="main">
-content  </span>
+  <span class="main">content</span>
   </li>
-  <!-- end content ListPane -->
+  <!-- end content CallbackRender -->
 </ul>
 </li>
 </ul>
-<!-- end ListRenderer -->
+<!-- end Renderer -->
 ';
         $expected = str_replace("\r\n","\n", $expected);
         $paneConfig = array(
@@ -156,7 +152,7 @@ content  </span>
             ));
         $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\Anchor')))->build($paneConfig);
         $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
-        $renderer = new ListRenderer($pane);
+        $renderer = new PaneRenderer($pane);
         $renderer->setView(new PhpRenderer);
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
     }
@@ -170,28 +166,25 @@ content  </span>
     {
 
         $expected =
-'<!-- begin ListRenderer -->
+'<!-- begin Renderer -->
 <ul>
 <li>
-<span class="container">
-foo</span>
+  <span class="container">foo</span>
 <ul>
-  <!-- start content ListPane -->
+  <!-- start content CallbackRender -->
   <li>
-  <span class="main">
-Label1  </span>
+  <span class="main">Label1</span>
   </li>
-  <!-- end content ListPane -->
-  <!-- start content ListPane -->
+  <!-- end content CallbackRender -->
+  <!-- start content CallbackRender -->
   <li>
-  <span class="main">
-Label2  </span>
+  <span class="main">Label2</span>
   </li>
-  <!-- end content ListPane -->
+  <!-- end content CallbackRender -->
 </ul>
 </li>
 </ul>
-<!-- end ListRenderer -->
+<!-- end Renderer -->
 ';
         $expected = str_replace("\r\n","\n", $expected);
         $paneConfig = array(
@@ -208,7 +201,7 @@ Label2  </span>
             ),);
         $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\Anchor')))->build($paneConfig);
         $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
-        $renderer = new ListRenderer($pane);
+        $renderer = new PaneRenderer($pane);
         $renderer->setView(new PhpRenderer);
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
     }
@@ -222,34 +215,30 @@ Label2  </span>
     {
 
         $expected =
-'<!-- begin ListRenderer -->
+'<!-- begin Renderer -->
 <ul>
 <li>
-<span class="container">
-foo</span>
+  <span class="container">foo</span>
 <ul>
-  <!-- start content ListPane -->
+  <!-- start content CallbackRender -->
   <li>
-  <span class="main">
-Label1  </span>
+  <span class="main">Label1</span>
   </li>
-  <!-- end content ListPane -->
-  <!-- start content ListPane -->
+  <!-- end content CallbackRender -->
+  <!-- start content CallbackRender -->
   <li>
-  <span class="main">
-Label2  </span>
+  <span class="main">Label2</span>
   </li>
-  <!-- end content ListPane -->
-  <!-- start content ListPane -->
+  <!-- end content CallbackRender -->
+  <!-- start content CallbackRender -->
   <li>
-  <span class="main">
-Label3  </span>
+  <span class="main">Label3</span>
   </li>
-  <!-- end content ListPane -->
+  <!-- end content CallbackRender -->
 </ul>
 </li>
 </ul>
-<!-- end ListRenderer -->
+<!-- end Renderer -->
 ';
         $expected = str_replace("\r\n","\n", $expected);
         $paneConfig = array(
@@ -273,7 +262,7 @@ Label3  </span>
             ),);
         $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\Anchor')))->build($paneConfig);
         $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
-        $renderer = new ListRenderer($pane);
+        $renderer = new PaneRenderer($pane);
         $renderer->setView(new PhpRenderer);
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
     }
@@ -287,34 +276,30 @@ Label3  </span>
     {
 
         $expected =
-'<!-- begin ListRenderer -->
+'<!-- begin Renderer -->
 <ul>
 <li>
-<span class="container">
-foo</span>
+  <span class="container">foo</span>
 <ul>
-  <!-- start content ListPane -->
+  <!-- start content CallbackRender -->
   <li>
-  <span class="main">
-Label1  </span>
+  <span class="main">Label1</span>
   </li>
-  <!-- end content ListPane -->
-  <!-- start content ListPane -->
+  <!-- end content CallbackRender -->
+  <!-- start content CallbackRender -->
   <li>
-  <span class="main">
-Label2  </span>
+  <span class="main">Label2</span>
   </li>
-  <!-- end content ListPane -->
-  <!-- start content ListPane -->
+  <!-- end content CallbackRender -->
+  <!-- start content CallbackRender -->
   <li>
-  <span class="main">
-Label3  </span>
+  <span class="main">Label3</span>
   </li>
-  <!-- end content ListPane -->
+  <!-- end content CallbackRender -->
 </ul>
 </li>
 </ul>
-<!-- end ListRenderer -->
+<!-- end Renderer -->
 ';
         $expected = str_replace("\r\n","\n", $expected);
         $paneConfig = array(
@@ -339,7 +324,7 @@ Label3  </span>
         );
         $pane = (new Builder(array('pane_class' => 'Flower\View\Pane\Anchor')))->build($paneConfig);
         $this->assertInstanceOf('Flower\View\Pane\Anchor', $pane);
-        $renderer = new ListRenderer($pane);
+        $renderer = new PaneRenderer($pane);
         $renderer->setView(new PhpRenderer);
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
     }
@@ -347,22 +332,20 @@ Label3  </span>
     public function testSimpleInnerWithoutRouteMatch()
     {
         $expected =
-'<!-- begin ListRenderer -->
+'<!-- begin Renderer -->
 <ul>
 <li>
-<span class="container">
-foo</span>
+  <span class="container">foo</span>
 <ul>
-  <!-- start content ListPane -->
+  <!-- start content CallbackRender -->
   <li>
-  <span class="main">
-content  </span>
+  <span class="main">content</span>
   </li>
-  <!-- end content ListPane -->
+  <!-- end content CallbackRender -->
 </ul>
 </li>
 </ul>
-<!-- end ListRenderer -->
+<!-- end Renderer -->
 ';
         $expected = str_replace("\r\n","\n", $expected);
         $paneConfig = array(

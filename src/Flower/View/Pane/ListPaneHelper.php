@@ -16,6 +16,4 @@ namespace Flower\View\Pane;
 class ListPaneHelper extends PaneHelper
 {
     public $defaultPaneClass = 'Flower\View\Pane\ListPane';
-
-    public $paneRenderer = 'Flower\View\Pane\ListRenderer';
 }
