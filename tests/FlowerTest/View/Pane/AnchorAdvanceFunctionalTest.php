@@ -56,7 +56,7 @@ class AnchorAdvanceFunctionalTest extends \PHPUnit_Framework_TestCase
         $renderer = $this->helperManager->getRenderer();
         $this->assertInstanceOf('Zend\View\Renderer\PhpRenderer', $renderer);
 
-        $this->assertInstanceOf('Flower\View\Pane\AnchorHelper', $this->helper);
+        $this->assertInstanceOf('Flower\View\Pane\Service\AnchorHelper', $this->helper);
 
         $builder = $this->helper->getBuilder();
         $this->assertEquals('Flower\View\Pane\PaneClass\Anchor', TestTool::getPropertyValue($builder, 'paneClass'));

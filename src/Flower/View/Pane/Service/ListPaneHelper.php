@@ -6,16 +6,14 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\View\Pane;
+namespace Flower\View\Pane\Service;
 
 /**
- * Description of ListHelperFactory
+ * Description of ListPaneHelper
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class AnchorHelperFactory extends HelperFactory
+class ListPaneHelper extends PaneHelper
 {
-    protected $configKey = 'flower_anchor_pane';
-
-    protected $helperClass = 'Flower\View\Pane\AnchorHelper';
+    public $defaultPaneClass = 'Flower\View\Pane\PaneClass\ListPane';
 }

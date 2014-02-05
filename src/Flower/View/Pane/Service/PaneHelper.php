@@ -7,7 +7,7 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\View\Pane;
+namespace Flower\View\Pane\Service;
 
 use Flower\View\Pane\Builder\Builder;
 use Flower\View\Pane\PaneClass\PaneInterface;

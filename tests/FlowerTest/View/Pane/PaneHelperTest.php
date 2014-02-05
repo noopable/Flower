@@ -9,7 +9,7 @@
 
 namespace FlowerTest\View\Pane;
 
-use Flower\View\Pane\PaneHelper;
+use Flower\View\Pane\Service\PaneHelper;
 use Flower\Test\TestTool;
 use Zend\View\Renderer\PhpRenderer;
 
@@ -75,7 +75,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Flower\View\Pane\PaneHelper::abstractFactoryPaneRenderer
+     * @covers Flower\View\Pane\Service\PaneHelper::abstractFactoryPaneRenderer
      * @todo   Implement testAbstractFactoryPaneRenderer().
      */
     public function testAbstractFactoryPaneRenderer() {
@@ -91,7 +91,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Flower\View\Pane\PaneHelper::paneFactory
+     * @covers Flower\View\Pane\Service\PaneHelper::paneFactory
      * @todo   Implement testPaneFactory().
      */
     public function testPaneFactory() {
@@ -102,7 +102,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Flower\View\Pane\PaneHelper::__invoke
+     * @covers Flower\View\Pane\Service\PaneHelper::__invoke
      */
     public function test__invokeDefaultPane() {
         //default pane
@@ -122,7 +122,7 @@ class PaneHelperTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Flower\View\Pane\PaneHelper::__invoke
+     * @covers Flower\View\Pane\Service\PaneHelper::__invoke
      */
     public function test__invokeWithPaneConfig() {
         $paneConfig = array(
@@ -338,7 +338,7 @@ EOF;
     }
 
     /**
-     * @covers Flower\View\Pane\PaneHelper::setObjectKey
+     * @covers Flower\View\Pane\Service\PaneHelper::setObjectKey
      */
     public function testSetObjectKey() {
         $this->helper->setObjectKey('foo');
@@ -346,7 +346,7 @@ EOF;
     }
 
     /**
-     * @covers Flower\View\Pane\PaneHelper::getObjectKey
+     * @covers Flower\View\Pane\Service\PaneHelper::getObjectKey
      */
     public function testGetObjectKey() {
         $this->helper->setObjectKey('foo');

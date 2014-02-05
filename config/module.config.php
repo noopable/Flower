@@ -147,12 +147,12 @@ return array(
     ),
     'view_helpers' => array(
         'factories' => array(
-            'pane' => 'Flower\View\Pane\HelperFactory',
-            'npList' =>  'Flower\View\Pane\ListHelperFactory',
-            'npNavi' =>   'Flower\View\Pane\AnchorHelperFactory',
+            'pane' => 'Flower\View\Pane\Service\HelperFactory',
+            'npList' =>  'Flower\View\Pane\Service\ListHelperFactory',
+            'npNavi' =>   'Flower\View\Pane\Service\AnchorHelperFactory',
         ),
         'invokables' => array(
-            //'pane' => 'Flower\View\Pane\PaneHelper',
+            //'pane' => 'Flower\View\Pane\Service\PaneHelper',
             'npMenu' => 'Flower\View\Navigation\NpMenu',
             'formPreview' => 'Flower\Form\View\FormPreview',
             'form-element' => 'Flower\Form\View\FormElement',

@@ -1,13 +1,13 @@
 <?php
 
-/*
+/**
  *
  *
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\View\Pane;
+namespace Flower\View\Pane\Service;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -23,7 +23,7 @@ class HelperFactory implements FactoryInterface
 
     protected $configKey = 'flower_pane';
 
-    protected $helperClass = 'Flower\View\Pane\PaneHelper';
+    protected $helperClass = 'Flower\View\Pane\Service\PaneHelper';
 
     protected $builderClass = 'Flower\View\Pane\Builder\Builder';
     /**
