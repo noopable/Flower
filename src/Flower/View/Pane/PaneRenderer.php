@@ -103,12 +103,19 @@ class PaneRenderer extends RecursiveIteratorIterator
         $pane = parent::getInnerIterator();
         $pane->setPaneRenderer($this);
         echo $indent . $pane->containerBegin($depth) . $this->linefeed;
-        $this->endTagStack[] = $indent . $pane->containerEnd($depth);
+        if ($end = $pane->containerEnd($depth)) {
+            $this->endTagStack[] = $indent . $end;
+        } else {
+            $this->endTagStack[] = '';
+         }
     }
 
     public function endChildren()
     {
-        echo array_pop($this->endTagStack) . $this->linefeed;
+        $end = array_pop($this->endTagStack);
+        if (strlen($end)) {
+            echo  $end . $this->linefeed;
+        }
     }
 
     public function current()
