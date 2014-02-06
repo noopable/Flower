@@ -42,6 +42,12 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
 
     protected $init = false;
 
+    protected $modePaneClass = array(
+        'pane' => 'Flower\View\Pane\PaneClass\Pane',
+        'list' => 'Flower\View\Pane\PaneClass\ListPane',
+        'anchor' => 'Flower\View\Pane\PaneClass\Anchor',
+    );
+
     public function __invoke()
     {
         $this->init();
@@ -174,6 +180,14 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
         }
 
         return $this->builder;
+    }
+
+    public function setBuilderMode($mode)
+    {
+        $mode = strtolower($mode);
+        if (isset($this->modePaneClass[$mode])) {
+            $this->getBuilder()->setPaneClass($this->modePaneClass[$mode]);
+        }
     }
 
     public function setRendererClass($rendererClass)
