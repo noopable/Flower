@@ -175,6 +175,57 @@ foo
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
     }
 
+    public function testMultiInnerWithMaxDepth()
+    {
+        $expected =
+'<!-- begin Renderer -->
+<ul>
+<li>
+  <span class="container">
+  <!-- start content level0 -->
+-0-
+  <!-- end content level0 -->
+  </span>
+<ul>
+  <li>
+    <span class="main">
+    <!-- start content level1 -->
+-1-
+    <!-- end content level1 -->
+    </span>
+  </li>
+</ul>
+</li>
+</ul>
+<!-- end Renderer -->
+';
+        $expected = str_replace("\r\n","\n",  $expected);
+        $paneConfig = array(
+            'classes' => 'container',
+            'var' => 'level0',
+            'inner' => array(
+                'classes' => 'main',
+                'var' => 'level1',
+                'inner' => array(
+                    'classes' => 'main',
+                    'var' => 'level2',
+                    'inner' => array(
+                        'classes' => 'sub',
+                        'var' => 'level3',
+                    ),
+                ),
+            ),
+        );
+        $pane = $this->builder->build($paneConfig);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\ListPane', $pane);
+        $renderer = new PaneRenderer($pane);
+        $renderer->setMaxDepth(1);
+        $renderer->setVar('level0', '-0-');
+        $renderer->setVar('level1', '-1-');
+        $renderer->setVar('level2', '-2-');
+        $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
+    }
+
     public function testMultiInnerCommentOff()
     {
         $expected = '<ul><li><span class="container">foo</span><ul><li><span class="main"><a href="foo">bar</a></span><ul><li><span class="main">foo</span></li></ul></li></ul></li></ul>';

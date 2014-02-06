@@ -42,10 +42,11 @@ class ListPane extends Pane implements CallbackRenderInterface
     public function containerBegin($depth = null)
     {
         $renderSelf = false;
-        $hasChildren = false;
         $response = '';
         $containerEnd = '';
         $indent = str_repeat($this->indent, (int) $depth);
+        $renderer = $this->getPaneRenderer();
+        $maxDepth = $renderer->getMaxDepth();
 
         if ($depth === 0) {
             //第１階層はulでラップする。
@@ -60,13 +61,11 @@ class ListPane extends Pane implements CallbackRenderInterface
                 $response .= $this->linefeed . $indent;
             }
             $response .= $this->wrapBegin . $this->linefeed . //<li>
-                $this->_render($this->getPaneRenderer()); //content
+                $this->_render($renderer) . $this->linefeed; //content
         }
-        if ($this->valid()) {
-            $hasChildren = true;
+        if ($this->valid() && (($maxDepth === false) || ($depth < $maxDepth))) {
             //子要素をcontainerでラップする
-            $response .=  $this->linefeed .
-                    $indent . $this->containerBegin; //<ul>
+            $response .= $indent . $this->containerBegin; //<ul>
             if ($renderSelf) {
                 //自要素のラップを後で閉じる
                 if (empty($containerEnd)) {
@@ -82,7 +81,7 @@ class ListPane extends Pane implements CallbackRenderInterface
             }
         } elseif ($renderSelf) {
             //自要素のラップをすぐに閉じる
-            $response .=  $this->linefeed . $indent . $this->wrapEnd; //</li>
+            $response .=  $indent . $this->wrapEnd; //</li>
         } else {
             //子要素も自要素も表示しないなら何も表示しない
             $this->containerEndStack[] = '';
