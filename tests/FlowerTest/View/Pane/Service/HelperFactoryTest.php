@@ -1,7 +1,6 @@
 <?php
-namespace FlowerTest\View\Pane;
+namespace FlowerTest\View\Pane\Service;
 
-use Flower\View\Pane\Service\PaneHelper;
 use Flower\View\Pane\Service\HelperFactory;
 use Zend\ServiceManager\ServiceManager;
 /**

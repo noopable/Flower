@@ -7,7 +7,7 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace FlowerTest\View\Pane;
+namespace FlowerTest\View\Pane\Service;
 
 use Flower\View\Pane\Service\PaneHelper;
 use Flower\Test\TestTool;

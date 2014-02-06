@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
-namespace FlowerTest\View\Pane;
+namespace FlowerTest\View\Pane\PaneClass;
 
 use Flower\Test\TestTool;
 use Flower\View\Pane\PaneClass\Pane;

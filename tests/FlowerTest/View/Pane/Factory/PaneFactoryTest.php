@@ -1,5 +1,5 @@
 <?php
-namespace FlowerTest\View\Pane;
+namespace FlowerTest\View\Pane\Factory;
 
 use Flower\View\Pane\Builder\Builder;
 use Flower\View\Pane\Factory\PaneFactory;

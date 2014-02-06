@@ -1,5 +1,5 @@
 <?php
-namespace FlowerTest\View\Pane;
+namespace FlowerTest\View\Pane\Builder;
 
 use Flower\Test\TestTool;
 use Flower\View\Pane\PaneClass\Pane;
