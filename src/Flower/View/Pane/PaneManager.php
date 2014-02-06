@@ -105,11 +105,11 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
         return $events->trigger($buildEvent)->last();
     }
 
-    public function render($paneId)
+    public function render($paneId, $options = null)
     {
         //キャッシュマネージャーを入れてキャッシュから取り出せるようにする。
         $pane = $this->get($paneId);
-        $renderer = $this->createPaneRenderer($pane);
+        $renderer = $this->createPaneRenderer($pane, $options);
         return $renderer->__toString();
     }
 
@@ -207,9 +207,14 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
         return $this->registry;
     }
 
-    public function createPaneRenderer(PaneInterface $pane)
+    public function createPaneRenderer(PaneInterface $pane, $options = null)
     {
         $renderer = new $this->rendererClass($pane);
+        if (isset($options)) {
+            $rendererConfig = new RendererConfig($options);
+            $rendererConfig->configure($renderer);
+        }
+
         if (!$view = $this->getView()) {
             throw new RuntimeException('Set PhpRenderer or use me via ViewHelper');
         }
