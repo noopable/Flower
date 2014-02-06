@@ -15,15 +15,15 @@ use Countable;
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
 class NamedFiles implements IteratorAggregate, Countable {
-    
+
     protected $name;
-    
+
     /**
-     * key = extentions
-e     * @var FileInfo[]
+     * key = extension
+     * @var FileInfo[]
      */
     protected $files;
-    
+
     public function __construct($name, array $files = array())
     {
         $this->name = $name;
@@ -33,12 +33,12 @@ e     * @var FileInfo[]
             }
         }
     }
-    
+
     public function getName()
     {
         return $this->name;
     }
-    
+
     public function setFile(FileInfo $fileInfo, $specifiedExtension = null)
     {
         if ($specifiedExtension) {
@@ -47,10 +47,10 @@ e     * @var FileInfo[]
         else {
             $specifiedExtension = $fileInfo->getExtension();
         }
-        
+
         $this->files[$specifiedExtension] = $fileInfo;
     }
-    
+
     public function getFile($specifiedExtension = null, $first = true)
     {
         if (null === $specifiedExtension) {
@@ -61,19 +61,19 @@ e     * @var FileInfo[]
                 return end($this->files);
             }
         }
-        
+
         if (isset($this->files[$specifiedExtension])) {
             return $this->files[$specifiedExtension];
         }
     }
-    
+
     public function clearFiles()
     {
         $this->files = array();
     }
-    
+
     /**
-     * 
+     *
      * @return \ArrayIterator
      */
     public function getIterator()

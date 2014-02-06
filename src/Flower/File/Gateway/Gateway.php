@@ -1,15 +1,18 @@
 <?php
-namespace Flower\File\Gateway;
+
 /*
  *
  *
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
+
+namespace Flower\File\Gateway;
+
 use Zend\EventManager\EventsCapableInterface;
 use Zend\EventManager\ProvidesEvents;
-
 use Flower\File\Event;
+
 /**
  *
  *
@@ -93,11 +96,11 @@ class Gateway implements GatewayInterface, EventsCapableInterface {
 
     /**
      * 指定された名前と拡張子のファイルに保存する。
-     * extentionがnullの場合は、最初に解決されたファイルに保存する。
+     * extensionがnullの場合は、最初に解決されたファイルに保存する。
      *
      * @param type $name
      * @param type $data
-     * @param type $extention
+     * @param type $extension
      */
     public function write($name, $data, $extension = null)
     {
