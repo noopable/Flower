@@ -45,7 +45,8 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
         $this->helperManager = $this->serviceLocator->get('ViewHelperManager');
         $this->view = new PhpRenderer;
         $this->view->setHelperPluginManager($this->helperManager);
-        $this->helper = $this->view->plugin('npNavi');
+        $this->helper = $this->view->plugin('npPaneManager');
+        $this->helper->setBuilderMode('anchor');
     }
 
     public function testEnv()
@@ -53,7 +54,7 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
         $renderer = $this->helperManager->getRenderer();
         $this->assertInstanceOf('Zend\View\Renderer\PhpRenderer', $renderer);
 
-        $this->assertInstanceOf('Flower\View\Pane\Service\AnchorHelper', $this->helper);
+        $this->assertInstanceOf('Flower\View\Pane\PaneManager', $this->helper);
 
         $builder = $this->helper->getBuilder();
         $this->assertEquals('Flower\View\Pane\PaneClass\Anchor', TestTool::getPropertyValue($builder, 'paneClass'));
@@ -356,11 +357,13 @@ class AnchorBareFunctionalTest extends \PHPUnit_Framework_TestCase
                 'var' => 'content',
             ));
 
-        $pane = $this->helper->paneFactory($paneConfig);
+        $this->helper->setPaneConfig('foo', $paneConfig);
+
+        $pane = $this->helper->get('foo');
         $this->assertInstanceOf('Flower\View\Pane\PaneClass\Anchor', $pane);
 
-        $renderer = $this->helper->__invoke($paneConfig);
-        $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
+        $res = $this->helper->render('foo');
+        $this->assertEquals($expected, str_replace("\r\n","\n", $res));
     }
 
 }

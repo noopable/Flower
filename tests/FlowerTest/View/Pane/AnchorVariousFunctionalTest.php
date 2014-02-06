@@ -47,8 +47,8 @@ class AnchorVariousFunctionalTest extends \PHPUnit_Framework_TestCase
         $this->helperManager = $this->serviceLocator->get('ViewHelperManager');
         $this->view = new PhpRenderer;
         $this->view->setHelperPluginManager($this->helperManager);
-        $this->helper = $this->view->plugin('npNavi');
-
+        $this->helper = $this->view->plugin('npPaneManager');
+        $this->helper->setBuilderMode('anchor');
     }
 
     public function testEnv()
@@ -56,7 +56,7 @@ class AnchorVariousFunctionalTest extends \PHPUnit_Framework_TestCase
         $renderer = $this->helperManager->getRenderer();
         $this->assertInstanceOf('Zend\View\Renderer\PhpRenderer', $renderer);
 
-        $this->assertInstanceOf('Flower\View\Pane\Service\AnchorHelper', $this->helper);
+        $this->assertInstanceOf('Flower\View\Pane\PaneManager', $this->helper);
 
         $builder = $this->helper->getBuilder();
         $this->assertEquals('Flower\View\Pane\PaneClass\Anchor', TestTool::getPropertyValue($builder, 'paneClass'));
@@ -78,8 +78,9 @@ class AnchorVariousFunctionalTest extends \PHPUnit_Framework_TestCase
             'classes' => 'container',
             'label' => 'Link Label 1',
         );
-        $renderer = $this->helper->__invoke($paneConfig);
-        $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
+        $this->helper->setPaneConfig('foo', $paneConfig);
+        $res = $this->helper->render('foo');
+        $this->assertEquals($expected, str_replace("\r\n","\n", $res));
     }
 
 }
