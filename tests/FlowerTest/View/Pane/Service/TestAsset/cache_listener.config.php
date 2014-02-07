@@ -13,7 +13,7 @@ return array(
             'adapter' => array(
                 'name'    => 'filesystem',
                 'options' => array(
-                    'namespace' => 'flower_resource_manager',
+                    'namespace' => 'test_pane_manager',
                     'cache_dir' => __DIR__ . '/tmp/cache',
                     'dir_level' => 1,
                 ),
