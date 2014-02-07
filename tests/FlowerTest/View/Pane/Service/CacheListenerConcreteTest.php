@@ -29,7 +29,7 @@ class CacheListenerConcreteTest extends \PHPUnit_Framework_TestCase
     {
         $this->object = new CacheListener;
         $this->config = require 'TestAsset/cache_listener.config.php';
-        $this->storageOptions = $this->config['test_pane_cache']['cache_storage'];
+        $this->storageOptions = $this->config['pane_cache_listener']['cache_storage'];
     }
 
     /**

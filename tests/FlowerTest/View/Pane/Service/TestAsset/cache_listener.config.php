@@ -7,7 +7,7 @@
  */
 
 return array(
-    'test_pane_cache' => array(
+    'pane_cache_listener' => array(
         //@see http://framework.zend.com/manual/2.2/en/modules/zend.cache.storage.adapter.html
         'cache_storage' => array(
             'adapter' => array(
