@@ -33,6 +33,11 @@ class PaneEvent extends Event
      */
     protected $result;
 
+    /**
+     *
+     * @var string
+     */
+    protected $errorMessages = array();
 
     /**
      * @param PaneManager $manager
@@ -58,6 +63,16 @@ class PaneEvent extends Event
     public function getPaneId()
     {
         return $this->paneId;
+    }
+
+    public function addErrorMessage($message)
+    {
+        $this->errorMessages[] = $message;
+    }
+
+    public function getErrorMessages()
+    {
+        return $this->errorMessages;
     }
 
 }
