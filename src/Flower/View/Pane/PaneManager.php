@@ -69,12 +69,31 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
 
     public function get($paneId)
     {
+        $this->init();
+
         $registry = $this->getRegistry();
 
         if (isset($registry->$paneId)) {
             return $registry->$paneId;
         }
-        $pane = $this->build($paneId);
+
+        $events = $this->getEventManager();
+
+        /**
+         * Constructor
+         *
+         * Accept a target and its parameters.
+         *
+         * @param  string $name Event name
+         * @param  string|object $target
+         * @param  array|ArrayAccess $params
+         */
+        $getEvent = new PaneEvent(PaneEvent::EVENT_GET_PANE);
+        $getEvent->setManager($this);
+        $getEvent->setPaneId($paneId);
+        $getEvent->setTarget($paneId);
+
+        $pane = $events->trigger($getEvent)->last();
 
         $registry->$paneId = $pane;
 
@@ -142,6 +161,21 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
         return $this->config[$paneId];
     }
 
+    public function onGet(PaneEvent $e)
+    {
+        $pane = $this->build($e->getPaneId());
+
+        $pre = $e->getTarget();
+
+        if ($pre instanceof PaneInterface) {
+            $pre->insert($pane, $pane->getOrder());
+            $e->setTarget($pre);
+            return $pre;
+        } else {
+            return $pane;
+        }
+    }
+
     public function onLoadConfig(PaneEvent $e)
     {
         $pre = $e->getTarget();
@@ -203,6 +237,7 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
     public function attachDefaultListers()
     {
         $events = $this->getEventManager();
+        $events->attach(PaneEvent::EVENT_GET_PANE, array($this, 'onGet'));
         $events->attach(PaneEvent::EVENT_BUILD_PANE, array($this->getBuilder(), 'onBuild'));
         $events->attach(PaneEvent::EVENT_LOAD_CONFIG, array($this, 'onLoadConfig'));
         $this->defaultListenersWait = false;

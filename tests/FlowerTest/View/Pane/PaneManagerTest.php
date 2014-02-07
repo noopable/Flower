@@ -58,7 +58,7 @@ class PaneManagerTest extends \PHPUnit_Framework_TestCase
         $listeners = $eventManager->getListeners(PaneEvent::EVENT_BUILD_PANE);
         $this->assertCount(1, $listeners);
         $events = $eventManager->getEvents();
-        $this->assertCount(2, $events);
+        $this->assertCount(3, $events);
         $this->assertTrue(TestTool::getPropertyValue($this->object, 'init'));
         $this->assertFalse(TestTool::getPropertyValue($this->object, 'defaultListenersWait'));
 
@@ -67,7 +67,7 @@ class PaneManagerTest extends \PHPUnit_Framework_TestCase
         $listeners = $eventManager->getListeners(PaneEvent::EVENT_BUILD_PANE);
         $this->assertCount(1, $listeners);
         $events = $eventManager->getEvents();
-        $this->assertCount(2, $events);
+        $this->assertCount(3, $events);
         $this->assertTrue(TestTool::getPropertyValue($this->object, 'init'));
         $this->assertFalse(TestTool::getPropertyValue($this->object, 'defaultListenersWait'));
     }
@@ -204,7 +204,7 @@ class PaneManagerTest extends \PHPUnit_Framework_TestCase
         $listeners = $eventManager->getListeners(PaneEvent::EVENT_BUILD_PANE);
         $this->assertCount(1, $listeners);
         $events = $eventManager->getEvents();
-        $this->assertCount(2, $events);
+        $this->assertCount(3, $events);
         $this->assertFalse(TestTool::getPropertyValue($this->object, 'defaultListenersWait'));
     }
 
