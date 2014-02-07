@@ -96,4 +96,16 @@ class PaneEventTest extends \PHPUnit_Framework_TestCase
         $this->object->addErrorMessage($message2);
         $this->assertEquals(array($message1, $message2), $this->object->getErrorMessages());
     }
+
+    /**
+     *
+     * @covers Flower\View\Pane\PaneEvent::hasError
+     */
+    public function testHasError()
+    {
+        $this->assertFalse($this->object->hasError());
+        $message = 'error';
+        $this->object->addErrorMessage($message);
+        $this->assertTrue($this->object->hasError());
+    }
 }

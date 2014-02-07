@@ -65,6 +65,11 @@ class PaneEvent extends Event
         return $this->paneId;
     }
 
+    public function hasError()
+    {
+        return !empty($this->errorMessages);
+    }
+    
     public function addErrorMessage($message)
     {
         $this->errorMessages[] = $message;
