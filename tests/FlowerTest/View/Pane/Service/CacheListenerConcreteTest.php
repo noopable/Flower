@@ -51,6 +51,9 @@ class CacheListenerConcreteTest extends \PHPUnit_Framework_TestCase
         $this->object->setStorageOptions($this->storageOptions);
         $res = $this->object->postGet($event);
         $this->assertSame($pane, $res);
+
+        $storage = $this->object->getStorage();
+        $storage->removeItem('foo');
     }
 
     public function testPreGetConcreteCache()
@@ -62,6 +65,6 @@ class CacheListenerConcreteTest extends \PHPUnit_Framework_TestCase
 
         $this->object->setStorageOptions($this->storageOptions);
         $res = $this->object->preGet($event);
-        $this->assertSame(null, $res);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\Pane', $res);
     }
 }
