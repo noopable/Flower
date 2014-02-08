@@ -143,10 +143,13 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
 
         $res = $events->trigger($buildEvent);
         if ($buildEvent->propagationIsStopped()) {
-            return $res->last();
+            $pane = $res->last();
+        } else {
+            $pane = $buildEvent->getResult();
         }
 
-        return $buildEvent->getResult();
+        $pane->setPaneId($paneId);
+        return $pane;
     }
 
     public function render($paneId, $options = array())
@@ -155,6 +158,11 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
         if (! $pane instanceof PaneInterface) {
             return '';
         }
+
+        if (!$pane->getPaneId()) {
+            $pane->setPaneId($paneId);
+        }
+        
         if (!is_array($options)) {
             $options = (array) $options;
         }
