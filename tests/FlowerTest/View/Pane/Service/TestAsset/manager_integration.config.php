@@ -12,6 +12,7 @@ return array(
         'factories' => array(
             'Test_FileListener' => 'Flower\View\Pane\Service\ConfigFileListenerFactory',
             'Test_PaneCacheListener' => 'Flower\View\Pane\Service\PaneCacheListenerFactory',
+            'Test_RenderCacheListener' => 'Flower\View\Pane\Service\RenderCacheListenerFactory',
         ),
     ),
     'view_helpers' => array(
@@ -43,6 +44,7 @@ return array(
         'listener_aggregates' => array(
             'Test_FileListener',
             'Test_PaneCacheListener',
+            'Test_RenderCacheListener',
             //'FlowerTest\View\Pane\Service\TestAsset\MockListenerAggregate',
         ),
     ),
@@ -62,4 +64,5 @@ return array(
         ),
     ),
     'pane_cache_listener' => include 'test_pane_cache_options.php',
+    'render_cache_listener' => include 'test_render_cache_options.php',
 );

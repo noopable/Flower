@@ -22,7 +22,9 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
 
     protected $serviceLocator;
 
-    protected $cacheStorage;
+    protected $paneCacheStorage;
+
+    protected $renderCacheStorage;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -44,7 +46,7 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->view = new PhpRenderer;
         $this->view->setHelperPluginManager($this->helperManager);
         $this->manager = $this->view->plugin('npPaneManager');
-        $this->getCacheStorage();
+        $this->getPaneCacheStorage();
     }
 
     /**
@@ -62,10 +64,10 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    protected function getCacheStorage()
+    protected function getPaneCacheStorage()
     {
-        if (isset($this->cacheStorage)) {
-            return $this->cacheStorage;
+        if (isset($this->paneCacheStorage)) {
+            return $this->paneCacheStorage;
         }
         $options = include 'TestAsset/test_pane_cache_options.php';
         if (isset($options['cache_storage']['adapter']['options']['cache_dir'])) {
@@ -74,8 +76,24 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
                 throw \Exception('invalid cache dir');
             }
         }
-        $this->cacheStorage = StorageFactory::factory($options['cache_storage']);
-        return $this->cacheStorage;
+        $this->paneCacheStorage = StorageFactory::factory($options['cache_storage']);
+        return $this->paneCacheStorage;
+    }
+
+    protected function getRenderCacheStorage()
+    {
+        if (isset($this->renderCacheStorage)) {
+            return $this->renderCacheStorage;
+        }
+        $options = include 'TestAsset/test_render_cache_options.php';
+        if (isset($options['cache_storage']['adapter']['options']['cache_dir'])) {
+            $dir = realpath($options['cache_storage']['adapter']['options']['cache_dir']);
+            if (strpos($dir, __DIR__) !== 0) {
+                throw \Exception('invalid cache dir');
+            }
+        }
+        $this->renderCacheStorage = StorageFactory::factory($options['cache_storage']);
+        return $this->renderCacheStorage;
     }
 
     public function testCanGetPaneManager()
@@ -110,7 +128,8 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
 ';
         $this->assertEquals(str_replace("\r\n", "\n", $expected), $res);
         //private teardown
-        $this->getCacheStorage()->removeItem('bar');
+        $this->getPaneCacheStorage()->removeItem('bar');
+        $this->getRenderCacheStorage()->removeItem('bar');
     }
 
     public function testCanGetPaneInFile()
@@ -126,7 +145,8 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(str_replace("\r\n", "\n", $expected), $res);
 
         //private teardown
-        $this->getCacheStorage()->removeItem('foo');
+        $this->getPaneCacheStorage()->removeItem('foo');
+        $this->getRenderCacheStorage()->removeItem('foo');
     }
 
     public function testEventListnerIsAttached()
