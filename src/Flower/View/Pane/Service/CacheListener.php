@@ -18,7 +18,6 @@ use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Serializer\Adapter\PhpSerialize;
 use Zend\Serializer\Adapter\AdapterInterface;
-use Zend\Stdlib\ArrayUtils;
 
 /**
  * Description of ConfigFileListener
@@ -132,7 +131,7 @@ class CacheListener extends AbstractListenerAggregate
             return;
         }
 
-        $e->setTarget($pane);
+        $e->setResult($pane);
 
         $e->stopPropagation(true);
 
@@ -141,7 +140,11 @@ class CacheListener extends AbstractListenerAggregate
 
     public function postGet(PaneEvent $e)
     {
-        $pane = $e->getTarget();
+        if (!$e->hasResult()) {
+            return;
+        }
+
+        $pane = $e->getResult();
         $paneId = $e->getPaneId();
 
         if (!$pane instanceof PaneInterface) {

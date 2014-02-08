@@ -219,7 +219,7 @@ class CacheListenerTest extends \PHPUnit_Framework_TestCase
         $pane = $this->getMock('Flower\View\Pane\PaneClass\Pane');
         $event = new PaneEvent(PaneEvent::EVENT_GET_PANE);
         $event->setPaneId($paneId);
-        $event->setTarget($pane);
+        $event->setResult($pane);
         $serialized = '--';
 
         $storage = $this->getMock('Zend\Cache\Storage\StorageInterface');
@@ -248,7 +248,7 @@ class CacheListenerTest extends \PHPUnit_Framework_TestCase
         $pane = $this->getMock('Flower\View\Pane\PaneClass\Pane');
         $event = new PaneEvent(PaneEvent::EVENT_GET_PANE);
         $event->setPaneId($paneId);
-        $event->setTarget($pane);
+        $event->setResult($pane);
         $event->addErrorMessage('error');
         $res = $this->object->postGet($event);
         $this->assertSame($pane, $res);
@@ -263,7 +263,7 @@ class CacheListenerTest extends \PHPUnit_Framework_TestCase
         $pane = $this->getMock('Flower\View\Pane\PaneClass\Pane');
         $event = new PaneEvent(PaneEvent::EVENT_GET_PANE);
         $event->setPaneId($paneId);
-        $event->setTarget($pane);
+        $event->setResult($pane);
         $res = $this->object->postGet($event);
         $this->assertSame($pane, $res);
     }
@@ -277,7 +277,7 @@ class CacheListenerTest extends \PHPUnit_Framework_TestCase
         $pane = $this->getMock('Flower\View\Pane\PaneClass\Pane');
         $event = new PaneEvent(PaneEvent::EVENT_GET_PANE);
         $event->setPaneId($paneId);
-        $event->setTarget($pane);
+        $event->setResult($pane);
 
         $storage = $this->getMock('Zend\Cache\Storage\StorageInterface');
         $storage->expects($this->never())->method('setItem');
@@ -305,7 +305,7 @@ class CacheListenerTest extends \PHPUnit_Framework_TestCase
         $pane = $this->getMock('Flower\View\Pane\PaneClass\Pane');
         $event = new PaneEvent(PaneEvent::EVENT_GET_PANE);
         $event->setPaneId($paneId);
-        $event->setTarget($pane);
+        $event->setResult($pane);
 
         $storage = $this->getMock('Zend\Cache\Storage\StorageInterface');
         $storage->expects($this->once())

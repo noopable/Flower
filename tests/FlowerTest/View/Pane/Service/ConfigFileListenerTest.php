@@ -97,6 +97,6 @@ class ConfigFileListenerTest extends \PHPUnit_Framework_TestCase
         $this->object->setFileService($fileService);
         $res = $this->object->onLoad($event);
         $this->assertEquals($expected, $res);
-        $this->assertEquals($expected, $event->getTarget());
+        $this->assertEquals($expected, $event->getResult());
     }
 }

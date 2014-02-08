@@ -287,7 +287,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
         $pane = $this->object->onBuild($event);
 
-        $this->assertSame($pane, $event->getTarget());
+        $this->assertSame($pane, $event->getResult());
         $this->assertFalse($pane->hasChildren());
         $children = $pane->current();
         $this->assertInstanceOf('Flower\View\Pane\PaneClass\PaneInterface', $pane);

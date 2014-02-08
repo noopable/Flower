@@ -93,9 +93,16 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
         $getEvent->setPaneId($paneId);
         $getEvent->setTarget($paneId);
 
-        $pane = $events->trigger($getEvent)->last();
+        $res = $events->trigger($getEvent);
+        if ($getEvent->propagationIsStopped()) {
+            $pane = $res->last();
+        } else {
+            $pane = $getEvent->getResult();
+        }
 
-        $registry->$paneId = $pane;
+        if ($pane instanceof PaneInterface) {
+            $registry->$paneId = $pane;
+        }
 
         return $pane;
     }
@@ -119,7 +126,14 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
         $loadEvent->setPaneId($paneId);
         $loadEvent->setTarget($paneId);
 
-        $config = $events->trigger($loadEvent)->last();
+        $res = $events->trigger($loadEvent);
+        if ($loadEvent->propagationIsStopped()) {
+            //終了条件を指定した場合は、リスナー側がresultをセットしない場合があり、
+            //trigger側で終了を宣言する場合がある。
+            $config = $res->last();
+        } else {
+            $config = $loadEvent->getResult();
+        }
 
         $buildEvent = new PaneEvent(PaneEvent::EVENT_BUILD_PANE);
         $buildEvent->setManager($this);
@@ -127,7 +141,12 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
         $buildEvent->setTarget($paneId);
         $buildEvent->setParams($config);
 
-        return $events->trigger($buildEvent)->last();
+        $res = $events->trigger($buildEvent);
+        if ($buildEvent->propagationIsStopped()) {
+            return $res->last();
+        }
+
+        return $buildEvent->getResult();
     }
 
     public function render($paneId, $options = null)
@@ -165,20 +184,20 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
     {
         $pane = $this->build($e->getPaneId());
 
-        $pre = $e->getTarget();
+        $pre = $e->getResult();
 
         if ($pre instanceof PaneInterface) {
             $pre->insert($pane, $pane->getOrder());
-            $e->setTarget($pre);
             return $pre;
         } else {
+            $e->setResult($pane);
             return $pane;
         }
     }
 
     public function onLoadConfig(PaneEvent $e)
     {
-        $pre = $e->getTarget();
+        $pre = $e->getResult();
         $config = $this->getPaneConfig($e->getPaneId());
         if (is_array($pre)) {
             /**
@@ -188,7 +207,7 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
              */
             $config = ArrayUtils::merge($pre, $config);
         }
-        $e->setTarget($config);
+        $e->setResult($config);
         return $config;
     }
 

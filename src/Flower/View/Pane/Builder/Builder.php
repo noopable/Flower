@@ -64,15 +64,17 @@ class Builder
      */
     public function onBuild(PaneEvent $e)
     {
-        $target = $e->getTarget();
+        $pane = $this->build($e->getParams());
 
-        if ($target instanceof PaneInterface) {
-            $pane = $this->build($e->getParams(), $target);
-        } else {
-            $pane = $this->build($e->getParams());
+        if ($e->hasResult()) {
+            $parent = $e->getResult();
+            if ($parent instanceof PaneInterface) {
+                $parent->insert($pane, $pane->getOrder());
+                return $parent;
+            }
         }
 
-        $e->setTarget($pane);
+        $e->setResult($pane);
 
         return $pane;
     }

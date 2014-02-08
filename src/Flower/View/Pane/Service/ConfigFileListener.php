@@ -55,14 +55,16 @@ class ConfigFileListener extends AbstractListenerAggregate
         }
 
         $paneId = $e->getPaneId();
-        $target = $e->getTarget();
 
         $config = $this->getFileService()->read($paneId);
         if (is_array($config) && !empty($config)) {
-            if (is_array($target)) {
-                $config = ArrayUtils::merge($target, $config);
+            if ($e->hasResult()) {
+                $pre = $e->getResult();
+                if (is_array($pre)) {
+                    $config = ArrayUtils::merge($pre, $config);
+                }
             }
-            $e->setTarget($config);
+            $e->setResult($config);
         }
         return $config;
     }

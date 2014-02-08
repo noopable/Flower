@@ -46,7 +46,7 @@ class CacheListenerConcreteTest extends \PHPUnit_Framework_TestCase
         $pane = new Pane;
         $event = new PaneEvent(PaneEvent::EVENT_GET_PANE);
         $event->setPaneId($paneId);
-        $event->setTarget($pane);
+        $event->setResult($pane);
 
         $this->object->setStorageOptions($this->storageOptions);
         $res = $this->object->postGet($event);

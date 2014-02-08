@@ -149,7 +149,7 @@ class PaneManagerTest extends \PHPUnit_Framework_TestCase
 
         $res = $this->object->onLoadConfig($loadEvent);
         $this->assertEquals($paneConfig, $res);
-        $this->assertEquals($paneConfig, $loadEvent->getTarget());
+        $this->assertEquals($paneConfig, $loadEvent->getResult());
     }
 
     /**
