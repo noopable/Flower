@@ -5,6 +5,7 @@ use ArrayObject;
 use Flower\Test\TestTool;
 use Flower\View\Pane\Builder\Builder;
 use Flower\View\Pane\PaneClass\Pane;
+use Flower\View\Pane\PaneClass\PaneInterface;
 use Flower\View\Pane\PaneEvent;
 use Flower\View\Pane\PaneManager;
 use Zend\EventManager\EventManager;
@@ -58,7 +59,7 @@ class PaneManagerTest extends \PHPUnit_Framework_TestCase
         $listeners = $eventManager->getListeners(PaneEvent::EVENT_BUILD_PANE);
         $this->assertCount(1, $listeners);
         $events = $eventManager->getEvents();
-        $this->assertCount(3, $events);
+        $this->assertCount(4, $events);
         $this->assertTrue(TestTool::getPropertyValue($this->object, 'init'));
         $this->assertFalse(TestTool::getPropertyValue($this->object, 'defaultListenersWait'));
 
@@ -67,7 +68,7 @@ class PaneManagerTest extends \PHPUnit_Framework_TestCase
         $listeners = $eventManager->getListeners(PaneEvent::EVENT_BUILD_PANE);
         $this->assertCount(1, $listeners);
         $events = $eventManager->getEvents();
-        $this->assertCount(3, $events);
+        $this->assertCount(4, $events);
         $this->assertTrue(TestTool::getPropertyValue($this->object, 'init'));
         $this->assertFalse(TestTool::getPropertyValue($this->object, 'defaultListenersWait'));
     }
@@ -204,7 +205,7 @@ class PaneManagerTest extends \PHPUnit_Framework_TestCase
         $listeners = $eventManager->getListeners(PaneEvent::EVENT_BUILD_PANE);
         $this->assertCount(1, $listeners);
         $events = $eventManager->getEvents();
-        $this->assertCount(3, $events);
+        $this->assertCount(4, $events);
         $this->assertFalse(TestTool::getPropertyValue($this->object, 'defaultListenersWait'));
     }
 

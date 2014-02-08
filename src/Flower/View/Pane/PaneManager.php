@@ -149,12 +149,48 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
         return $buildEvent->getResult();
     }
 
-    public function render($paneId, $options = null)
+    public function render($paneId, $options = array())
     {
-        //キャッシュマネージャーを入れてキャッシュから取り出せるようにする。
         $pane = $this->get($paneId);
-        $renderer = $this->createPaneRenderer($pane, $options);
-        return $renderer->__toString();
+        if (! $pane instanceof PaneInterface) {
+            return '';
+        }
+        if (!is_array($options)) {
+            $options = (array) $options;
+        }
+
+        return $this->renderPane($pane, $options);
+    }
+
+    public function renderPane(PaneInterface $pane, array $options = array())
+    {
+        $this->init();
+
+        $events = $this->getEventManager();
+        /**
+         * Constructor
+         *
+         * Accept a target and its parameters.
+         *
+         * @param  string $name Event name
+         * @param  string|object $target
+         * @param  array|ArrayAccess $params
+         */
+        $renderEvent = new PaneEvent(PaneEvent::EVENT_RENDER);
+        $renderEvent->setManager($this);
+        $renderEvent->setPaneId($pane->getPaneId());
+        $renderEvent->setTarget($pane);
+        $renderEvent->setParams($options);
+
+        $res = $events->trigger($renderEvent);
+        if ($renderEvent->propagationIsStopped()) {
+            //終了条件を指定した場合は、リスナー側がresultをセットしない場合があり、
+            //trigger側で終了を宣言する場合がある。
+            $rendered = $res->last();
+        } else {
+            $rendered = $renderEvent->getResult();
+        }
+        return $rendered;
     }
 
     public function setConfig($config)
@@ -211,6 +247,21 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
         return $config;
     }
 
+    public function onRenderPane(PaneEvent $e)
+    {
+        $pane = $e->getTarget();
+        $options = $e->getParams();
+        $renderer = $this->createPaneRenderer($pane, $options);
+
+        ob_start();
+        foreach ($renderer as $entry) {}
+        $rendered = ob_get_clean();
+
+        $e->setResult($rendered);
+
+        return $rendered;
+    }
+
     /**
      * MvcではサービスファクトリでサービスでBuilderOptionを取得してから
      * Builderを設定する
@@ -259,6 +310,7 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
         $events->attach(PaneEvent::EVENT_GET_PANE, array($this, 'onGet'));
         $events->attach(PaneEvent::EVENT_BUILD_PANE, array($this->getBuilder(), 'onBuild'));
         $events->attach(PaneEvent::EVENT_LOAD_CONFIG, array($this, 'onLoadConfig'));
+        $events->attach(PaneEvent::EVENT_RENDER, array($this, 'onRenderPane'));
         $this->defaultListenersWait = false;
     }
 
