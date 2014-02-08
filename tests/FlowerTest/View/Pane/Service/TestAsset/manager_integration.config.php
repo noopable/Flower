@@ -61,5 +61,5 @@ return array(
             'cache_path' => __DIR__ . '/tmp/cache',
         ),
     ),
-    'pane_cache_listener' => include 'test_cache_options.php',
+    'pane_cache_listener' => include 'test_pane_cache_options.php',
 );

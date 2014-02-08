@@ -67,7 +67,7 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
         if (isset($this->cacheStorage)) {
             return $this->cacheStorage;
         }
-        $options = include 'TestAsset/test_cache_options.php';
+        $options = include 'TestAsset/test_pane_cache_options.php';
         if (isset($options['cache_storage']['adapter']['options']['cache_dir'])) {
             $dir = realpath($options['cache_storage']['adapter']['options']['cache_dir']);
             if (strpos($dir, __DIR__) !== 0) {
