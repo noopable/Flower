@@ -72,7 +72,7 @@ class ManagerFactoryTest extends \PHPUnit_Framework_TestCase
                     'pane_class' => 'Flower\View\Pane\PaneClass\Pane',
                 ),
                 'renderer_class' => 'Flower\View\Pane\PaneRenderer',
-                'listenerAggregates' => array(
+                'listener_aggregates' => array(
                     'FlowerTest\View\Pane\Service\TestAsset\MockListenerAggregate',
                 ),
             ),
@@ -109,7 +109,7 @@ class ManagerFactoryTest extends \PHPUnit_Framework_TestCase
                     'pane_class' => 'Flower\View\Pane\PaneClass\Pane',
                 ),
                 'renderer_class' => 'Flower\View\Pane\PaneRenderer',
-                'listenerAggregates' => array(
+                'listener_aggregates' => array(
                     'FlowerTest\View\Pane\Service\TestAsset\MockListenerAggregate',
                 ),
             ),
@@ -148,4 +148,22 @@ class ManagerFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(str_replace("\r\n", "\n", $expected), $res);
     }
 
+    /**
+     * @expectedException Flower\View\Pane\Exception\RuntimeException
+     */
+    public function testInvalidListenerAggregateThrowsException()
+    {
+        $config = array(
+            'flower_pane_manager' => array(
+                'listener_aggregates' => array(
+                    'NoExists',
+                ),
+            ),
+        );
+        $serviceLocator = new ServiceManager();
+        $serviceLocator->setService('Config', $config);
+        $helperPluginManager = new HelperPluginManager;
+        $helperPluginManager->setServiceLocator($serviceLocator);
+        $manager = $this->object->createService($helperPluginManager);
+    }
 }

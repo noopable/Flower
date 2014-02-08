@@ -9,6 +9,7 @@
 
 namespace Flower\View\Pane\Service;
 
+use Flower\View\Pane\Exception\RuntimeException;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -73,16 +74,26 @@ class ManagerFactory implements FactoryInterface
 
         if (isset($config['listener_aggregates'])) {
             $eventManager = $manager->getEventManager();
-            foreach ((array) $config['listner_aggregates'] as $listenerAggregate) {
+            foreach ((array) $config['listener_aggregates'] as $listenerAggregate) {
                 if (is_string($listenerAggregate)) {
                     if ($serviceLocator->has($listenerAggregate)) {
-                        $lisnerAggregate = $serviceLocator->get($listenerAggregate);
-                    } elseif (is_subclass_of($lisnerAggregate, 'Zend\EventManager\ListenerAggregateInterface', true)) {
+                        $listenerAggregate = $serviceLocator->get($listenerAggregate);
+                    } elseif (is_subclass_of($listenerAggregate, 'Zend\EventManager\ListenerAggregateInterface', true)) {
                         $listenerAggregate = new $listenerAggregate;
+                    } else {
+                        throw new RuntimeException($listenerAggregate . ' is not service name nor ListenerAggregateInterface');
                     }
                 }
+
                 if ($listenerAggregate instanceof ListenerAggregateInterface) {
-                    $eventManager->attachAggregate($lisnerAggregate);
+                    $eventManager->attachAggregate($listenerAggregate);
+                } else {
+                    if (is_object($listenerAggregate)) {
+                        $listenerAggregate = get_class($listenerAggregate);
+                    } elseif( !is_string($listenerAggregate)) {
+                        $listenerAggregate = gettype($listenerAggregate);
+                    }
+                    throw new \Exception('invalid listenerAggregate:' . $listenerAggregate);
                 }
             }
         }
