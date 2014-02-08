@@ -42,7 +42,7 @@ class PaneCacheListenerFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\ConfigFileListenerFactory::createService
+     * @covers Flower\View\Pane\Service\PaneCacheListenerFactory::createService
      */
     public function testCreateService()
     {
