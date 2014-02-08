@@ -53,6 +53,13 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        $config = $this->serviceLocator->get('Config');
+        if (isset($config['flower_pane_manager']['listener_aggregates'])) {
+            if (in_array('Test_FileListener', $config['flower_pane_manager']['listener_aggregates'])) {
+                $fileListener = $this->serviceLocator->get('Test_FileListener');
+                $fileListener->getFileService()->refresh();
+            }
+        }
     }
 
     protected function getCacheStorage()
