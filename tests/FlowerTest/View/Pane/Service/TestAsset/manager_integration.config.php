@@ -11,7 +11,7 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'Test_FileListener' => 'Flower\View\Pane\Service\ConfigFileListenerFactory',
-            'Test_CacheListener' => 'Flower\View\Pane\Service\CacheListenerFactory',
+            'Test_PaneCacheListener' => 'Flower\View\Pane\Service\PaneCacheListenerFactory',
         ),
     ),
     'view_helpers' => array(
@@ -42,7 +42,7 @@ return array(
         'renderer_class' => 'Flower\View\Pane\PaneRenderer',
         'listener_aggregates' => array(
             'Test_FileListener',
-            'Test_CacheListener',
+            'Test_PaneCacheListener',
             //'FlowerTest\View\Pane\Service\TestAsset\MockListenerAggregate',
         ),
     ),

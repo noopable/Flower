@@ -17,11 +17,11 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class CacheListenerFactory implements FactoryInterface
+class PaneCacheListenerFactory implements FactoryInterface
 {
     protected $configKey = 'pane_cache_listener';
 
-    protected $listenerClass = 'Flower\View\Pane\Service\CacheListener';
+    protected $listenerClass = 'Flower\View\Pane\Service\PaneCacheListener';
 
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

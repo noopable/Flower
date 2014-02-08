@@ -24,7 +24,7 @@ use Zend\Serializer\Adapter\AdapterInterface;
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class CacheListener extends AbstractListenerAggregate
+class PaneCacheListener extends AbstractListenerAggregate
 {
     protected $serializer;
 
