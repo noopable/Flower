@@ -5,6 +5,7 @@ use Flower\Test\TestTool;
 use Flower\View\Pane\PaneEvent;
 use Flower\View\Pane\Service\ConfigFileListenerFactory;
 use FlowerTest\Bootstrap;
+use Zend\Cache\StorageFactory;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\View\Renderer\PhpRenderer;
@@ -20,6 +21,8 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
     protected $object;
 
     protected $serviceLocator;
+
+    protected $cacheStorage;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -41,6 +44,7 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->view = new PhpRenderer;
         $this->view->setHelperPluginManager($this->helperManager);
         $this->manager = $this->view->plugin('npPaneManager');
+        $this->getCacheStorage();
     }
 
     /**
@@ -49,6 +53,22 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+    }
+
+    protected function getCacheStorage()
+    {
+        if (isset($this->cacheStorage)) {
+            return $this->cacheStorage;
+        }
+        $options = include 'TestAsset/test_cache_options.php';
+        if (isset($options['cache_storage']['adapter']['options']['cache_dir'])) {
+            $dir = realpath($options['cache_storage']['adapter']['options']['cache_dir']);
+            if (strpos($dir, __DIR__) !== 0) {
+                throw \Exception('invalid cache dir');
+            }
+        }
+        $this->cacheStorage = StorageFactory::factory($options['cache_storage']);
+        return $this->cacheStorage;
     }
 
     public function testCanGetPaneManager()
@@ -82,6 +102,8 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
 <!-- end Renderer -->
 ';
         $this->assertEquals(str_replace("\r\n", "\n", $expected), $res);
+        //private teardown
+        $this->getCacheStorage()->removeItem('bar');
     }
 
     public function testCanGetPaneInFile()
@@ -95,6 +117,9 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
 <!-- end Renderer -->
 ';
         $this->assertEquals(str_replace("\r\n", "\n", $expected), $res);
+
+        //private teardown
+        $this->getCacheStorage()->removeItem('foo');
     }
 
     public function testEventListnerIsAttached()
