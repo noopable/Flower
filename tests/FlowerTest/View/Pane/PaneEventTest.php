@@ -108,4 +108,39 @@ class PaneEventTest extends \PHPUnit_Framework_TestCase
         $this->object->addErrorMessage($message);
         $this->assertTrue($this->object->hasError());
     }
+
+    /**
+     *
+     * @covers Flower\View\Pane\PaneEvent::setResult
+     */
+    public function testSetResult()
+    {
+        $result = new \stdClass;
+        $this->object->setResult($result);
+        $this->assertEquals($result, TestTool::getPropertyValue($this->object, 'result'));
+    }
+
+    /**
+     * @depends testSetResult
+     * @covers Flower\View\Pane\PaneEvent::getResult
+     */
+    public function testGetResult()
+    {
+        $result = new \stdClass;
+        $this->object->setResult($result);
+        $this->assertEquals($result, $this->object->getResult());
+    }
+
+    /**
+     *
+     * @covers Flower\View\Pane\PaneEvent::hasResult
+     */
+    public function testHasResult()
+    {
+        $this->assertFalse($this->object->hasResult());
+        $result = new \stdClass;
+        $this->object->setResult($result);
+        $this->assertTrue($this->object->hasResult());
+    }
+
 }

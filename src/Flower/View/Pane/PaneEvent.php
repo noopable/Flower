@@ -69,7 +69,7 @@ class PaneEvent extends Event
     {
         return !empty($this->errorMessages);
     }
-    
+
     public function addErrorMessage($message)
     {
         $this->errorMessages[] = $message;
@@ -78,6 +78,21 @@ class PaneEvent extends Event
     public function getErrorMessages()
     {
         return $this->errorMessages;
+    }
+
+    public function setResult($result)
+    {
+        $this->result = $result;
+    }
+
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    public function hasResult()
+    {
+        return isset($this->result);
     }
 
 }
