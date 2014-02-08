@@ -11,6 +11,7 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'Test_FileListener' => 'Flower\View\Pane\Service\ConfigFileListenerFactory',
+            'Test_CacheListener' => 'Flower\View\Pane\Service\CacheListenerFactory',
         ),
     ),
     'view_helpers' => array(
@@ -39,9 +40,10 @@ return array(
             'pane_class' => 'Flower\View\Pane\PaneClass\Pane',
         ),
         'renderer_class' => 'Flower\View\Pane\PaneRenderer',
-        'listenerAggregates' => array(
+        'listener_aggregates' => array(
             'Test_FileListener',
-            'FlowerTest\View\Pane\Service\TestAsset\MockListenerAggregate',
+            'Test_CacheListener',
+            //'FlowerTest\View\Pane\Service\TestAsset\MockListenerAggregate',
         ),
     ),
     'pane_config_file_listener' => array(
@@ -57,6 +59,22 @@ return array(
         ),
         'cache_spec_options' => array(
             'cache_path' => __DIR__ . '/tmp/cache',
+        ),
+    ),
+    'pane_cache_listener' => array(
+        //@see http://framework.zend.com/manual/2.2/en/modules/zend.cache.storage.adapter.html
+        'cache_storage' => array(
+            'adapter' => array(
+                'name'    => 'filesystem',
+                'options' => array(
+                    'namespace' => 'test_pane_manager',
+                    'cache_dir' => __DIR__ . '/tmp/cache',
+                    'dir_level' => 1,
+                ),
+            ),
+            'plugins' => array(
+                'exception_handler' => array('throw_exceptions' => true),
+            ),
         ),
     ),
 );

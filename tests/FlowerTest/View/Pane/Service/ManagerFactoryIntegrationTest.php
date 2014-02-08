@@ -2,6 +2,7 @@
 namespace FlowerTest\View\Pane\Service;
 
 use Flower\Test\TestTool;
+use Flower\View\Pane\PaneEvent;
 use Flower\View\Pane\Service\ConfigFileListenerFactory;
 use FlowerTest\Bootstrap;
 use Zend\ServiceManager\ServiceManager;
@@ -27,9 +28,11 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $config = Bootstrap::getServiceManager()->get('ApplicationConfig');
-        $testConfig = require __DIR__ . '/TestAsset/manager_integration.config.php';
-        $serviceManager = new ServiceManager(new ServiceManagerConfig($testConfig['service_manager']));
-        $config = array_merge($config, $testConfig);
+        if (!isset($config['module_listener_options']['config_static_paths'])) {
+            $config['module_listener_options']['config_static_paths'] = array();
+        }
+        $config['module_listener_options']['config_static_paths'][] = __DIR__ . '/TestAsset/manager_integration.config.php';
+        $serviceManager = new ServiceManager(new ServiceManagerConfig);
         $serviceManager->setService('ApplicationConfig', $config);
         $serviceManager->get('ModuleManager')->loadModules();
         $serviceManager->get('Application')->bootstrap();
@@ -53,16 +56,51 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Flower\View\Pane\PaneManager', $this->manager);
     }
 
+    public function testCanGetPaneInConfig()
+    {
+        $pane = $this->manager->get('bar');
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\PaneInterface', $pane);
+        $res = $this->manager->render('bar');
+        $expected = '<!-- begin Renderer -->
+<ul>
+<li>
+  <span class="container">Link Label 1</span>
+<ul>
+  <li>
+    <span class="main">Link Label 1.1</span>
+  <ul>
+    <!-- start content CallbackRender -->
+    <li>
+    <span class="main">Link Label 1.1.1</span>
+    </li>
+    <!-- end content CallbackRender -->
+  </ul>
+  </li>
+</ul>
+</li>
+</ul>
+<!-- end Renderer -->
+';
+        $this->assertEquals(str_replace("\r\n", "\n", $expected), $res);
+    }
+
     public function testCanGetPaneInFile()
     {
         $pane = $this->manager->get('foo');
         $this->assertInstanceOf('Flower\View\Pane\PaneClass\PaneInterface', $pane);
         $res = $this->manager->render('foo');
         $expected = '<!-- begin Renderer -->
-<div>
+<div id="foo">
 </div>
 <!-- end Renderer -->
 ';
         $this->assertEquals(str_replace("\r\n", "\n", $expected), $res);
+    }
+
+    public function testEventListnerIsAttached()
+    {
+        $eventManager = $this->manager->getEventManager();
+        $listeners = $eventManager->getListeners(PaneEvent::EVENT_GET_PANE);
+        $this->assertEquals(2, $listeners->count());
     }
 }
