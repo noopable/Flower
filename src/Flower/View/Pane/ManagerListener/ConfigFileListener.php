@@ -6,7 +6,7 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\View\Pane\Service\Domain;
+namespace Flower\View\Pane\ManagerListener;
 
 use Flower\File\Gateway\GatewayInterface;
 use Flower\View\Pane\PaneEvent;

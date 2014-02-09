@@ -1,5 +1,5 @@
 <?php
-namespace FlowerTest\View\Pane\Service;
+namespace FlowerTest\View\Pane\ManagerListener;
 
 use Flower\Test\TestTool;
 use Zend\ServiceManager\ServiceManager;
@@ -33,7 +33,7 @@ class AbstractLazyLoadCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\AbstractLazyLoadCacheListener::setCacheServiceName
+     * @covers Flower\View\Pane\ManagerListener\AbstractLazyLoadCacheListener::setCacheServiceName
      */
     public function testSetCacheServiceName()
     {
@@ -44,7 +44,7 @@ class AbstractLazyLoadCacheListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testSetCacheServiceName
-     * @covers Flower\View\Pane\Service\AbstractLazyLoadCacheListener::getCacheServiceName
+     * @covers Flower\View\Pane\ManagerListener\AbstractLazyLoadCacheListener::getCacheServiceName
      */
     public function testGetCacheServiceName()
     {
@@ -54,7 +54,7 @@ class AbstractLazyLoadCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\AbstractLazyLoadCacheListener::setStorage
+     * @covers Flower\View\Pane\ManagerListener\AbstractLazyLoadCacheListener::setStorage
      */
     public function testSetStorageNull()
     {

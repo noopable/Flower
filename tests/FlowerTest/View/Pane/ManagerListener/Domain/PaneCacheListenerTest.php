@@ -1,9 +1,9 @@
 <?php
-namespace FlowerTest\View\Pane\Service\Domain;
+namespace FlowerTest\View\Pane\ManagerListener\Domain;
 
 use Flower\Test\TestTool;
 use Flower\View\Pane\PaneEvent;
-use Flower\View\Pane\Service\Domain\PaneCacheListener;
+use Flower\View\Pane\ManagerListener\Domain\PaneCacheListener;
 use Zend\EventManager\EventManager;
 use Zend\ServiceManager\ServiceManager;
 
@@ -42,7 +42,7 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\PaneCacheListener::setStorageOptions
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::setStorageOptions
      */
     public function testSetStorageOptions()
     {
@@ -52,7 +52,7 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testSetStorageOptions
-     * @covers Flower\View\Pane\Service\Domain\PaneCacheListener::getStorageOptions
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::getStorageOptions
      */
     public function testGetStorageOptions()
     {
@@ -61,7 +61,7 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\PaneCacheListener::setStorage
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::setStorage
      */
     public function testSetStorage()
     {
@@ -71,7 +71,7 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\PaneCacheListener::getStorage
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::getStorage
      */
     public function testGetStorage()
     {
@@ -90,7 +90,7 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\PaneCacheListener::setSerializer
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::setSerializer
      */
     public function testSetSerializer()
     {
@@ -100,7 +100,7 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\PaneCacheListener::getSerializer
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::getSerializer
      */
     public function testGetSerializer()
     {
@@ -110,7 +110,7 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\PaneCacheListener::attach
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::attach
      */
     public function testAttach()
     {
@@ -150,7 +150,7 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\PaneCacheListener::preGet
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::preGet
      */
     public function testPreGetWithStorageHasNoData()
     {
@@ -170,7 +170,7 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\PaneCacheListener::preGet
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::preGet
      */
     public function testPreGetWithStorageThrowsException()
     {
@@ -223,7 +223,7 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\PaneCacheListener::postGet
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::postGet
      */
     public function testPostGetModelCase()
     {
@@ -252,7 +252,7 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\PaneCacheListener::postGet
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::postGet
      */
     public function testPostGetEventHasError()
     {
@@ -267,7 +267,7 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\PaneCacheListener::postGet
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::postGet
      */
     public function testPostGetWithoutStorage()
     {
@@ -281,7 +281,7 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\PaneCacheListener::postGet
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::postGet
      */
     public function testPostGetSerializerThrowsException()
     {
@@ -308,7 +308,7 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\PaneCacheListener::postGet
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::postGet
      */
     public function testPostGetStorageThrowsException()
     {

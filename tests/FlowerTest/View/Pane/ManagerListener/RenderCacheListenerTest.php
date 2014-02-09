@@ -1,9 +1,9 @@
 <?php
-namespace FlowerTest\View\Pane\Service\Domain;
+namespace FlowerTest\View\Pane\ManagerListener;
 
 use Flower\Test\TestTool;
 use Flower\View\Pane\PaneEvent;
-use Flower\View\Pane\Service\Domain\RenderCacheListener;
+use Flower\View\Pane\ManagerListener\RenderCacheListener;
 use Zend\EventManager\EventManager;
 
 /**
@@ -40,7 +40,7 @@ class RenderCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\RenderCacheListener::setStorageOptions
+     * @covers Flower\View\Pane\ManagerListener\RenderCacheListener::setStorageOptions
      */
     public function testSetStorageOptions()
     {
@@ -50,7 +50,7 @@ class RenderCacheListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testSetStorageOptions
-     * @covers Flower\View\Pane\Service\Domain\RenderCacheListener::getStorageOptions
+     * @covers Flower\View\Pane\ManagerListener\RenderCacheListener::getStorageOptions
      */
     public function testGetStorageOptions()
     {
@@ -59,7 +59,7 @@ class RenderCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\RenderCacheListener::setStorage
+     * @covers Flower\View\Pane\ManagerListener\RenderCacheListener::setStorage
      */
     public function testSetStorage()
     {
@@ -69,7 +69,7 @@ class RenderCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\RenderCacheListener::getStorage
+     * @covers Flower\View\Pane\ManagerListener\RenderCacheListener::getStorage
      */
     public function testGetStorage()
     {
@@ -88,7 +88,7 @@ class RenderCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\RenderCacheListener::attach
+     * @covers Flower\View\Pane\ManagerListener\RenderCacheListener::attach
      */
     public function testAttach()
     {
@@ -129,7 +129,7 @@ class RenderCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\RenderCacheListener::preRender
+     * @covers Flower\View\Pane\ManagerListener\RenderCacheListener::preRender
      */
     public function testPreRenderWithStorageHasNoData()
     {
@@ -154,7 +154,7 @@ class RenderCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\RenderCacheListener::preRender
+     * @covers Flower\View\Pane\ManagerListener\RenderCacheListener::preRender
      */
     public function testPreRenderWithStorageThrowsException()
     {
@@ -183,7 +183,7 @@ class RenderCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\RenderCacheListener::postRender
+     * @covers Flower\View\Pane\ManagerListener\RenderCacheListener::postRender
      */
     public function testPostRenderModelCase()
     {
@@ -207,7 +207,7 @@ class RenderCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\RenderCacheListener::postRender
+     * @covers Flower\View\Pane\ManagerListener\RenderCacheListener::postRender
      */
     public function testPostRenderEventHasError()
     {
@@ -222,7 +222,7 @@ class RenderCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\RenderCacheListener::postRender
+     * @covers Flower\View\Pane\ManagerListener\RenderCacheListener::postRender
      */
     public function testPostRenderWithoutStorage()
     {
@@ -236,7 +236,7 @@ class RenderCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\RenderCacheListener::postRender
+     * @covers Flower\View\Pane\ManagerListener\RenderCacheListener::postRender
      */
     public function testPostRenderStorageThrowsException()
     {

@@ -1,9 +1,9 @@
 <?php
-namespace FlowerTest\View\Pane\Service\Domain;
+namespace FlowerTest\View\Pane\ManagerListener\Domain;
 
 use Flower\Test\TestTool;
 use Flower\View\Pane\PaneEvent;
-use Flower\View\Pane\Service\Domain\ConfigFileListener;
+use Flower\View\Pane\ManagerListener\Domain\ConfigFileListener;
 use Zend\EventManager\EventManager;
 
 /**
@@ -34,7 +34,7 @@ class ConfigFileListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\ConfigFileListener::setFileService
+     * @covers Flower\View\Pane\ManagerListener\Domain\ConfigFileListener::setFileService
      */
     public function testSetFileService()
     {
@@ -45,7 +45,7 @@ class ConfigFileListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testSetFileService
-     * @covers Flower\View\Pane\Service\Domain\ConfigFileListener::getFileService
+     * @covers Flower\View\Pane\ManagerListener\Domain\ConfigFileListener::getFileService
      */
     public function testGetFileService()
     {
@@ -55,7 +55,7 @@ class ConfigFileListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\ConfigFileListener::attach
+     * @covers Flower\View\Pane\ManagerListener\Domain\ConfigFileListener::attach
      */
     public function testAttach()
     {
@@ -67,7 +67,7 @@ class ConfigFileListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\ConfigFileListener::onLoad
+     * @covers Flower\View\Pane\ManagerListener\Domain\ConfigFileListener::onLoad
      */
     public function testOnLoadWithoutService()
     {
@@ -80,7 +80,7 @@ class ConfigFileListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\Domain\ConfigFileListener::onLoad
+     * @covers Flower\View\Pane\ManagerListener\Domain\ConfigFileListener::onLoad
      */
     public function testOnLoad()
     {

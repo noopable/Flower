@@ -22,7 +22,7 @@ class ConfigFileListenerFactory implements FactoryInterface
 {
     protected $configKey = 'pane_config_file_listener';
 
-    protected $listenerClass = 'Flower\View\Pane\Service\ConfigFileListener';
+    protected $listenerClass = 'Flower\View\Pane\ManagerListener\ConfigFileListener';
 
     protected $specConfig = 'Flower\File\Service\SpecConfig';
 

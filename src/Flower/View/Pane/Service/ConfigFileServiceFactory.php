@@ -12,7 +12,7 @@ namespace Flower\View\Pane\Service;
 use Flower\File\Service\FileServiceFactoryFromConfig;
 
 /**
- * Description of FireServiceFactory
+ * Description of ConfigFileServiceFactory
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */

@@ -6,25 +6,20 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\View\Pane\Service;
+namespace Flower\View\Pane\ManagerListener\Domain;
 
-use Flower\View\Pane\Exception\RuntimeException;
+use Flower\View\Pane\ManagerListener\AbstractLazyLoadCacheListener;
 use Flower\View\Pane\PaneClass\PaneInterface;
 use Flower\View\Pane\PaneEvent;
-use Zend\Cache\Exception\InvalidArgumentException;
-use Zend\Cache\StorageFactory;
-use Zend\Cache\Storage\StorageInterface;
-use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Serializer\Adapter\PhpSerialize;
 use Zend\Serializer\Adapter\AdapterInterface;
 
 /**
- * Description of ConfigFileListener
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class PaneCacheListener extends AbstractCacheListener
+class PaneCacheListener extends AbstractLazyLoadCacheListener
 {
 
     /**

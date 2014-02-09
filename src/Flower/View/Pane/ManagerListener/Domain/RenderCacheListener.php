@@ -6,14 +6,13 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\View\Pane\Service\Domain;
+namespace Flower\View\Pane\ManagerListener\Domain;
 
-use Flower\View\Pane\Service\AbstractLazyLoadCacheListener;
+use Flower\View\Pane\ManagerListener\AbstractLazyLoadCacheListener;
 use Flower\View\Pane\PaneEvent;
 use Zend\EventManager\EventManagerInterface;
 
 /**
- * Description of ConfigFileListener
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */

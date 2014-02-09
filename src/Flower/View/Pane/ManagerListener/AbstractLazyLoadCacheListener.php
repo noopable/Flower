@@ -6,7 +6,7 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\View\Pane\Service;
+namespace Flower\View\Pane\ManagerListener;
 
 use Flower\View\Pane\Exception\RuntimeException;
 use Zend\Cache\Storage\StorageInterface;

@@ -6,7 +6,7 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\View\Pane\Service;
+namespace Flower\View\Pane\ManagerListener;
 
 use Zend\Cache\Storage\StorageInterface;
 use Zend\EventManager\ListenerAggregateInterface;
@@ -23,7 +23,7 @@ interface CacheListenerInterface extends ListenerAggregateInterface
     public function getStorage();
 
     public function getStorageOptions();
-    
+
     public function setStorageOptions(array $options);
 
     public function setSerializer(AdapterInterface $serializer);

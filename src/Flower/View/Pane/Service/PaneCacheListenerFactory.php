@@ -8,10 +8,8 @@
 
 namespace Flower\View\Pane\Service;
 
-use Zend\ServiceManager\FactoryInterface;
-
 /**
- * Description of ConfigFileListenerFactory
+ * Description of PaneCacheListenerFactory
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
@@ -19,6 +17,6 @@ class PaneCacheListenerFactory extends AbstractCacheListenerFactory
 {
     protected $configKey = 'pane_cache_listener';
 
-    protected $defaultListenerClass = 'Flower\View\Pane\Service\PaneCacheListener';
+    protected $defaultListenerClass = 'Flower\View\Pane\ManagerListener\PaneCacheListener';
 
 }

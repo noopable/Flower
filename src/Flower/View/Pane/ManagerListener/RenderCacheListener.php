@@ -6,13 +6,12 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\View\Pane\Service;
+namespace Flower\View\Pane\ManagerListener;
 
 use Flower\View\Pane\PaneEvent;
 use Zend\EventManager\EventManagerInterface;
 
 /**
- * Description of ConfigFileListener
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */

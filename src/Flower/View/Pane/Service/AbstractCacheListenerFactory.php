@@ -22,7 +22,7 @@ abstract class AbstractCacheListenerFactory implements FactoryInterface
 {
     protected $configKey = 'pane_cache_listener';
 
-    protected $defaultListenerClass = 'Flower\View\Pane\Service\PaneCacheListener';
+    protected $defaultListenerClass = 'Flower\View\Pane\ManagerListener\PaneCacheListener';
 
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

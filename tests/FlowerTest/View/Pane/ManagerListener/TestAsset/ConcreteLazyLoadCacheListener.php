@@ -6,9 +6,9 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace FlowerTest\View\Pane\Service\TestAsset;
+namespace FlowerTest\View\Pane\ManagerListener\TestAsset;
 
-use Flower\View\Pane\Service\AbstractLazyLoadCacheListener;
+use Flower\View\Pane\ManagerListener\AbstractLazyLoadCacheListener;
 /**
  * Description of ConcreteLazyLoadCacheListener
  *

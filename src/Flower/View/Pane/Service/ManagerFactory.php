@@ -16,7 +16,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\HelperPluginManager;
 
 /**
- * Description of HelperFactory
+ * Description of ManagerFactory
  *
  * @author tomoaki
  */

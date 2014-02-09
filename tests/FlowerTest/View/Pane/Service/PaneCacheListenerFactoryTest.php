@@ -49,6 +49,6 @@ class PaneCacheListenerFactoryTest extends \PHPUnit_Framework_TestCase
         $config = require 'TestAsset/cache_listener.config.php';
         $this->serviceLocator->setService('Config', $config);
         $service = $this->object->createService($this->serviceLocator);
-        $this->assertInstanceOf('Flower\View\Pane\Service\PaneCacheListener', $service);
+        $this->assertInstanceOf('Flower\View\Pane\ManagerListener\PaneCacheListener', $service);
     }
 }

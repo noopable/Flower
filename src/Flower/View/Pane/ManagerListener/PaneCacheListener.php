@@ -6,9 +6,8 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\View\Pane\Service\Domain;
+namespace Flower\View\Pane\ManagerListener;
 
-use Flower\View\Pane\Service\AbstractLazyLoadCacheListener;
 use Flower\View\Pane\PaneClass\PaneInterface;
 use Flower\View\Pane\PaneEvent;
 use Zend\EventManager\EventManagerInterface;
@@ -16,11 +15,10 @@ use Zend\Serializer\Adapter\PhpSerialize;
 use Zend\Serializer\Adapter\AdapterInterface;
 
 /**
- * Description of ConfigFileListener
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class PaneCacheListener extends AbstractLazyLoadCacheListener
+class PaneCacheListener extends AbstractCacheListener
 {
 
     /**

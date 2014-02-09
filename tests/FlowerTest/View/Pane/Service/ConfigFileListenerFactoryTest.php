@@ -59,7 +59,7 @@ class ConfigFileListenerFactoryTest extends \PHPUnit_Framework_TestCase
         $this->serviceLocator->setService('Config', $config);
         $this->serviceLocator->setService('FileService', $fileService);
         $service = $this->object->createService($this->serviceLocator);
-        $this->assertInstanceOf('Flower\View\Pane\Service\ConfigFileListener', $service);
+        $this->assertInstanceOf('Flower\View\Pane\ManagerListener\ConfigFileListener', $service);
     }
 
     /**

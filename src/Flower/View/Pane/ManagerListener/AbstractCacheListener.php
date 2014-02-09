@@ -6,7 +6,7 @@
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
-namespace Flower\View\Pane\Service;
+namespace Flower\View\Pane\ManagerListener;
 
 use Flower\View\Pane\Exception\RuntimeException;
 use Zend\Cache\Exception\InvalidArgumentException;
@@ -17,7 +17,6 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\Serializer\Adapter\AdapterInterface;
 
 /**
- * Description of ConfigFileListener
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
@@ -40,7 +39,7 @@ abstract class AbstractCacheListener extends AbstractListenerAggregate implement
      * @return void
      */
     abstract public function attach(EventManagerInterface $events);
-    
+
     public function setStorageOptions(array $storageOptions)
     {
         $this->storageOptions = $storageOptions;

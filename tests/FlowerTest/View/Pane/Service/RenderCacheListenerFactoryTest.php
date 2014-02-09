@@ -49,6 +49,6 @@ class RenderCacheListenerFactoryTest extends \PHPUnit_Framework_TestCase
         $config = require 'TestAsset/render_cache_listener.config.php';
         $this->serviceLocator->setService('Config', $config);
         $service = $this->object->createService($this->serviceLocator);
-        $this->assertInstanceOf('Flower\View\Pane\Service\RenderCacheListener', $service);
+        $this->assertInstanceOf('Flower\View\Pane\ManagerListener\RenderCacheListener', $service);
     }
 }
