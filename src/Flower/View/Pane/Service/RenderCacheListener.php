@@ -15,6 +15,7 @@ use Zend\Cache\StorageFactory;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
+use Zend\Serializer\Adapter\AdapterInterface;
 
 /**
  * Description of ConfigFileListener
@@ -136,4 +137,15 @@ class RenderCacheListener extends AbstractListenerAggregate implements CacheList
 
         return $rendered;
     }
+
+    public function getSerializer()
+    {
+        return $this->serializer;
+    }
+
+    public function setSerializer(AdapterInterface $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
 }

@@ -10,6 +10,7 @@ namespace Flower\View\Pane\Service;
 
 use Zend\Cache\Storage\StorageInterface;
 use Zend\EventManager\ListenerAggregateInterface;
+use Zend\Serializer\Adapter\AdapterInterface;
 
 /**
  *
@@ -22,4 +23,8 @@ interface CacheListenerInterface extends ListenerAggregateInterface
     public function getStorage();
 
     public function setStorageOptions(array $options);
+
+    public function setSerializer(AdapterInterface $serializer);
+
+    public function getSerializer();
 }
