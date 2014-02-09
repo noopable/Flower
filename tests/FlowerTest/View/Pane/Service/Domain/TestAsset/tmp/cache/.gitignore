@@ -1,0 +1,4 @@
+test_pane_manager-*
+!test_pane_manager-d1
+test_render_manager-*
+*.php
