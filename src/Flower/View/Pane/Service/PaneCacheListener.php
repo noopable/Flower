@@ -24,63 +24,8 @@ use Zend\Serializer\Adapter\AdapterInterface;
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class PaneCacheListener extends AbstractListenerAggregate implements CacheListenerInterface
+class PaneCacheListener extends AbstractCacheListener
 {
-    protected $serializer;
-
-    protected $storage;
-
-    protected $storageOptions;
-
-    public function setStorageOptions(array $storageOptions)
-    {
-        $this->storageOptions = $storageOptions;
-    }
-
-    public function getStorageOptions()
-    {
-        return $this->storageOptions;
-    }
-
-    /**
-     * pass data to low level
-     *
-     *
-     */
-    public function setStorage(StorageInterface $storage = null)
-    {
-        if (null === $storage) {
-            $storageOptions = $this->getStorageOptions();
-            if (!is_array($storageOptions)) {
-                return;
-            }
-            try {
-                $storage = StorageFactory::factory($storageOptions);
-            } catch (InvalidArgumentException $ex) {
-                throw new RuntimeException('try to make a cache storage, but invalid options', $ex->getCode(), $ex);
-            }
-        }
-
-        $this->storage = $storage;
-    }
-
-    /**
-     *
-     *
-     * @return StorageInterface
-     */
-    public function getStorage()
-    {
-        if (!isset($this->storage)) {
-            $this->setStorage();
-        }
-        return $this->storage;
-    }
-
-    public function setSerializer(AdapterInterface $serializer)
-    {
-        $this->serializer = $serializer;
-    }
 
     /**
      *

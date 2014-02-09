@@ -8,73 +8,16 @@
 
 namespace Flower\View\Pane\Service;
 
-use Flower\View\Pane\Exception\RuntimeException;
 use Flower\View\Pane\PaneEvent;
-use Zend\Cache\Exception\InvalidArgumentException;
-use Zend\Cache\StorageFactory;
-use Zend\Cache\Storage\StorageInterface;
-use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
-use Zend\Serializer\Adapter\AdapterInterface;
 
 /**
  * Description of ConfigFileListener
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class RenderCacheListener extends AbstractListenerAggregate implements CacheListenerInterface
+class RenderCacheListener extends AbstractCacheListener
 {
-    protected $serializer;
-
-    protected $storage;
-
-    protected $storageOptions;
-
-    public function setStorageOptions(array $storageOptions)
-    {
-        $this->storageOptions = $storageOptions;
-    }
-
-    public function getStorageOptions()
-    {
-        return $this->storageOptions;
-    }
-
-    /**
-     * pass data to low level
-     *
-     *
-     */
-    public function setStorage(StorageInterface $storage = null)
-    {
-        if (null === $storage) {
-            $storageOptions = $this->getStorageOptions();
-            if (!is_array($storageOptions)) {
-                return;
-            }
-            try {
-                $storage = StorageFactory::factory($storageOptions);
-            } catch (InvalidArgumentException $ex) {
-                throw new RuntimeException('try to make a cache storage, but invalid options', $ex->getCode(), $ex);
-            }
-        }
-
-        $this->storage = $storage;
-    }
-
-    /**
-     *
-     *
-     * @return StorageInterface
-     */
-    public function getStorage()
-    {
-        if (!isset($this->storage)) {
-            $this->setStorage();
-        }
-        return $this->storage;
-    }
-
     /**
      * Attach one or more listeners
      *
@@ -142,16 +85,6 @@ class RenderCacheListener extends AbstractListenerAggregate implements CacheList
         }
 
         return $rendered;
-    }
-
-    public function getSerializer()
-    {
-        return $this->serializer;
-    }
-
-    public function setSerializer(AdapterInterface $serializer)
-    {
-        $this->serializer = $serializer;
     }
 
 }
