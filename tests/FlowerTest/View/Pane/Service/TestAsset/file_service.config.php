@@ -7,7 +7,7 @@
  */
 
 return array(
-    'pane_config_file_listener' => array(
+    'pane_config_file' => array(
         'spec_class' => 'Flower\File\Spec\TreeArrayMerge',
         'spec_options' => array(
         ),

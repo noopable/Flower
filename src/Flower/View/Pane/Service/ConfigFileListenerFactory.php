@@ -34,11 +34,18 @@ class ConfigFileListenerFactory implements FactoryInterface
 
         $config = $serviceLocator->get('Config');
 
-        if (!isset($config[$this->configKey])) {
+        if (!isset($config[$this->configKey])
+                || !isset($config[$this->configKey]['file_service'])) {
             return;
         }
 
-        $fileService = $this->getFileService($serviceLocator, $config[$this->configKey]);
+        $fileServiceName = $config[$this->configKey]['file_service'];
+
+        if (! $serviceLocator->has($fileServiceName)) {
+            throw new RuntimeException('specified service ' . $fileServiceName . ' is not found');
+        }
+
+        $fileService = $serviceLocator->get($fileServiceName);
 
         if (! $fileService instanceof GatewayInterface) {
             throw new RuntimeException('failed to load file service');
@@ -49,48 +56,6 @@ class ConfigFileListenerFactory implements FactoryInterface
         $listener->setFileService($fileService);
 
         return $listener;
-    }
-
-    public function getFileService($serviceLocator, array $config)
-    {
-        $config['serviceLocator'] = $serviceLocator;
-
-        if (isset($config['configurator'])) {
-            //you can use instance
-            $configurator = $config['configurator'];
-        }
-        else {
-            $configurator = $this->specConfig;
-        }
-
-        if (is_string($configurator) && class_exists($configurator)) {
-            $configurator = new $configurator($config);
-        }
-
-        // TODO: create interface and check interface
-        if (!is_object($configurator)) {
-            throw new RuntimeException('configurator not instantiable in ' . __CLASS__);
-        }
-
-        /**
-         *
-         * instantiate core spec
-         */
-        $spec = $configurator->createSpec();
-
-        /**
-         *
-         * inject dependencies with config and more outer work
-         */
-        $configurator->configure($spec);
-
-        /**
-         *
-         * attachListenerAggregate and more inner work
-         */
-        $spec->configure();
-
-        return $spec->getGateway();
     }
 
 }

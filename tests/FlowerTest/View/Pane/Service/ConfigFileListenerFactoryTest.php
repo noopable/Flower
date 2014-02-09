@@ -45,25 +45,45 @@ class ConfigFileListenerFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Service\ConfigFileListenerFactory::getFileService
-     */
-    public function testGetFileService()
-    {
-        $config = require 'TestAsset/file_service.config.php';
-        $configKey = TestTool::getPropertyValue($this->object, 'configKey');
-        $service = $this->object->getFileService($this->serviceLocator, $config[$configKey]);
-        $this->assertInstanceOf('Flower\File\Gateway\GatewayInterface', $service);
-    }
-
-    /**
      * @covers Flower\View\Pane\Service\ConfigFileListenerFactory::createService
      */
     public function testCreateService()
     {
-        $config = require 'TestAsset/file_service.config.php';
+        $config = array(
+            'pane_config_file_listener' => array(
+                'file_service' => 'FileService',
+            ),
+        );
+        $fileService = $this->getMock('Flower\File\Gateway\GatewayInterface');
+
         $this->serviceLocator->setService('Config', $config);
+        $this->serviceLocator->setService('FileService', $fileService);
         $service = $this->object->createService($this->serviceLocator);
         $this->assertInstanceOf('Flower\View\Pane\Service\ConfigFileListener', $service);
     }
 
+    /**
+     * @expectedException Flower\View\Pane\Exception\RuntimeException
+     */
+    public function testCreateServiceServiceNotFound()
+    {
+        $serviceLocator = $this->getMock('Zend\ServiceManager\ServiceManager');
+        $serviceLocator->expects($this->at(0))
+                ->method('has')
+                ->with('Config')
+                ->will($this->returnValue(true));
+        $serviceLocator->expects($this->once())
+                ->method('get')
+                ->with('Config')
+                ->will($this->returnValue(array(
+                    'pane_config_file_listener' => array(
+                        'file_service' => 'FileService',
+                    ),
+                )));
+        $serviceLocator->expects($this->at(2))
+                ->method('has')
+                ->with('FileService')
+                ->will($this->returnValue(false));
+        $this->object->createService($serviceLocator);
+    }
 }

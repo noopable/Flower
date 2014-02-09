@@ -10,6 +10,7 @@
 return array(
     'service_manager' => array(
         'factories' => array(
+            'Test_FileService' => 'Flower\View\Pane\Service\ConfigFileServiceFactory',
             'Test_FileListener' => 'Flower\View\Pane\Service\ConfigFileListenerFactory',
             'Test_PaneCacheListener' => 'Flower\View\Pane\Service\PaneCacheListenerFactory',
             'Test_RenderCacheListener' => 'Flower\View\Pane\Service\RenderCacheListenerFactory',
@@ -49,6 +50,9 @@ return array(
         ),
     ),
     'pane_config_file_listener' => array(
+        'file_service' => 'Test_FileService',
+    ),
+    'pane_config_file' => array(
         'spec_class' => 'Flower\File\Spec\TreeArrayMerge',
         'spec_options' => array(
         ),
