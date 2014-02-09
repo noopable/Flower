@@ -49,6 +49,16 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @depends testSetStorageOptions
+     * @covers Flower\View\Pane\Service\PaneCacheListener::getStorageOptions
+     */
+    public function testGetStorageOptions()
+    {
+        $this->object->setStorageOptions($this->storageOptions);
+        $this->assertEquals($this->storageOptions, $this->object->getStorageOptions());
+    }
+    
+    /**
      * @covers Flower\View\Pane\Service\PaneCacheListener::setStorage
      */
     public function testSetStorage()

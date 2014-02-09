@@ -37,6 +37,11 @@ class PaneCacheListener extends AbstractListenerAggregate implements CacheListen
         $this->storageOptions = $storageOptions;
     }
 
+    public function getStorageOptions()
+    {
+        return $this->storageOptions;
+    }
+
     /**
      * pass data to low level
      *
@@ -45,11 +50,12 @@ class PaneCacheListener extends AbstractListenerAggregate implements CacheListen
     public function setStorage(StorageInterface $storage = null)
     {
         if (null === $storage) {
-            if (!isset($this->storageOptions)) {
+            $storageOptions = $this->getStorageOptions();
+            if (!is_array($storageOptions)) {
                 return;
             }
             try {
-                $storage = StorageFactory::factory($this->storageOptions);
+                $storage = StorageFactory::factory($storageOptions);
             } catch (InvalidArgumentException $ex) {
                 throw new RuntimeException('try to make a cache storage, but invalid options', $ex->getCode(), $ex);
             }

@@ -49,6 +49,16 @@ class RenderCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @depends testSetStorageOptions
+     * @covers Flower\View\Pane\Service\RenderCacheListener::getStorageOptions
+     */
+    public function testGetStorageOptions()
+    {
+        $this->object->setStorageOptions($this->storageOptions);
+        $this->assertEquals($this->storageOptions, $this->object->getStorageOptions());
+    }
+
+    /**
      * @covers Flower\View\Pane\Service\RenderCacheListener::setStorage
      */
     public function testSetStorage()
