@@ -24,7 +24,7 @@ use Zend\Serializer\Adapter\AdapterInterface;
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class PaneCacheListener extends AbstractListenerAggregate
+class PaneCacheListener extends AbstractListenerAggregate implements CacheListenerInterface
 {
     protected $serializer;
 
@@ -32,7 +32,7 @@ class PaneCacheListener extends AbstractListenerAggregate
 
     protected $storageOptions;
 
-    public function setStorageOptions($storageOptions)
+    public function setStorageOptions(array $storageOptions)
     {
         $this->storageOptions = $storageOptions;
     }

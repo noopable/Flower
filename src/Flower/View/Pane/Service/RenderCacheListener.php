@@ -21,7 +21,7 @@ use Zend\EventManager\EventManagerInterface;
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class RenderCacheListener extends AbstractListenerAggregate
+class RenderCacheListener extends AbstractListenerAggregate implements CacheListenerInterface
 {
     protected $serializer;
 
@@ -29,7 +29,7 @@ class RenderCacheListener extends AbstractListenerAggregate
 
     protected $storageOptions;
 
-    public function setStorageOptions($storageOptions)
+    public function setStorageOptions(array $storageOptions)
     {
         $this->storageOptions = $storageOptions;
     }
