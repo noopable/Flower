@@ -337,4 +337,25 @@ class PaneCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($event->hasError());
         $this->assertSame($pane, $res);
     }
+
+    /**
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::setDomainService
+     */
+    public function testSetDomainService()
+    {
+        $domainService = $this->getMock('Flower\Domain\Service');
+        $this->object->setDomainService($domainService);
+        $this->assertSame($domainService, TestTool::getPropertyValue($this->object, 'domainService'));
+    }
+
+    /**
+     * @depends testSetDomainService
+     * @covers Flower\View\Pane\ManagerListener\Domain\PaneCacheListener::getDomainService
+     */
+    public function testGetDomainService()
+    {
+        $domainService = $this->getMock('Flower\Domain\Service');
+        $this->object->setDomainService($domainService);
+        $this->assertSame($domainService, $this->object->getDomainService());
+    }
 }
