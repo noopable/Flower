@@ -8,6 +8,8 @@
 
 namespace Flower\View\Pane\ManagerListener\Domain;
 
+use Flower\Domain\DomainServiceAwareInterface;
+use Flower\Domain\DomainServiceAwareTrait;
 use Flower\View\Pane\ManagerListener\AbstractLazyLoadCacheListener;
 use Flower\View\Pane\ManagerListener\RenderCacheTrait;
 
@@ -15,7 +17,8 @@ use Flower\View\Pane\ManagerListener\RenderCacheTrait;
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class RenderCacheListener extends AbstractLazyLoadCacheListener
+class RenderCacheListener extends AbstractLazyLoadCacheListener implements DomainServiceAwareInterface
 {
     use RenderCacheTrait;
+    use DomainServiceAwareTrait;
 }
