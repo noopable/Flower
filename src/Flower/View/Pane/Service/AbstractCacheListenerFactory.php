@@ -56,10 +56,16 @@ abstract class AbstractCacheListenerFactory implements FactoryInterface
 
         if (isset($config['cache_storage'])) {
             $this->configureCacheStorage($listener, $config['cache_storage']);
+            unset($config['cache_storage']);
         }
 
         if (isset($config['serializer'])) {
             $this->configureSerializer($listener, $config['serializer']);
+            unset($config['serializer']);
+        }
+
+        if (!empty($config)) {
+            $this->configureExtra($listener, $config);
         }
 
         return $listener;
@@ -86,5 +92,9 @@ abstract class AbstractCacheListenerFactory implements FactoryInterface
             }
             $listener->setSerializer($serializer);
         }
+    }
+
+    public function configureExtra($listener, $options)
+    {
     }
 }
