@@ -8,6 +8,8 @@
 
 namespace Flower\View\Pane\Service;
 
+use Flower\Domain\Service as DomainService;
+use Flower\Domain\DomainServiceAwareInterface;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -65,7 +67,7 @@ abstract class AbstractCacheListenerFactory implements FactoryInterface
         }
 
         if (!empty($config)) {
-            $this->configureExtra($listener, $config);
+            $this->configureExtra($serviceLocator, $listener, $config);
         }
 
         return $listener;
@@ -83,10 +85,9 @@ abstract class AbstractCacheListenerFactory implements FactoryInterface
         }
     }
 
-    public function configureSerializer($listener, $options)
+    public function configureSerializer($listener, $serializer)
     {
-        $serializer = $options['serializer'];
-        if (!is_a($serializer, 'Zend\Serializer\Adapter\AdapterInterface', true)) {
+        if (is_a($serializer, 'Zend\Serializer\Adapter\AdapterInterface', true)) {
             if (is_string($serializer)) {
                 $serializer = new $serializer;
             }
@@ -94,7 +95,20 @@ abstract class AbstractCacheListenerFactory implements FactoryInterface
         }
     }
 
-    public function configureExtra($listener, $options)
+    public function configureExtra($serviceLocator, $listener, $config)
     {
+        if (isset($config['domain_service'])
+            && ($listener instanceof DomainServiceAwareInterface)) {
+            if (is_string($config['domain_service'])
+                && $serviceLocator->has($config['domain_service'])) {
+                $config['domain_service'] = $serviceLocator->get($config['domain_service']);
+            }
+
+            if ($config['domain_service'] instanceof DomainService) {
+                $listener->setDomainService($config['domain_service']);
+                unset($config['domain_service']);
+            }
+        }
+
     }
 }
