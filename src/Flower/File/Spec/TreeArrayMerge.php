@@ -35,6 +35,10 @@ class TreeArrayMerge extends AbstractSpec {
         $gateway = $this->getGateway();
         $events = $gateway->getEventManager();
 
+        /**
+         * @todo $eventsで$eventのevent名が書き換えられても、リスナーが取得できているから問題ない？
+         * 問題なかったとしてもcloneするべきでは？
+         */
         $events->trigger(Event::EVENT_CACHE_READ, $event);
 
         if ($data = $event->getData()) {
