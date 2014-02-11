@@ -23,6 +23,9 @@ class PaneCacheListener extends AbstractLazyLoadCacheListener implements DomainS
 {
     use PaneCacheTrait;
     use DomainServiceAwareTrait;
+    use DomainIdPrefixTrait;
+
+    protected $defaultNamespace = 'flower_view_pane_cache';
     /**
      *
      * @return AdapterInterface

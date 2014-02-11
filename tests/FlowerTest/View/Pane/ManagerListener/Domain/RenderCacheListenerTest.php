@@ -1,6 +1,7 @@
 <?php
 namespace FlowerTest\View\Pane\ManagerListener\Domain;
 
+use Flower\Domain\Domain;
 use Flower\Test\TestTool;
 use Flower\View\Pane\PaneEvent;
 use Flower\View\Pane\ManagerListener\Domain\RenderCacheListener;
@@ -49,13 +50,45 @@ class RenderCacheListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException Flower\View\Pane\Exception\RuntimeException
+     */
+    public function testGetStorageOptionsWithoutDomainService()
+    {
+        $this->object->getStorageOptions();
+    }
+
+    /**
+     * @expectedException Flower\View\Pane\Exception\RuntimeException
+     */
+    public function testGetStorageOptionsBeforeCurrentDomainIsSet()
+    {
+        $currentDomain = new Domain;
+        $domainService = $this->getMock('Flower\Domain\Service');
+        $domainService->expects($this->once())
+                ->method('getCurrentDomain')
+                ->will($this->returnValue($currentDomain));
+        $this->object->setDomainService($domainService);
+        $this->object->getStorageOptions();
+    }
+
+    /**
      * @depends testSetStorageOptions
      * @covers Flower\View\Pane\ManagerListener\Domain\RenderCacheListener::getStorageOptions
      */
     public function testGetStorageOptions()
     {
+        $currentDomain = new Domain;
+        $currentDomain->setDomainId(123);
+        $domainService = $this->getMock('Flower\Domain\Service');
+        $domainService->expects($this->once())
+                ->method('getCurrentDomain')
+                ->will($this->returnValue($currentDomain));
+        $this->object->setDomainService($domainService);
         $this->object->setStorageOptions($this->storageOptions);
-        $this->assertEquals($this->storageOptions, $this->object->getStorageOptions());
+        $this->object->setStorageOptions($this->storageOptions);
+        $expects = $this->storageOptions;
+        $expects['adapter']['options']['namespace'] = 'd_123' . $expects['adapter']['options']['namespace'];
+        $this->assertEquals($expects, $this->object->getStorageOptions());
     }
 
     /**
@@ -81,6 +114,13 @@ class RenderCacheListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStorageWithOptions()
     {
+        $currentDomain = new Domain;
+        $currentDomain->setDomainId(123);
+        $domainService = $this->getMock('Flower\Domain\Service');
+        $domainService->expects($this->once())
+                ->method('getCurrentDomain')
+                ->will($this->returnValue($currentDomain));
+        $this->object->setDomainService($domainService);
         $this->assertNull($this->object->getStorage());
         $this->object->setStorageOptions($this->storageOptions);
         $storage = $this->object->getStorage();

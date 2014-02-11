@@ -58,6 +58,9 @@ abstract class AbstractCacheListener extends AbstractListenerAggregate implement
     public function setStorage(StorageInterface $storage = null)
     {
         if (null === $storage) {
+            if(!isset($this->storageOptions)) {
+                return;
+            }
             $storageOptions = $this->getStorageOptions();
             if (!is_array($storageOptions)) {
                 return;

@@ -59,12 +59,8 @@ abstract class AbstractLazyLoadCacheListener extends AbstractCacheListener imple
                 $storage = $serviceLocator->get($cacheServiceName);
             } while(false);
 
-            if (!isset($storage) && ($storageOptions = $this->getStorageOptions())) {
-                try {
-                    $storage = StorageFactory::factory($storageOptions);
-                } catch (InvalidArgumentException $ex) {
-                    throw new RuntimeException('try to make a cache storage, but invalid options', $ex->getCode(), $ex);
-                }
+            if (!isset($storage) && isset($this->storageOptions)) {
+                return parent::setStorage();
             } elseif (isset($message)) {
                 throw new RuntimeException($message);
             }

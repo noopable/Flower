@@ -21,4 +21,7 @@ class RenderCacheListener extends AbstractLazyLoadCacheListener implements Domai
 {
     use RenderCacheTrait;
     use DomainServiceAwareTrait;
+    use DomainIdPrefixTrait;
+
+    protected $defaultNamespace = 'flower_view_pane_cache';
 }
