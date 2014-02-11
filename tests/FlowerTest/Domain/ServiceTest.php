@@ -91,6 +91,14 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($domainName, TestTool::getPropertyValue($this->object, 'currentDomainName'));
     }
 
+    public function testSetCurrentDomainNameAfterGetCurrentDomain()
+    {
+        $domainName = 'example.com';
+        $domain = $this->object->getCurrentDomain();
+        $this->object->setCurrentDomainName($domainName);
+        $this->assertEquals($domainName, $domain->getDomainName());
+    }
+
     /**
      * @covers Flower\Domain\Service::setCurrentDomainId
      */
@@ -99,6 +107,14 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
         $domainId = 123;
         $this->object->setCurrentDomainId($domainId);
         $this->assertEquals($domainId, TestTool::getPropertyValue($this->object, 'currentDomainId'));
+    }
+
+    public function testSetCurrentDomainIdAfterGetCurrentDomain()
+    {
+        $domainId = 123;
+        $domain = $this->object->getCurrentDomain();
+        $this->object->setCurrentDomainId($domainId);
+        $this->assertEquals($domainId, $domain->getDomainId());
     }
 
     /**
