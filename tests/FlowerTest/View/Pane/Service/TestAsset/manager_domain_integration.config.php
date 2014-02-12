@@ -59,12 +59,10 @@ return array(
         'spec_class' => 'Flower\File\Spec\TreeArrayMerge',
         'spec_options' => array(
         ),
-        'resolve_spec_class' => 'Flower\File\Spec\Resolver\Tree',
+        'resolve_spec_class' => 'Flower\File\Spec\Resolver\Sprintf',
         'resolve_spec_options' => array(
-            'map' => [],
-            'path_stack' => array(
-                'flower' => __DIR__ . '/File',
-            ),
+            'path_spec' => __DIR__ . '/%s',
+            'param' => 'file',
         ),
         'cache_spec_options' => array(
             'cache_path' => __DIR__ . '/tmp/cache',
