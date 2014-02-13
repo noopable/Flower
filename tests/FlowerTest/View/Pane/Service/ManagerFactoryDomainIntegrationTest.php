@@ -49,49 +49,6 @@ class ManagerFactoryDomainIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->view = new PhpRenderer;
         $this->view->setHelperPluginManager($this->helperManager);
         $this->manager = $this->view->plugin('npPaneManager');
-        $this->getPaneCacheStorage();
-    }
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
-        $config = $this->serviceLocator->get('Config');
-        if (isset($config['flower_pane_manager']['listener_aggregates'])) {
-            if (in_array('Test_FileListener', $config['flower_pane_manager']['listener_aggregates'])) {
-                $fileListener = $this->serviceLocator->get('Test_FileListener');
-                $fileListener->getFileService()->refresh();
-            }
-        }
-    }
-
-    protected function getPaneCacheStorage()
-    {
-        if (isset($this->paneCacheStorage)) {
-            return $this->paneCacheStorage;
-        }
-        $listeners = $this->manager->getEventManager()->getListeners(PaneEvent::EVENT_GET_PANE);
-        $listener = $listeners->top();
-        $callback = $listener->getCallback();
-
-        $this->paneCacheStorage = $callback[0]->getStorage();
-
-        return $this->paneCacheStorage;
-    }
-
-    protected function getRenderCacheStorage()
-    {
-        if (isset($this->renderCacheStorage)) {
-            return $this->renderCacheStorage;
-        }
-        $listeners = $this->manager->getEventManager()->getListeners(PaneEvent::EVENT_RENDER);
-        $listener = $listeners->top();
-        $callback = $listener->getCallback();
-
-        $this->renderCacheStorage = $callback[0]->getStorage();
-        return $this->renderCacheStorage;
     }
 
     public function testCanGetPaneManager()
@@ -126,8 +83,7 @@ class ManagerFactoryDomainIntegrationTest extends \PHPUnit_Framework_TestCase
 ';
         $this->assertEquals(str_replace("\r\n", "\n", $expected), $res);
         //private teardown
-        $this->getPaneCacheStorage()->removeItem('bar');
-        $this->getRenderCacheStorage()->removeItem('bar');
+        $this->manager->refresh('bar');
     }
 
     public function testCanGetPaneInFile()
@@ -143,8 +99,7 @@ class ManagerFactoryDomainIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(str_replace("\r\n", "\n", $expected), $res);
 
         //private teardown
-        $this->getPaneCacheStorage()->removeItem('foo');
-        $this->getRenderCacheStorage()->removeItem('foo');
+        $this->manager->refresh('foo');
     }
 
     public function testEventListnerIsAttached()

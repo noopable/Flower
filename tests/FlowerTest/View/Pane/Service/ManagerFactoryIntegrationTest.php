@@ -48,21 +48,6 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->manager = $this->view->plugin('npPaneManager');
     }
 
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
-        $config = $this->serviceLocator->get('Config');
-        if (isset($config['flower_pane_manager']['listener_aggregates'])) {
-            if (in_array('Test_FileListener', $config['flower_pane_manager']['listener_aggregates'])) {
-                $fileListener = $this->serviceLocator->get('Test_FileListener');
-                $fileListener->getFileService()->refresh();
-            }
-        }
-    }
-
     public function testCanGetPaneManager()
     {
         $this->assertInstanceOf('Flower\View\Pane\PaneManager', $this->manager);
