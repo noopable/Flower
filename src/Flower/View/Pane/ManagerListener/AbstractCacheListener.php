@@ -9,8 +9,10 @@
 namespace Flower\View\Pane\ManagerListener;
 
 use Flower\View\Pane\Exception\RuntimeException;
+use Flower\View\Pane\PaneEvent;
 use Zend\Cache\Exception\InvalidArgumentException;
 use Zend\Cache\StorageFactory;
+use Zend\Cache\Storage\FlushableInterface;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
@@ -96,6 +98,22 @@ abstract class AbstractCacheListener extends AbstractListenerAggregate implement
             $this->setStorage();
         }
         return $this->storage;
+    }
+
+    public function refresh($paneId = null)
+    {
+        $storage = $this->getStorage();
+        if ($paneId) {
+            return $storage->removeItem($paneId);
+        } elseif ($storage instanceof FlushableInterface) {
+            return $storage->flush();
+        }
+    }
+
+    public function onRefresh(PaneEvent $e)
+    {
+        $paneId = $e->getPaneId();
+        return $this->refresh($paneId);
     }
 
 }
