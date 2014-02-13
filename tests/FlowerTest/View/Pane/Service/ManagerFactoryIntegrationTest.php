@@ -46,7 +46,6 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->view = new PhpRenderer;
         $this->view->setHelperPluginManager($this->helperManager);
         $this->manager = $this->view->plugin('npPaneManager');
-        $this->getPaneCacheStorage();
     }
 
     /**
@@ -62,38 +61,6 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
                 $fileListener->getFileService()->refresh();
             }
         }
-    }
-
-    protected function getPaneCacheStorage()
-    {
-        if (isset($this->paneCacheStorage)) {
-            return $this->paneCacheStorage;
-        }
-        $options = include 'TestAsset/test_pane_cache_options.php';
-        if (isset($options['cache_storage']['adapter']['options']['cache_dir'])) {
-            $dir = realpath($options['cache_storage']['adapter']['options']['cache_dir']);
-            if (strpos($dir, __DIR__) !== 0) {
-                throw \Exception('invalid cache dir');
-            }
-        }
-        $this->paneCacheStorage = StorageFactory::factory($options['cache_storage']);
-        return $this->paneCacheStorage;
-    }
-
-    protected function getRenderCacheStorage()
-    {
-        if (isset($this->renderCacheStorage)) {
-            return $this->renderCacheStorage;
-        }
-        $options = include 'TestAsset/test_render_cache_options.php';
-        if (isset($options['cache_storage']['adapter']['options']['cache_dir'])) {
-            $dir = realpath($options['cache_storage']['adapter']['options']['cache_dir']);
-            if (strpos($dir, __DIR__) !== 0) {
-                throw \Exception('invalid cache dir');
-            }
-        }
-        $this->renderCacheStorage = StorageFactory::factory($options['cache_storage']);
-        return $this->renderCacheStorage;
     }
 
     public function testCanGetPaneManager()
@@ -127,9 +94,8 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
 <!-- end Renderer -->
 ';
         $this->assertEquals(str_replace("\r\n", "\n", $expected), $res);
-        //private teardown
-        $this->getPaneCacheStorage()->removeItem('bar');
-        $this->getRenderCacheStorage()->removeItem('bar');
+        //private refresh
+        $this->manager->refresh('bar');
     }
 
     public function testCanGetPaneInFile()
@@ -145,8 +111,20 @@ class ManagerFactoryIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(str_replace("\r\n", "\n", $expected), $res);
 
         //private teardown
-        $this->getPaneCacheStorage()->removeItem('foo');
-        $this->getRenderCacheStorage()->removeItem('foo');
+        $this->manager->refresh('foo');
+    }
+
+    public function testCacheRefresh()
+    {
+        $pane = $this->manager->get('bar');
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\PaneInterface', $pane);
+        $this->manager->render('bar');
+
+        $this->assertFileExists(__DIR__ . '/TestAsset/tmp/cache/test_pane_manager-37/test_pane_manager-bar.dat');
+        $this->assertFileExists(__DIR__ . '/TestAsset/tmp/cache/test_render_manager-37/test_render_manager-bar.dat');
+        $this->manager->refresh('bar');
+        $this->assertFileNotExists(__DIR__ . '/TestAsset/tmp/cache/test_pane_manager-37/test_pane_manager-bar.dat');
+        $this->assertFileNotExists(__DIR__ . '/TestAsset/tmp/cache/test_render_manager-37/test_render_manager-bar.dat');
     }
 
     public function testEventListnerIsAttached()

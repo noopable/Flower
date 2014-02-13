@@ -31,6 +31,7 @@ trait RenderCacheTrait
     {
         $this->listeners[] = $events->attach(PaneEvent::EVENT_RENDER, array($this, 'preRender'), 10000);
         $this->listeners[] = $events->attach(PaneEvent::EVENT_RENDER, array($this, 'postRender'), -10000);
+        $this->listeners[] = $events->attach(PaneEvent::EVENT_REFRESH_RENDER, array($this, 'onRefresh'));
     }
 
     public function preRender(PaneEvent $e)

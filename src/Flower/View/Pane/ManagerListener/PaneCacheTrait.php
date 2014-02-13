@@ -33,6 +33,7 @@ trait PaneCacheTrait
     {
         $this->listeners[] = $events->attach(PaneEvent::EVENT_GET_PANE, array($this, 'preGet'), 10000);
         $this->listeners[] = $events->attach(PaneEvent::EVENT_GET_PANE, array($this, 'postGet'), -10000);
+        $this->listeners[] = $events->attach(PaneEvent::EVENT_REFRESH_PANE, array($this, 'onRefresh'));
     }
 
     public function preGet(PaneEvent $e)
