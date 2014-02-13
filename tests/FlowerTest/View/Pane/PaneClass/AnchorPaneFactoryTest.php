@@ -1,5 +1,5 @@
 <?php
-namespace Flower\View\Pane;
+namespace Flower\View\Pane\PaneClass;
 
 use Flower\View\Pane\Factory\AnchorPaneFactory;
 use Flower\View\Pane\Builder\Builder;
