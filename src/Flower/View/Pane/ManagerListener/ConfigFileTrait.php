@@ -44,6 +44,7 @@ trait ConfigFileTrait
     public function attach(EventManagerInterface $events)
     {
         $this->listeners[] = $events->attach(PaneEvent::EVENT_LOAD_CONFIG, array($this, 'onload'), 10);
+        $this->listeners[] = $events->attach(PaneEvent::EVENT_REFRESH_CONFIG, array($this, 'onRefresh'));
     }
 
     public function onLoad(PaneEvent $e)
@@ -65,5 +66,11 @@ trait ConfigFileTrait
             $e->setResult($config);
         }
         return $config;
+    }
+
+    public function onRefresh(PaneEvent $e)
+    {
+        $paneId = $e->getPaneId();
+        $this->getFileService()->refresh($paneId);
     }
 }

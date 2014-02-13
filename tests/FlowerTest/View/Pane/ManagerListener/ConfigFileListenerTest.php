@@ -99,4 +99,17 @@ class ConfigFileListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $res);
         $this->assertEquals($expected, $event->getResult());
     }
+
+    public function testOnRefresh()
+    {
+        $paneId = 'foo';
+        $event = new PaneEvent(PaneEvent::EVENT_REFRESH_CONFIG);
+        $event->setPaneId($paneId);
+        $fileService = $this->getMock('Flower\File\Gateway\GatewayInterface');
+        $fileService->expects($this->once())
+                ->method('refresh')
+                ->with($this->equalTo($paneId));
+        $this->object->setFileService($fileService);
+        $res = $this->object->onRefresh($event);
+    }
 }
