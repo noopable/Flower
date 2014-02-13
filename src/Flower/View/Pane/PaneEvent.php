@@ -21,6 +21,10 @@ class PaneEvent extends Event
     const EVENT_LOAD_CONFIG = 'load_config';
     const EVENT_BUILD_PANE = 'build_pane';
     const EVENT_RENDER = 'render_pane';
+    const EVENT_REFRESH_CONFIG = 'refresh_config';
+    const EVENT_REFRESH_PANE = 'refresh_pane';
+    const EVENT_REFRESH_RENDER = 'refresh_render';
+
     /**
      * @var \Flower\Pane\PaneManager
      */

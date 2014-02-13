@@ -48,6 +48,12 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
         'anchor' => 'Flower\View\Pane\PaneClass\Anchor',
     );
 
+    protected $refreshEvents = array(
+        PaneEvent::EVENT_REFRESH_CONFIG => PaneEvent::EVENT_REFRESH_CONFIG,
+        PaneEvent::EVENT_REFRESH_PANE => PaneEvent::EVENT_REFRESH_PANE,
+        PaneEvent::EVENT_REFRESH_RENDER => PaneEvent::EVENT_REFRESH_RENDER,
+    );
+
     public function __invoke()
     {
         $this->init();
@@ -162,7 +168,7 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
         if (!$pane->getPaneId()) {
             $pane->setPaneId($paneId);
         }
-        
+
         if (!is_array($options)) {
             $options = (array) $options;
         }
@@ -199,6 +205,30 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
             $rendered = $renderEvent->getResult();
         }
         return $rendered;
+    }
+
+    public function refresh($paneId, $types = null)
+    {
+        if (null === $types) {
+            $types = $this->refreshEvents;
+        }
+
+        $events = $this->getEventManager();
+
+        $results = array();
+        foreach ((array) $types as $type) {
+            if (!isset($this->refreshEvents[$type])) {
+                continue;
+            }
+            $refreshEvent = new PaneEvent($type);
+            $refreshEvent->setManager($this);
+            $refreshEvent->setPaneId($paneId);
+            $refreshEvent->setTarget($this);
+
+            $results[] = $events->trigger($refreshEvent);
+        }
+
+        return $results;
     }
 
     public function setConfig($config)

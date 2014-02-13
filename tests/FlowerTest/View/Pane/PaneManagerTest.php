@@ -367,4 +367,36 @@ class PaneManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(str_replace("\r\n", "\n", $expected), $res);
     }
 
+    public function testRefresh()
+    {
+        $paneId = 'foo';
+        $eventManager = $this->getMock('Zend\EventManager\EventManager');
+        $eventManager->expects($this->exactly(3))
+                ->method('trigger')
+                ->with($this->isInstanceOf('Flower\View\Pane\PaneEvent'));
+        $this->object->setEventManager($eventManager);
+        $this->object->refresh($paneId);
+    }
+
+    public function testRefreshBySpecifiedEventString()
+    {
+        $paneId = 'foo';
+        $eventManager = $this->getMock('Zend\EventManager\EventManager');
+        $eventManager->expects($this->once())
+                ->method('trigger')
+                ->with($this->isInstanceOf('Flower\View\Pane\PaneEvent'));
+        $this->object->setEventManager($eventManager);
+        $this->object->refresh($paneId, PaneEvent::EVENT_REFRESH_PANE);
+    }
+
+    public function testRefreshBySpecifiedEventArray()
+    {
+        $paneId = 'foo';
+        $eventManager = $this->getMock('Zend\EventManager\EventManager');
+        $eventManager->expects($this->exactly(2))
+                ->method('trigger')
+                ->with($this->isInstanceOf('Flower\View\Pane\PaneEvent'));
+        $this->object->setEventManager($eventManager);
+        $this->object->refresh($paneId, array(PaneEvent::EVENT_REFRESH_CONFIG, PaneEvent::EVENT_REFRESH_PANE));
+    }
 }
