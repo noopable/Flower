@@ -2,6 +2,7 @@
 namespace FlowerTest\View\Pane\Builder;
 
 use Flower\Test\TestTool;
+use Flower\View\Pane\PaneClass\EntityScriptPane;
 use Flower\View\Pane\PaneClass\Pane;
 use Flower\View\Pane\PaneEvent;
 use Flower\View\Pane\Builder\Builder;
@@ -292,5 +293,65 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $children = $pane->current();
         $this->assertInstanceOf('Flower\View\Pane\PaneClass\PaneInterface', $pane);
         $this->assertInstanceOf('FlowerTest\View\Pane\TestAsset\YetAnotherPane', $children);
+    }
+
+    public function testRecognizePrototypeObject()
+    {
+        $data = array(
+            new \stdClass,
+            array('foo' => 'bar'),
+        );
+        $collection = new \RecursiveArrayIterator;
+        $prototype = new EntityScriptPane;
+        $paneConfig = array(
+            'pane_class' => 'Flower\View\Pane\PaneClass\Collection',
+            'tag' => $tag = 'foo',
+            'order' => $order = 5,
+            'size' => $size = 10,
+            'var' => $var = 'header',
+            'classes' => $classes = 'container row',
+            'collection' => $collection,
+            'prototype' => $prototype,
+            'attributes' => $attributes = array(
+                'foo' => 'bar',
+                'baz' => 'qux',
+            ),
+        );
+
+        $pane = $this->object->build($paneConfig);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\Collection', $pane);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\EntityScriptPane', $pane->current());
+        $this->assertEquals($collection->current(), $pane->current()->getEntity());
+    }
+
+    public function testRecognizePrototypeOption()
+    {
+        $data = array(
+            new \stdClass,
+            array('foo' => 'bar'),
+        );
+        $collection = new \RecursiveArrayIterator;
+        $paneConfig = array(
+            'pane_class' => 'Flower\View\Pane\PaneClass\Collection',
+            'tag' => $tag = 'foo',
+            'order' => $order = 5,
+            'size' => $size = 10,
+            'var' => $var = 'header',
+            'classes' => $classes = 'container row',
+            'collection' => $collection,
+            'prototype' => array(
+                'pane_class' => 'Flower\View\Pane\PaneClass\EntityScriptPane',
+                'id' => 'foo',
+            ),
+            'attributes' => $attributes = array(
+                'foo' => 'bar',
+                'baz' => 'qux',
+            ),
+        );
+
+        $pane = $this->object->build($paneConfig);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\Collection', $pane);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\EntityScriptPane', $pane->current());
+        $this->assertEquals($collection->current(), $pane->current()->getEntity());
     }
 }

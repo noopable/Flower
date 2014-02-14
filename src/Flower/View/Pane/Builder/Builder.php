@@ -13,6 +13,8 @@ use Zend\Stdlib\ArrayUtils;
 use Flower\Exception\IllegalClassException;
 use Flower\View\Pane\Exception\PaneClassNotFoundException;
 use Flower\View\Pane\Exception\RuntimeException;
+use Flower\View\Pane\PaneClass\EntityAwareInterface;
+use Flower\View\Pane\PaneClass\EntityPrototypeAwareInterface;
 use Flower\View\Pane\PaneClass\PaneInterface;
 use Flower\View\Pane\PaneEvent;
 
@@ -122,6 +124,11 @@ class Builder
             unset($config['inner']);
         }
 
+        if (isset($config['prototype'])) {
+            $prototypeConfig = $config['prototype'];
+            unset($config['prototype']);
+        }
+
         if (!isset($this->factoryClass)) {
             $this->factoryClass = $this->getDefaultPaneFactory();
         }
@@ -137,6 +144,19 @@ class Builder
         }
 
         $current = call_user_func($this->factoryClass . '::factory', $config);
+
+        if (isset($prototypeConfig) && ($current instanceof EntityPrototypeAwareInterface)) {
+            if (is_array($prototypeConfig)) {
+                $prototype = $this->build($prototypeConfig);
+            } else {
+                //check factory?
+                $prototype = $prototypeConfig;
+            }
+
+            if ($prototype instanceof EntityAwareInterface) {
+                $current->setPrototype($prototype);
+            }
+        }
 
         if (!empty($innerConfig)) {
             if (ArrayUtils::isList($innerConfig)) {
