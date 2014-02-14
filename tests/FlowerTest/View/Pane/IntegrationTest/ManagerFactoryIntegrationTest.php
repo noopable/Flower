@@ -1,11 +1,9 @@
 <?php
-namespace FlowerTest\View\Pane\Service;
+namespace FlowerTest\View\Pane\IntegrationTest;
 
-use Flower\Test\TestTool;
 use Flower\View\Pane\PaneEvent;
 use Flower\View\Pane\Service\ConfigFileListenerFactory;
 use FlowerTest\Bootstrap;
-use Zend\Cache\StorageFactory;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\View\Renderer\PhpRenderer;
