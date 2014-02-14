@@ -44,7 +44,7 @@ class PaneRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testRender()
     {
-        $paneConfig = include __DIR__ . '/Service/TestAsset/2column.php';
+        $paneConfig = include __DIR__ . '/TestAsset/2column.php';
         $builder =new Builder;
         $pane = $builder->build($paneConfig);
         $paneRenderer = new PaneRenderer($pane);
@@ -86,7 +86,7 @@ EOD;
 
    public function testRenderWithSize()
     {
-        $paneConfig = include __DIR__ . '/Service/TestAsset/2column_size.php';
+        $paneConfig = include __DIR__ . '/TestAsset/2column_size.php';
         $builder =new Builder;
         $pane = $builder->build($paneConfig);
         $paneRenderer = new PaneRenderer($pane);
