@@ -21,12 +21,6 @@ class ListPane extends Pane implements CallbackRenderInterface
 
     protected static $factoryClass = 'Flower\View\Pane\Factory\ListPaneFactory';
 
-    public $containerTag = 'ul';
-
-    public $wrapTag = 'li';
-
-    public $tag = 'span';
-
     /**
      *  var をcallbackとして使うため
      *　render時に、実質的なvarとして働く
@@ -41,14 +35,12 @@ class ListPane extends Pane implements CallbackRenderInterface
 
     protected $containerEndStack = array();
 
-    public function wrapBegin($depth = null)
+    public function __construct()
     {
-        return $this->wrapBegin;
-    }
-
-    public function wrapEnd($depth = null)
-    {
-        return $this->wrapEnd;
+        parent::__construct();
+        $this->containerTag = 'ul';
+        $this->wrapTag = 'li';
+        $this->tag = 'span';
     }
 
     public function render(PaneRenderer $paneRenderer)

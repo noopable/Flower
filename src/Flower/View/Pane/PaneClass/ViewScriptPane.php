@@ -21,12 +21,14 @@ class ViewScriptPane extends ListPane
 {
     protected static $factoryClass = 'Flower\View\Pane\Factory\ViewScriptPaneFactory';
 
-    public $containerTag = 'div';
-
-    public $wrapTag = 'div';
-
-    public $tag = 'div';
-
+    public function __construct()
+    {
+        parent::__construct();
+        $this->containerTag = 'div';
+        $this->wrapTag = 'div';
+        $this->tag = 'div';
+    }
+    
     public function _render(PaneRenderer $paneRenderer)
     {
         $this->indent = $paneRenderer->indent;

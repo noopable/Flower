@@ -20,21 +20,7 @@ class Anchor extends ListPane
 {
     protected static $factoryClass = 'Flower\View\Pane\Factory\AnchorPaneFactory';
 
-    public $containerTag = 'ul';
-
-    public $wrapTag = 'li';
-
-    public $tag = 'a';
-
     protected $defaultSubstituteTag = 'span';
-
-    /**
-     * reset var as default innerHtml value
-     *
-     * @see Flower\View\Pane\PaneClass\Pane::var
-     * @var type
-     */
-    public $var = '';
 
     public $href;
 
@@ -48,6 +34,15 @@ class Anchor extends ListPane
 
     protected $view;
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->containerTag = 'ul';
+        $this->wrapTag = 'li';
+        $this->tag = 'a';
+        $this->var = '';
+    }
+    
     public function getSubstituteTag()
     {
         $substitute = $this->getOption('substitute_tag');

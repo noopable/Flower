@@ -97,7 +97,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     public function testSetBegin()
     {
         $this->object->setBegin('foo');
-        $this->assertEquals('foo', $this->object->begin);
+        $this->assertEquals('foo', TestTool::getPropertyValue($this->object, 'begin'));
     }
 
     /**
@@ -106,7 +106,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     public function testSetEnd()
     {
         $this->object->setEnd('bar');
-        $this->assertEquals('bar', $this->object->end);
+        $this->assertEquals('bar', TestTool::getPropertyValue($this->object,'end'));
     }
 
     /**
