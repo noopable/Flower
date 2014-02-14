@@ -60,20 +60,20 @@ class Collection implements PaneInterface, CollectionAwareInterface, EntityProto
 
     public function getChildren()
     {
-        $collection = $this->getCollection();
-        if (! $collection instanceof RecursiveIterator) {
-            return;
-        }
-        return $collection->getChildren();
     }
 
+    /**
+     * This is not recursive. Iterates collection only
+     * @return false
+     */
     public function hasChildren()
     {
-        $collection = $this->getCollection();
-        if (! $collection instanceof RecursiveIterator) {
-            return false;
-        }
-        return $collection->hasChildren();
+        return false;
+    }
+
+    public function resetEntriesCache()
+    {
+        $this->children = array();
     }
 
     public function insert($value, $priority = null)
