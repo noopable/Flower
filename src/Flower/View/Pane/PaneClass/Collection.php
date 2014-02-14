@@ -16,11 +16,15 @@ use RecursiveIterator;
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class Collection implements PaneInterface, CollectionAwareInterface
+class Collection implements PaneInterface, CollectionAwareInterface, EntityPrototypeAwareInterface
 {
     use PaneTrait, CollectionAwareTrait;
 
+    protected static $factoryClass = 'Flower\View\Pane\Factory\CollectionFactory';
+
     protected $prototype;
+
+    public $_var;
 
     public function setPrototype(EntityAwareInterface $prototype)
     {
@@ -29,9 +33,14 @@ class Collection implements PaneInterface, CollectionAwareInterface
 
     public function getPrototype()
     {
+        if (!isset($this->prototype)) {
+            $this->prototype = new EntityScriptPane;
+        }
+
         if (! is_object($this->prototype)) {
             throw new RuntimeException('Collection needs prototype');
         }
+        
         return clone $this->prototype;
     }
 
