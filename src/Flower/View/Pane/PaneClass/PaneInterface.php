@@ -57,6 +57,10 @@ interface PaneInterface extends RecursiveIterator
 
     public function setWrapEnd($wrapEnd);
 
+    public function setContainerBegin($containerBegin);
+
+    public function setContainerEnd($containerEnd);
+
     public function setOptions(array $options);
 
     public function getOptions();

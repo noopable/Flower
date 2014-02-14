@@ -29,10 +29,6 @@ class ListPane extends Pane implements CallbackRenderInterface
      */
     public $_var;
 
-    public $containerBegin;
-
-    public $containerEnd;
-
     protected $containerEndStack = array();
 
     public function __construct()

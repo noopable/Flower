@@ -97,4 +97,14 @@ trait PaneWrapMethodsTrait
     {
         $this->wrapEnd = $wrapEnd;
     }
+
+    public function setContainerBegin($containerBegin)
+    {
+        $this->containerBegin = $containerBegin;
+    }
+
+    public function setContainerEnd($containerEnd)
+    {
+        $this->containerEnd = $containerEnd;
+    }
 }

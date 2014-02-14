@@ -70,23 +70,23 @@ class ListPaneFactory extends PaneFactory
     public static function parseContainerBeginEnd(PaneInterface $pane, array $config)
     {
         if (isset($config['containerBegin'])) {
-            $pane->containerBegin = (string) $config['containerBegin'];
+            $pane->setContainerBegin((string) $config['containerBegin']);
         } elseif(isset($pane->containerTag)) {
             $attributes = $pane->getOption('container_attributes');
             if (is_array($attributes)) {
                 $attributeString = self::attributesToAttributeString($pane);
-                $pane->containerBegin = sprintf('<%s%s>', $pane->containerTag, $attributeString);
+                $pane->setContainerBegin(sprintf('<%s%s>', $pane->containerTag, $attributeString));
             } else {
-                $pane->containerBegin = sprintf('<%s>', $pane->containerTag);
+                $pane->setContainerBegin(sprintf('<%s>', $pane->containerTag));
             }
         }
 
          if (isset($config['containerEnd'])) {
-             $pane->containerEnd = (string) $config['containerEnd'];
+             $pane->setContainerEnd((string) $config['containerEnd']);
          } elseif (! isset($pane->containerTag)) {
-             $pane->containerEnd = '<!-- end container -->';
+             $pane->setContainerEnd('<!-- end container -->');
          } else {
-             $pane->containerEnd = '</' . $pane->containerTag . '>';
+             $pane->setContainerEnd('</' . $pane->containerTag . '>');
          }
     }
 
