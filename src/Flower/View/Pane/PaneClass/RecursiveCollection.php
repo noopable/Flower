@@ -17,6 +17,8 @@ use RecursiveIterator;
  */
 class RecursiveCollection extends Collection
 {
+    protected static $factoryClass = 'Flower\View\Pane\Factory\RecursiveCollectionFactory';
+
     public function getChildren()
     {
         $collection = $this->getCollection();
