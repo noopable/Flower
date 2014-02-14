@@ -24,6 +24,8 @@ class Collection implements PaneInterface, CollectionAwareInterface, EntityProto
 
     protected $prototype;
 
+    protected $children = array();
+
     public $_var;
 
     public function setPrototype(EntityAwareInterface $prototype)
@@ -40,16 +42,20 @@ class Collection implements PaneInterface, CollectionAwareInterface, EntityProto
         if (! is_object($this->prototype)) {
             throw new RuntimeException('Collection needs prototype');
         }
-        
+
         return clone $this->prototype;
     }
 
     public function current()
     {
+        $key = $this->key();
+        if (!isset($this->children[$key])) {
+            $this->children[$key] = $this->getPrototype();
+        }
+
         $entity = $this->getCollection()->current();
-        $prototype = $this->getPrototype();
-        $prototype->setEntity($entity);
-        return $prototype;
+        $this->children[$key]->setEntity($entity);
+        return $this->children[$key];
     }
 
     public function getChildren()
