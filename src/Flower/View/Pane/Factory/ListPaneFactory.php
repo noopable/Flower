@@ -80,12 +80,9 @@ class ListPaneFactory extends PaneFactory
                 $pane->setContainerBegin(sprintf('<%s>', $pane->containerTag));
             }
         }
-
          if (isset($config['containerEnd'])) {
              $pane->setContainerEnd((string) $config['containerEnd']);
-         } elseif (! isset($pane->containerTag)) {
-             $pane->setContainerEnd('<!-- end container -->');
-         } else {
+         } elseif (isset($pane->containerTag)) {
              $pane->setContainerEnd('</' . $pane->containerTag . '>');
          }
     }
