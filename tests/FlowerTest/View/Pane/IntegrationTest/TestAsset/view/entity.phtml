@@ -1,0 +1,17 @@
+<?php
+
+/**
+ *
+ * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
+ * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
+ */
+
+echo basename(__FILE__);
+if (isset($entity)) {
+    echo "\n";
+    if (is_object($entity)) {
+        var_dump(get_object_vars($entity));
+    } else {
+        var_dump($entity);
+    }
+}
