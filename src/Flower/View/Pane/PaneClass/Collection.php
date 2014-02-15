@@ -53,18 +53,22 @@ class Collection implements PaneInterface, CollectionAwareInterface, EntityProto
             return;
         }
 
-        $key = $this->key();
-        if (null === $key) {
-            return;
-        }
-        
-        if (!isset($this->children[$key])) {
-            $this->children[$key] = $this->getPrototype();
-        }
+        $key = (string) $this->key();
 
-        $entity = $this->getCollection()->current();
-        $this->children[$key]->setEntity($entity);
-        return $this->children[$key];
+        if ($key) {
+            if (!isset($this->children[$key])) {
+                $this->children[$key] = $this->getPrototype();
+            }
+
+            $entity = $this->getCollection()->current();
+            $this->children[$key]->setEntity($entity);
+            return $this->children[$key];
+        } else {
+            $prototype = $this->getPrototype();
+            $entity = $this->getCollection()->current();
+            $prototype->setEntity($entity);
+            return $prototype;
+        }
     }
 
     public function getChildren()
