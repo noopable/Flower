@@ -8,6 +8,8 @@
 
 namespace Flower\View\Pane\PaneClass;
 
+use Flower\View\Pane\PaneRenderer;
+
 /**
  * Description of ListContainerBeginTrait
  *
@@ -23,7 +25,11 @@ trait ListContainerBeginEndTrait
         $containerEnd = '';
         $indent = str_repeat($this->indent, (int) $depth);
         $renderer = $this->getPaneRenderer();
-        $maxDepth = $renderer->getMaxDepth();
+        if ($renderer instanceof PaneRenderer) {
+            $maxDepth = $renderer->getMaxDepth();
+        } else {
+            $maxDepth = false;
+        }
 
         if ($depth === 0) {
             //第１階層はulでラップする。
