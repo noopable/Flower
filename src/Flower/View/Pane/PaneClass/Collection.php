@@ -48,7 +48,16 @@ class Collection implements PaneInterface, CollectionAwareInterface, EntityProto
 
     public function current()
     {
+        $collection = $this->getCollection();
+        if (null === $collection) {
+            return;
+        }
+
         $key = $this->key();
+        if (null === $key) {
+            return;
+        }
+        
         if (!isset($this->children[$key])) {
             $this->children[$key] = $this->getPrototype();
         }
@@ -83,7 +92,11 @@ class Collection implements PaneInterface, CollectionAwareInterface, EntityProto
 
     public function key()
     {
-        return $this->getCollection()->key();
+        $collection = $this->getCollection();
+        if (null === $collection) {
+            return;
+        }
+        return $collection->key();
     }
 
     public function next()
@@ -93,12 +106,20 @@ class Collection implements PaneInterface, CollectionAwareInterface, EntityProto
 
     public function rewind()
     {
+        $collection = $this->getCollection();
+        if (null === $collection) {
+            return;
+        }
         return $this->getCollection()->rewind();
     }
 
     public function valid()
     {
-        return $this->getCollection()->valid();
+        $collection = $this->getCollection();
+        if (null === $collection) {
+            return false;
+        }
+        return $collection->valid();
     }
 
 }

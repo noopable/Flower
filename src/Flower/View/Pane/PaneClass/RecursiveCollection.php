@@ -27,6 +27,10 @@ class RecursiveCollection extends Collection
         }
         $prototype = clone $this;
         $prototype->resetEntriesCache();
+        $children = $collection->getChildren();
+        if (null === $children) {
+            return;
+        }
         $prototype->setCollection($collection->getChildren());
         return $prototype;
     }
