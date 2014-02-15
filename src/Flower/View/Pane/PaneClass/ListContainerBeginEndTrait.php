@@ -18,6 +18,8 @@ use Flower\View\Pane\PaneRenderer;
 trait ListContainerBeginEndTrait
 {
 
+    protected $containerEndStack = array();
+    
     public function containerBegin($depth = null)
     {
         $renderSelf = false;

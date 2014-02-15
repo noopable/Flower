@@ -21,8 +21,6 @@ class ListPane extends Pane implements CallbackRenderInterface
 
     protected static $factoryClass = 'Flower\View\Pane\Factory\ListPaneFactory';
 
-    protected $containerEndStack = array();
-
     public function __construct()
     {
         parent::__construct();
