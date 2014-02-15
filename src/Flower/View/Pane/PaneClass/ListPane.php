@@ -17,7 +17,7 @@ use Flower\View\Pane\PaneRenderer;
  */
 class ListPane extends Pane implements CallbackRenderInterface
 {
-    use CallbackRenderTrait, ListContainerBeginEndTrait;
+    use ListContainerCallbackRenderTrait;
 
     protected static $factoryClass = 'Flower\View\Pane\Factory\ListPaneFactory';
 

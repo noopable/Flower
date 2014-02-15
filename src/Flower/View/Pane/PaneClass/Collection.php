@@ -18,15 +18,17 @@ use RecursiveIterator;
  */
 class Collection implements PaneInterface, CollectionAwareInterface, EntityPrototypeAwareInterface
 {
-    use PaneTrait, CollectionAwareTrait;
+    use PaneTrait, CollectionAwareTrait, ListContainerCallbackRenderTrait {
+        PaneTrait::containerBegin insteadof ListContainerCallbackRenderTrait;
+        PaneTrait::containerEnd insteadof ListContainerCallbackRenderTrait;
+        PaneTrait::hasContent insteadof ListContainerCallbackRenderTrait;
+    }
 
     protected static $factoryClass = 'Flower\View\Pane\Factory\CollectionFactory';
 
     protected $prototype;
 
     protected $children = array();
-
-    public $_var;
 
     public function setPrototype(EntityAwareInterface $prototype)
     {

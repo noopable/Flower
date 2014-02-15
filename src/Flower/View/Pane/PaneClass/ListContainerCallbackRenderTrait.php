@@ -15,11 +15,12 @@ use Flower\View\Pane\PaneRenderer;
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-trait ListContainerBeginEndTrait
+trait ListContainerCallbackRenderTrait
 {
-
-    protected $containerEndStack = array();
+    use CallbackRenderTrait;
     
+    protected $containerEndStack = array();
+
     public function containerBegin($depth = null)
     {
         $renderSelf = false;
