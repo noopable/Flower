@@ -17,12 +17,6 @@
         "zendframework/zendframework": "dev-master",
         "evandotpro/edp-superluminal": "dev-master"
     },
-    "require-dev": {
-        "zendframework/zendframework": "dev-master",
-        "phpunit/phpunit": "~3.7",
-        "squizlabs/php_codesniffer": "1.4.*",
-        "satooshi/php-coveralls": "~0.6"
-    },
     "autoload": {
         "psr-0": {
             "Flower\\": "src/",
