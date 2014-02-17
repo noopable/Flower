@@ -167,26 +167,7 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
 
     public function render($paneId, $options = array())
     {
-        $pane = $this->get($paneId);
-        if (! $pane instanceof PaneInterface) {
-            return '';
-        }
-
-        if (!$pane->getPaneId()) {
-            $pane->setPaneId($paneId);
-        }
-
-        if (!is_array($options)) {
-            $options = (array) $options;
-        }
-
-        return $this->renderPane($pane, $options);
-    }
-
-    public function renderPane(PaneInterface $pane, array $options = array())
-    {
         $this->init();
-
         $events = $this->getEventManager();
         /**
          * Constructor
@@ -199,8 +180,7 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
          */
         $renderEvent = new PaneEvent(PaneEvent::EVENT_RENDER);
         $renderEvent->setManager($this);
-        $renderEvent->setPaneId($pane->getPaneId());
-        $renderEvent->setTarget($pane);
+        $renderEvent->setPaneId($paneId);
         $renderEvent->setParams($options);
 
         $res = $events->trigger($renderEvent);
@@ -212,6 +192,7 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
             $rendered = $renderEvent->getResult();
         }
         return $rendered;
+
     }
 
     public function refresh($paneId, $types = null)
@@ -259,6 +240,22 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
             return $default;
         }
         return $this->config[$paneId];
+    }
+
+    public function onRender(PaneEvent $e)
+    {
+        $paneId = $e->getPaneId();
+
+        $pane = $this->get($paneId);
+        if (! $pane instanceof PaneInterface) {
+            return '';
+        }
+
+        if (!$pane->getPaneId()) {
+            $pane->setPaneId($paneId);
+        }
+
+        $e->setTarget($pane);
     }
 
     public function onGet(PaneEvent $e)
@@ -355,6 +352,9 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
         $events->attach(PaneEvent::EVENT_GET_PANE, array($this, 'onGet'));
         $events->attach(PaneEvent::EVENT_BUILD_PANE, array($this->getBuilder(), 'onBuild'));
         $events->attach(PaneEvent::EVENT_LOAD_CONFIG, array($this, 'onLoadConfig'));
+        //paneId to Pane
+        $events->attach(PaneEvent::EVENT_RENDER, array($this, 'onRender'), 100);
+        //Pane to string
         $events->attach(PaneEvent::EVENT_RENDER, array($this, 'onRenderPane'));
         $this->defaultListenersWait = false;
     }
