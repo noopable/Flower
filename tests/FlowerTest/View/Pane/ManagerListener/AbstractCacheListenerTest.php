@@ -142,4 +142,10 @@ class AbstractCacheListenerTest extends \PHPUnit_Framework_TestCase
         $event->setPaneId($paneId);
         $this->object->onRefresh($event);
     }
+
+    public function testNormalizeKey()
+    {
+        $key = 'foo/bar';
+        $this->assertEquals('foo_bar', $this->object->normalizeKey($key));
+    }
 }

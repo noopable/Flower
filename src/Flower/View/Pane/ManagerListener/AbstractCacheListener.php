@@ -116,4 +116,8 @@ abstract class AbstractCacheListener extends AbstractListenerAggregate implement
         return $this->refresh($paneId);
     }
 
+    public function normalizeKey($key)
+    {
+        return preg_replace('/[^a-z0-9_\+\-]+/Di', '_', $key);
+    }
 }
