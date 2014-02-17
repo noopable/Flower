@@ -42,7 +42,7 @@ trait PaneCacheTrait
             return;
         }
 
-        $paneId = $e->getPaneId();
+        $paneId = $this->normalizeKey($e->getPaneId());
 
         if (! $storage->hasItem($paneId)) {
             return;
@@ -77,7 +77,7 @@ trait PaneCacheTrait
         }
 
         $pane = $e->getResult();
-        $paneId = $e->getPaneId();
+        $paneId = $this->normalizeKey($e->getPaneId());
 
         if (!$pane instanceof PaneInterface) {
             return;

@@ -40,7 +40,7 @@ trait RenderCacheTrait
             return;
         }
 
-        $paneId = $e->getPaneId();
+        $paneId = $this->normalizeKey($e->getPaneId());
 
         if (! $storage->hasItem($paneId)) {
             return;
@@ -68,7 +68,7 @@ trait RenderCacheTrait
         }
 
         $rendered = $e->getResult();
-        $paneId = $e->getPaneId();
+        $paneId = $this->normalizeKey($e->getPaneId());
 
         if ($e->hasError()) {
             return $rendered;
