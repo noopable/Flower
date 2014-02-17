@@ -73,8 +73,15 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
         }
     }
 
+    /**
+     *
+     * @var string $paneId
+     */
     public function get($paneId)
     {
+        if (! is_string($paneId)) {
+            throw new RuntimeException('PaneManager::get only accept string param');
+        }
         $this->init();
 
         $registry = $this->getRegistry();

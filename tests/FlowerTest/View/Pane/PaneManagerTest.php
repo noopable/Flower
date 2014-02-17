@@ -316,6 +316,15 @@ class PaneManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     *
+     * @expectedException Flower\View\Pane\Exception\RuntimeException
+     */
+    public function testGetWithInvalidParamThrowsException()
+    {
+        $this->object->get(array());
+    }
+
+    /**
      * @depends testGet
      * @covers Flower\View\Pane\PaneManager::render
      */
