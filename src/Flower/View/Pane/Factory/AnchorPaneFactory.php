@@ -58,6 +58,7 @@ class AnchorPaneFactory extends ListPaneFactory
         //parse config
         foreach ($config as $k => $v) {
             switch ($k) {
+                case "href":
                 case "route":
                 case "controller":
                 case "action":

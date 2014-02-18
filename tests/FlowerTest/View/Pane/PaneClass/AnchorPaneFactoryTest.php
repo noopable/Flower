@@ -54,4 +54,16 @@ class AnchorHelperFactoryTest extends \PHPUnit_Framework_TestCase
         $attributes['href'] = 'PaneRenderer is not setFlower\View\Pane\PaneClass\Anchor::getHrefWithViewHelper';
         $this->assertEquals($attributes, $pane->attributes);
     }
+
+    public function testFactoryWithHref()
+    {
+        $builder = new Builder(array('pane_class' => 'Flower\View\Pane\PaneClass\Anchor'));
+        $paneConfig = array(
+            'href' => $href = '#',
+        );
+
+        $pane = AnchorPaneFactory::factory($paneConfig, $builder);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\Anchor', $pane);
+        $this->assertEquals($href, $pane->href);
+    }
 }
