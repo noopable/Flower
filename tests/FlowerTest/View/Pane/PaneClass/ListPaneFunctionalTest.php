@@ -105,6 +105,38 @@ foo
         $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
     }
 
+    public function testSimpleInnerHasNoContent()
+    {
+        $expected =
+'<!-- begin Renderer -->
+<ul>
+  <!-- start content CallbackRender -->
+  <li>
+  <span class="main">
+  <!-- start content content -->
+foo
+  <!-- end content content -->
+  </span>
+  </li>
+  <!-- end content CallbackRender -->
+</ul>
+<!-- end Renderer -->
+';
+        $expected = str_replace("\r\n","\n", $expected);
+        $paneConfig = array(
+            'classes' => 'container',
+            'var' => '',
+            'inner' => array(
+                'classes' => 'main',
+                'var' => 'content',
+            ));
+        $pane = $this->builder->build($paneConfig);
+        $this->assertInstanceOf('Flower\View\Pane\PaneClass\ListPane', $pane);
+        $renderer = new PaneRenderer($pane);
+        $renderer->setVar('content', 'foo');
+        $this->assertEquals($expected, str_replace("\r\n","\n", (string) $renderer));
+    }
+
     public function testMultiInner()
     {
         $expected =
