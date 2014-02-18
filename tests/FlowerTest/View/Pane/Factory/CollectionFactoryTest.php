@@ -40,8 +40,8 @@ class CollectionFactoryTest extends \PHPUnit_Framework_TestCase
 
         $pane = CollectionFactory::factory($paneConfig, $builder);
         $this->assertInstanceOf('Flower\View\Pane\PaneClass\Collection', $pane);
-        $this->assertEquals('<foo>', $pane->containerBegin());
-        $this->assertEquals('</foo>', $pane->containerEnd());
+        $this->assertEquals('<!-- start container pane -->', $pane->containerBegin());
+        $this->assertEquals('<!-- end container pane -->', $pane->containerEnd());
         $this->assertEquals($var, TestTool::getPropertyValue($pane, '_var'));
         $this->assertEquals($prototype, $pane->getPrototype());
         $this->assertEquals($collection->current(), $pane->current()->getEntity());

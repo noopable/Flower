@@ -48,10 +48,12 @@ class ListPaneFactory extends PaneFactory
     {
         if (isset($config['wrapBegin'])) {
             $pane->setWrapBegin((string) $config['wrapBegin']);
+        } elseif(!isset($pane->wrapTag) || empty($pane->wrapTag)) {
+            $pane->setWrapBegin('<!-- start wrap pane -->');
         } else {
             $attributes = $pane->getOption('wrap_attributes');
             if (is_array($attributes)) {
-                $attributeString = self::attributesToAttributeString($pane);
+                $attributeString = self::attributesToAttributeString($attributes);
                 $pane->setWrapBegin(sprintf('<%s%s>', $pane->wrapTag, $attributeString));
             } else {
                 $pane->setWrapBegin(sprintf('<%s>', $pane->wrapTag));
@@ -61,7 +63,7 @@ class ListPaneFactory extends PaneFactory
          if (isset ($config['wrapEnd'])) {
              $pane->setWrapEnd((string) $config['wrapEnd']);
          } elseif (! strlen($pane->wrapTag)) {
-             $pane->setWrapEnd('<!-- end pane -->');
+             $pane->setWrapEnd('<!-- end wrap pane -->');
          } else {
              $pane->setWrapEnd('</' . $pane->wrapTag . '>');
          }
@@ -71,10 +73,12 @@ class ListPaneFactory extends PaneFactory
     {
         if (isset($config['containerBegin'])) {
             $pane->setContainerBegin((string) $config['containerBegin']);
-        } elseif(isset($pane->containerTag)) {
+        } elseif(!isset($pane->containerTag) || empty($pane->containerTag)) {
+            $pane->setContainerBegin('<!-- start container pane -->');
+        } else {
             $attributes = $pane->getOption('container_attributes');
             if (is_array($attributes)) {
-                $attributeString = self::attributesToAttributeString($pane);
+                $attributeString = self::attributesToAttributeString($attributes);
                 $pane->setContainerBegin(sprintf('<%s%s>', $pane->containerTag, $attributeString));
             } else {
                 $pane->setContainerBegin(sprintf('<%s>', $pane->containerTag));
@@ -82,7 +86,9 @@ class ListPaneFactory extends PaneFactory
         }
          if (isset($config['containerEnd'])) {
              $pane->setContainerEnd((string) $config['containerEnd']);
-         } elseif (isset($pane->containerTag)) {
+         } elseif(!isset($pane->containerTag) || empty($pane->containerTag)) {
+            $pane->setContainerEnd('<!-- end container pane -->');
+         } else {
              $pane->setContainerEnd('</' . $pane->containerTag . '>');
          }
     }

@@ -61,14 +61,14 @@ class EntityCollectionIntegrationTest extends \PHPUnit_Framework_TestCase
 
         $pane = $this->manager->get('collection');
         $pane->setCollection($collection);
-        $this->assertEquals('<div>', $pane->containerBegin());
-        $this->assertEquals('</div>', $pane->containerEnd());
+        $this->assertEquals('<!-- start container pane -->', $pane->containerBegin());
+        $this->assertEquals('<!-- end container pane -->', $pane->containerEnd());
         $this->assertInstanceOf('Flower\View\Pane\PaneClass\PaneInterface', $pane);
         //Managerのレジストリ(メンバ変数)に入っているので、上記のsetCollectionがそのまま生きる。
         $res = $this->manager->render('collection');
         $expected =
 '<!-- begin Renderer -->
-<div>
+<!-- start container pane -->
   <!-- start content CallbackRender -->
   <div>
   <div>
@@ -93,7 +93,7 @@ array(1) {
   </div>
   </div>
   <!-- end content CallbackRender -->
-</div>
+<!-- end container pane -->
 <!-- end Renderer -->
 ';
         $this->assertEquals(str_replace("\r\n", "\n", $expected), $res);
