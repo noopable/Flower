@@ -195,7 +195,11 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
 
     }
 
+<<<<<<< Updated upstream
     public function renderPane(PaneInterface $pane, $options)
+=======
+    public function renderPane(PaneInterface $pane, $options = array())
+>>>>>>> Stashed changes
     {
         $this->init();
         $events = $this->getEventManager();

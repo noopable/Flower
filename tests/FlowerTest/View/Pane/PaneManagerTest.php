@@ -376,6 +376,22 @@ class PaneManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(str_replace("\r\n", "\n", $expected), $res);
     }
 
+    public function testRenderPane()
+    {
+        $view = new PhpRenderer;
+        $this->object->setView($view);
+        $pane = new Pane;
+        $pane->var = 'foo';
+        $pane->tag = 'foo';
+        $res = $this->object->renderPane($pane);
+        $expected = '<!-- begin Renderer -->
+
+
+<!-- end Renderer -->
+';
+        $this->assertEquals(str_replace("\r\n", "\n", $expected), $res);
+    }
+
     public function testRefresh()
     {
         $paneId = 'foo';
