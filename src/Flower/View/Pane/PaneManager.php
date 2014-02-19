@@ -195,6 +195,37 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
 
     }
 
+    public function renderPane(PaneInterface $pane, $options)
+    {
+        $this->init();
+        $events = $this->getEventManager();
+        /**
+         * Constructor
+         *
+         * Accept a target and its parameters.
+         *
+         * @param  string $name Event name
+         * @param  string|object $target
+         * @param  array|ArrayAccess $params
+         */
+        $renderEvent = new PaneEvent(PaneEvent::EVENT_RENDER);
+        $renderEvent->setManager($this);
+        $renderEvent->setPaneId($pane->getPaneId());//設定されていない場合がある。
+        $renderEvent->setParams($options);
+        $renderEvent->setTarget($pane);
+        $res = $events->trigger($renderEvent);
+
+        if ($renderEvent->propagationIsStopped()) {
+            //終了条件を指定した場合は、リスナー側がresultをセットしない場合があり、
+            //trigger側で終了を宣言する場合がある。
+            $rendered = $res->last();
+        } else {
+            $rendered = $renderEvent->getResult();
+        }
+
+        return $rendered;
+    }
+
     public function refresh($paneId, $types = null)
     {
         if (null === $types) {
@@ -244,6 +275,10 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
 
     public function onRender(PaneEvent $e)
     {
+        if ($e->getTarget() instanceof PaneInterface) {
+            return;
+        }
+
         $paneId = $e->getPaneId();
 
         $pane = $this->get($paneId);
