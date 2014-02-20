@@ -9,7 +9,6 @@
 namespace Flower\View\Pane\PaneClass;
 
 use Flower\View\Pane\Exception\RuntimeException;
-use RecursiveIterator;
 
 /**
  * Description of Collection

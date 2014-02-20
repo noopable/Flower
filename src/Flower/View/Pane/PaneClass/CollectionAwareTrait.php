@@ -8,7 +8,7 @@
 
 namespace Flower\View\Pane\PaneClass;
 
-use Iterator;
+use Traversable;
 
 /**
  * Description of CollectionAwareTrait
@@ -20,7 +20,7 @@ trait CollectionAwareTrait
 
     protected $collection;
 
-    public function setCollection(Iterator $collection)
+    public function setCollection(Traversable $collection)
     {
         $this->collection = $collection;
     }

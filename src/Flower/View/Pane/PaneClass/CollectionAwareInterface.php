@@ -8,7 +8,7 @@
 
 namespace Flower\View\Pane\PaneClass;
 
-use Iterator;
+use Traversable;
 
 /**
  *
@@ -17,7 +17,7 @@ use Iterator;
 interface CollectionAwareInterface
 {
 
-    public function setCollection(Iterator $collection);
+    public function setCollection(Traversable $collection);
 
     public function getCollection();
 }
