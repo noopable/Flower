@@ -255,18 +255,21 @@ class PaneFactory implements PaneFactoryInterface
         $protocol = '';
         $host = '';
         $path = '';
+        $hashDelimiter = '';
         $hash = '';
         $matches = array();
 
-        if (preg_match('/^(' . implode('|', $allowedProtocols) . '):\/\/([^\/]+)([^#]*)[#]*(.*)/i', $url, $matches)) {
+        if (preg_match('/^(' . implode('|', $allowedProtocols) . '):\/\/([^\/]+)([^#]*)(#)?(.*)/i', $url, $matches)) {
             //sorry. now ignore authinfo
             $protocol = $matches[1];
             $host = $matches[2];
             $path = $matches[3];
-            $hash = $matches[4];
-        } elseif (preg_match('/^([^#]*)[#]*(.*)/i', $url, $matches)) {
+            $hashDelimiter = $matches[4];
+            $hash = $matches[5];
+        } elseif (preg_match('/^([^#]*)(#)?(.*)/i', $url, $matches)) {
             $path = $matches[1];
-            $hash = $matches[2];
+            $hashDelimiter = $matches[2];
+            $hash = $matches[3];
         }
 
         if (strlen($protocol) && strlen($host)) {
@@ -278,9 +281,13 @@ class PaneFactory implements PaneFactoryInterface
             $escapedUrl .= implode('/', array_map(array($escaper, 'escapeUrl'), explode('/', $path)));
         }
 
-        if (strlen($hash)) {
-            $escapedUrl .=  '#' . $escaper->escapeUrl($hash);
+        if (strlen($hashDelimiter)) {
+            $escapedUrl .= '#';
+            if (strlen($hash)) {
+                $escapedUrl .=  $escaper->escapeUrl($hash);
+            }
         }
+
 
         return $escapedUrl;
     }

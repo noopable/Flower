@@ -235,6 +235,7 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
             array('/fo%27o/bar', '/fo\'o/bar'),
             array('fo%27o/bar#baz%3A%2F%2Fb%22oo', 'fo\'o/bar#baz://b"oo'),
             array('fo%27o/bar', 'fo\'o/bar'),
+            array('#', '#'),
         );
     }
 }
