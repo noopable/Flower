@@ -196,7 +196,7 @@ class PaneFactory implements PaneFactoryInterface
         return self::attributesToAttributeString($attributes);
     }
 
-    public static function attributesToAttributeString(array $attributes)
+    public static function attributesToAttributeString(array $attributes, $attrOptions = array())
     {
         $attributeString = '';
         $escaper = self::getEscaper();
@@ -206,15 +206,32 @@ class PaneFactory implements PaneFactoryInterface
                 switch (strtolower($name)) {
                     case 'href':
                     case 'src':
-                        $delimiter = '/';
-                        $escapeMethod = 'escapeUrl';
-                        break;
+                        //by default href & src should be escaped at composing phaze.
+                        if (isset($attrOptions[$name])
+                            && isset($attrOptions[$name]['no_escape'])) {
+                            $attributeString .= ' ' . $name . '="' . $attribute . '"';
+                            continue 2;
+                        }
+                        if (isset($attrOptions[$name])
+                            && isset($attrOptions[$name]['allowed_protocols'])) {
+                            $attributeString .= ' ' . $name . '="' . static::escapeUrl($attribute, $attrOptions[$name]['allowed_protocols']) . '"';
+                        } else {
+                            $attributeString .= ' ' . $name . '="' . static::escapeUrl($attribute) . '"';
+                        }
+                        continue 2;
                     default:
                         $delimiter = ' ';
                         $escapeMethod = 'escapeHtmlAttr';
                         break;
                 }
-                $attributeArray = array_map(array($escaper, $escapeMethod), explode($delimiter, $attribute));
+
+                if (!isset($attrOptions[$name])
+                    || !isset($attrOptions[$name]['no_escape'])) {
+                    $attributeArray = array_map(array($escaper, $escapeMethod), explode($delimiter, $attribute));
+                } else {
+                    $attributeArray = explode($delimiter, $attribute);
+                }
+
                 $attributeString .= ' ' . $name . '="' . implode($delimiter, $attributeArray) . '"';
             } elseif (!$attribute) {
                 $attributeString .= ' ' . $name;
@@ -222,6 +239,50 @@ class PaneFactory implements PaneFactoryInterface
         }
 
         return $attributeString;
+    }
+
+
+    /**
+     * @see http://qiita.com/mpyw/items/1e422848030fcde0f29a
+     *
+     * @param type $url
+     * @param type $allowedProtocols
+     */
+    public static function escapeUrl($url, $allowedProtocols = array('http', 'https'))
+    {
+        $escaper = self::getEscaper();
+        $escapedUrl = '';
+        $protocol = '';
+        $host = '';
+        $path = '';
+        $hash = '';
+        $matches = array();
+
+        if (preg_match('/^(' . implode('|', $allowedProtocols) . '):\/\/([^\/]+)([^#]*)[#]*(.*)/i', $url, $matches)) {
+            //sorry. now ignore authinfo
+            $protocol = $matches[1];
+            $host = $matches[2];
+            $path = $matches[3];
+            $hash = $matches[4];
+        } elseif (preg_match('/^([^#]*)[#]*(.*)/i', $url, $matches)) {
+            $path = $matches[1];
+            $hash = $matches[2];
+        }
+
+        if (strlen($protocol) && strlen($host)) {
+            $host = implode('.', array_map(array($escaper, 'escapeUrl'), explode('.', $host)));
+            $escapedUrl = $protocol . '://' . $host;
+        }
+
+        if (strlen($path)) {
+            $escapedUrl .= implode('/', array_map(array($escaper, 'escapeUrl'), explode('/', $path)));
+        }
+
+        if (strlen($hash)) {
+            $escapedUrl .=  '#' . $escaper->escapeUrl($hash);
+        }
+
+        return $escapedUrl;
     }
 
     public static function treatment(PaneInterface $pane)

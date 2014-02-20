@@ -216,4 +216,25 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
         PaneFactory::addHtmlClass(array('baz', 'qux'), $attributes);
         $this->assertEquals('foo bar baz qux', $attributes['class']);
     }
+
+    /**
+     *
+     * @dataProvider providesEscapedUrl
+     */
+    public function testEscapeUrl($expected, $url)
+    {
+        $this->assertEquals($expected, PaneFactory::escapeUrl($url));
+    }
+
+    public function providesEscapedUrl()
+    {
+        return array(
+            array('http://www.example.com/fo%27o/bar#baz%3A%2F%2Fb%22oo', 'http://www.example.com/fo\'o/bar#baz://b"oo'),
+            array('http://www.example.com/fo%27o/bar', 'http://www.example.com/fo\'o/bar'),
+            array('/fo%27o/bar#baz%3A%2F%2Fb%22oo', '/fo\'o/bar#baz://b"oo'),
+            array('/fo%27o/bar', '/fo\'o/bar'),
+            array('fo%27o/bar#baz%3A%2F%2Fb%22oo', 'fo\'o/bar#baz://b"oo'),
+            array('fo%27o/bar', 'fo\'o/bar'),
+        );
+    }
 }

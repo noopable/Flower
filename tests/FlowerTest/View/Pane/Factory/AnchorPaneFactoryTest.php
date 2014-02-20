@@ -1,5 +1,5 @@
 <?php
-namespace Flower\View\Pane\PaneClass;
+namespace Flower\View\Pane\Factory;
 
 use Flower\View\Pane\Factory\AnchorPaneFactory;
 use Flower\View\Pane\Builder\Builder;
@@ -59,11 +59,12 @@ class AnchorHelperFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new Builder(array('pane_class' => 'Flower\View\Pane\PaneClass\Anchor'));
         $paneConfig = array(
-            'href' => $href = '#',
+            'href' => $href = '/foo/bar#baz',
         );
 
         $pane = AnchorPaneFactory::factory($paneConfig, $builder);
         $this->assertInstanceOf('Flower\View\Pane\PaneClass\Anchor', $pane);
         $this->assertEquals($href, $pane->href);
+        $this->assertEquals('<a href="/foo/bar#baz">', trim($pane->begin()));
     }
 }
