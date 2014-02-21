@@ -44,6 +44,15 @@ class EntityAnchorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($entity->href, $this->object->href);
     }
 
+    public function testSetEntityApplicatePaneInterface()
+    {
+        $entity = $this->getMock('Flower\View\Pane\Entity\ApplicatePaneInterface');
+        $entity->expects($this->once())
+                ->method('apply')
+                ->with($this->identicalTo($this->object));
+        $this->object->setEntity($entity);
+    }
+
     /**
      * @covers Flower\View\Pane\PaneClass\EntityAnchor::getEntity
      */

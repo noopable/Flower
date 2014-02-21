@@ -9,6 +9,7 @@
 namespace Flower\View\Pane\PaneClass;
 
 use ArrayAccess;
+use Flower\View\Pane\Entity\ApplicatePaneInterface;
 
 /**
  * Description of MutableEntityAwareTrait
@@ -40,6 +41,10 @@ trait MutableEntityAwareTrait
         }
 
         $this->entity = $entity;
+
+        if ($entity instanceof ApplicatePaneInterface) {
+            $entity->apply($this);
+        }
     }
 
     public function getEntity()
