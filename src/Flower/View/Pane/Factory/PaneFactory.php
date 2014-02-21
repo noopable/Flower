@@ -193,7 +193,7 @@ class PaneFactory implements PaneFactoryInterface
             self::addHtmlClass($pane->classes, $attributes);
         }
 
-        return self::attributesToAttributeString($attributes);
+        return self::attributesToAttributeString($attributes, $pane->getOption('attr_options'));
     }
 
     public static function attributesToAttributeString(array $attributes, $attrOptions = array())
@@ -208,7 +208,7 @@ class PaneFactory implements PaneFactoryInterface
                     case 'src':
                         //by default href & src should be escaped at composing phaze.
                         if (isset($attrOptions[$name])
-                            && isset($attrOptions[$name]['no_escape'])) {
+                            && isset($attrOptions[$name]['no-escape'])) {
                             $attributeString .= ' ' . $name . '="' . $attribute . '"';
                             continue 2;
                         }
@@ -226,7 +226,7 @@ class PaneFactory implements PaneFactoryInterface
                 }
 
                 if (!isset($attrOptions[$name])
-                    || !isset($attrOptions[$name]['no_escape'])) {
+                    || !isset($attrOptions[$name]['no-escape'])) {
                     $attributeArray = array_map(array($escaper, $escapeMethod), explode($delimiter, $attribute));
                 } else {
                     $attributeArray = explode($delimiter, $attribute);

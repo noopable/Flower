@@ -53,7 +53,7 @@ class ListPaneFactory extends PaneFactory
         } else {
             $attributes = $pane->getOption('wrap_attributes');
             if (is_array($attributes)) {
-                $attributeString = self::attributesToAttributeString($attributes);
+                $attributeString = self::attributesToAttributeString($attributes, $pane->getOption('wrap_attr_options'));
                 $pane->setWrapBegin(sprintf('<%s%s>', $pane->wrapTag, $attributeString));
             } else {
                 $pane->setWrapBegin(sprintf('<%s>', $pane->wrapTag));
@@ -78,7 +78,7 @@ class ListPaneFactory extends PaneFactory
         } else {
             $attributes = $pane->getOption('container_attributes');
             if (is_array($attributes)) {
-                $attributeString = self::attributesToAttributeString($attributes);
+                $attributeString = self::attributesToAttributeString($attributes, $pane->getOption('container_attr_options'));
                 $pane->setContainerBegin(sprintf('<%s%s>', $pane->containerTag, $attributeString));
             } else {
                 $pane->setContainerBegin(sprintf('<%s>', $pane->containerTag));

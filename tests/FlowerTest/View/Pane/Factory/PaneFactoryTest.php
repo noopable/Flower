@@ -190,6 +190,33 @@ class PaneFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Flower\View\Pane\Factory\PaneFactory::factory
+     */
+    public function testFactoryNoEscapeOptions()
+    {
+        $builder = new Builder;
+        $paneConfig = array(
+            'tag' => $tag = 'fo?"o',
+            'id' => $id = '30-c\c3',
+            'order' => $order = '5x',
+            'size' => $size = '10--',
+            'classes' => $classes = 'container row 2002\'s"',
+            'attributes' => $attributes = array(
+                'fo\o-1' => 'bar"',
+                'ba&z2' => 'qux\'',
+            ),
+            'options' => array(
+                'attr_options' => array(
+                    'baz2' => array('no-escape' => true),
+                ),
+            ),
+        );
+
+        $pane = PaneFactory::factory($paneConfig, $builder);
+        $this->assertEquals('<foo foo-1="bar&quot;" baz2="qux\'" id="cc3" class="span10 container row 2002&#x27;s&quot;">', trim($pane->begin()));
+    }
+
+    /**
      * @covers Flower\View\Pane\Builder\Builder::getEscaper
      */
     public function testGetEscaper()
