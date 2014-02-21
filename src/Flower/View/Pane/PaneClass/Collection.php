@@ -9,6 +9,8 @@
 namespace Flower\View\Pane\PaneClass;
 
 use Flower\View\Pane\Exception\RuntimeException;
+use Iterator;
+use IteratorAggregate;
 
 /**
  * Description of Collection
@@ -26,6 +28,8 @@ class Collection implements PaneInterface, CollectionAwareInterface, EntityProto
     protected static $factoryClass = 'Flower\View\Pane\Factory\CollectionFactory';
 
     protected $prototype;
+
+    protected $iterator;
 
     protected $children = array();
 
@@ -49,7 +53,7 @@ class Collection implements PaneInterface, CollectionAwareInterface, EntityProto
 
     public function current()
     {
-        $collection = $this->getCollection();
+        $collection = $this->getIterator();
         if (null === $collection) {
             return;
         }
@@ -61,12 +65,12 @@ class Collection implements PaneInterface, CollectionAwareInterface, EntityProto
                 $this->children[$key] = $this->getPrototype();
             }
 
-            $entity = $this->getCollection()->current();
+            $entity = $this->getIterator()->current();
             $this->children[$key]->setEntity($entity);
             return $this->children[$key];
         } else {
             $prototype = $this->getPrototype();
-            $entity = $this->getCollection()->current();
+            $entity = $this->getIterator()->current();
             $prototype->setEntity($entity);
             return $prototype;
         }
@@ -97,7 +101,7 @@ class Collection implements PaneInterface, CollectionAwareInterface, EntityProto
 
     public function key()
     {
-        $collection = $this->getCollection();
+        $collection = $this->getIterator();
         if (null === $collection) {
             return;
         }
@@ -106,25 +110,36 @@ class Collection implements PaneInterface, CollectionAwareInterface, EntityProto
 
     public function next()
     {
-        return $this->getCollection()->next();
+        return $this->getIterator()->next();
     }
 
     public function rewind()
     {
-        $collection = $this->getCollection();
+        $collection = $this->getIterator();
         if (null === $collection) {
             return;
         }
-        return $this->getCollection()->rewind();
+        return $this->getIterator()->rewind();
     }
 
     public function valid()
     {
-        $collection = $this->getCollection();
+        $collection = $this->getIterator();
         if (null === $collection) {
             return false;
         }
         return $collection->valid();
+    }
+
+    public function getIterator()
+    {
+        $collection = $this->getCollection();
+        if ($collection instanceof Iterator) {
+            $this->iterator = $collection;
+        } elseif ($collection instanceof IteratorAggregate) {
+            $this->iterator = $collection->getIterator();
+        }
+        return $this->iterator;
     }
 
 }

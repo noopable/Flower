@@ -157,4 +157,21 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->object->valid());
     }
 
+    public function testGetIteratorWithIterator()
+    {
+        $iterator = $this->getMock('Iterator');
+        $this->object->setCollection($iterator);
+        $this->assertSame($iterator, $this->object->getIterator());
+    }
+
+    public function testGetIteratorWithIteratorAggregate()
+    {
+        $iterator = $this->getMock('Iterator');
+        $iteratorAggregate = $this->getMock('IteratorAggregate');
+        $iteratorAggregate->expects($this->once())
+                ->method('getIterator')
+                ->will($this->returnValue($iterator));
+        $this->object->setCollection($iteratorAggregate);
+        $this->assertSame($iterator, $this->object->getIterator());
+    }
 }

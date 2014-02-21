@@ -11,6 +11,7 @@ namespace Flower\View\Pane\Entity;
 use ArrayIterator;
 use Flower\View\Pane\Entity\ApplicatableCallbackEntity;
 use IteratorAggregate;
+
 /**
  * Description of ApplicatableCallbackCollection
  *
