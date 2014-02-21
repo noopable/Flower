@@ -104,7 +104,8 @@ abstract class AbstractCacheListener extends AbstractListenerAggregate implement
     {
         $storage = $this->getStorage();
         if ($paneId) {
-            return $storage->removeItem($paneId);
+            $cacheId = $this->normalizeKey($paneId);
+            return $storage->removeItem($cacheId);
         } elseif ($storage instanceof FlushableInterface) {
             return $storage->flush();
         }
