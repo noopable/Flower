@@ -14,8 +14,7 @@
     ],
     "require": {
         "php": ">=5.4.10",
-        "zendframework/zendframework": "dev-master",
-        "evandotpro/edp-superluminal": "dev-master"
+        "zendframework/zendframework": "dev-master"
     },
     "autoload": {
         "psr-0": {
