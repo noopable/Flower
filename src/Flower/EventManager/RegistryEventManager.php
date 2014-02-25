@@ -95,13 +95,19 @@ class RegistryEventManager implements RegistryEventManagerInterface
         $responses = array();
 
         foreach ($entries as $entry) {
+            $managerIdentifier = '';
             if (!isset($entry['name'])) {
                 continue;
             }
 
             try {
                 $event = $eventPluginManager->get($entry['name'], $entry['params']);
-                $responses[] = $this->triggerIdentifier($entry['name'], $event);
+                if (isset($entry['identifier'])) {
+                    $managerIdentifier = $entry['identifier'];
+                } else {
+                    $managerIdentifier = $entry['name'];
+                }
+                $responses[] = $this->triggerIdentifier($managerIdentifier, $event);
             } catch (\Exception $ex) {
                 $exceptions[] = $ex;
                 continue;

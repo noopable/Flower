@@ -122,6 +122,45 @@ class RegistryEventManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @depends testAttachWithId
+     * @covers Flower\EventManager\RegistryEventManager::notify
+     */
+    public function testNotifyWithAnotherSetting()
+    {
+        $identifier = 'raise identifier';
+        $id = 'bar';
+        $action ='update';
+        $name = $identifier . '/' . $id . '.' . $action;
+        $info = array(
+            array(
+                'name' => 'Zend\EventManager\Event',
+                'identifier' => 'foo',
+                'params' => 'event_name',
+            ),
+        );
+        $registry = $this->getMock('Flower\File\Gateway\GatewayInterface');
+        $registry->expects($this->once())
+                ->method('read')
+                ->with($this->equalTo($name))
+                ->will($this->returnValue($info));
+        $this->object->setRegistry($registry);
+        $eventPlugins = new EventPluginManager;
+        $eventPlugins->setInvokableClass('foo', 'Zend\EventManager\Event');
+        $this->object->setEventPluginManager($eventPlugins);
+        $response = 'result';
+        $listener = $this->getMock('stdClass', array('onEvent'));
+        $listener->expects($this->once())
+                ->method('onEvent')
+                ->with($this->isInstanceOf('Zend\EventManager\Event'))
+                ->will($this->returnValue($response));
+        $callback = array($listener, 'onEvent');
+        $this->object->attachWithId(array('foo'), 'event_name', $callback, $priority = 1);
+
+        $this->object->notify($identifier, $id, $action);
+
+    }
+
+    /**
      * @covers Flower\EventManager\RegistryEventManager::setEventPluginManager
      */
     public function testSetEventPluginManager()
