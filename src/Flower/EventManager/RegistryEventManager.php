@@ -36,6 +36,41 @@ class RegistryEventManager implements RegistryEventManagerInterface
     protected $sharedEventManager;
 
     /**
+     * Attach a listener to an event
+     *
+     * Allows attaching a callback to an event offered by one or more
+     * identifying components. As an example, the following connects to the
+     * "getAll" event of both an AbstractResource and EntityResource:
+     *
+     * <code>
+     * $sharedEventManager = new SharedEventManager();
+     * $sharedEventManager->attach(
+     *     array('My\Resource\AbstractResource', 'My\Resource\EntityResource'),
+     *     'getAll',
+     *     function ($e) use ($cache) {
+     *         if (!$id = $e->getParam('id', false)) {
+     *             return;
+     *         }
+     *         if (!$data = $cache->load(get_class($resource) . '::getOne::' . $id )) {
+     *             return;
+     *         }
+     *         return $data;
+     *     }
+     * );
+     * </code>
+     *
+     * @param  string|array $id Identifier(s) for event emitting component(s)
+     * @param  string $event
+     * @param  callable $callback PHP Callback
+     * @param  int $priority Priority at which listener should execute
+     * @return CallbackHandler|array Either CallbackHandler or array of CallbackHandlers
+     */
+    public function attachWithId($id, $event, $callback, $priority = 1)
+    {
+        return $this->getSharedEventManager()->attach($id, $event, $callback, $priority);
+    }
+
+    /**
      * もし同一エンティティに対してイベント種を変更したいときは、レジストリエントリを分ける
      *
      * @param string $identifier
