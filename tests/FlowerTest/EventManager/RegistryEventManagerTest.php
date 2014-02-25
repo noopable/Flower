@@ -209,7 +209,14 @@ class RegistryEventManagerTest extends \PHPUnit_Framework_TestCase
         $id = 'bar';
         $action = 'update';
         $name = $identifier . '/' . $id . '.' . $action;
-        $info = array('action' => 'refresh');
+        $info = array(array('name' => 'refresh'));
+        $expects = array(
+            array(
+                'class' => 'refresh',
+                'identifier' => 'refresh',
+                'params' => array(),
+            ),
+        );
         $registry = $this->getMock('Flower\File\Gateway\GatewayInterface');
         $registry->expects($this->once())
                 ->method('read')
@@ -217,7 +224,7 @@ class RegistryEventManagerTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($info));
         $this->object->setRegistry($registry);
         $res = $this->object->getInfo($identifier, $id, $action);
-        $this->assertEquals($info, $res);
+        $this->assertEquals($expects, $res);
     }
 
     /**

@@ -14,6 +14,7 @@ use Traversable;
 use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManagerAwareTrait;
 use Zend\EventManager\ResponseCollection;
+use Zend\Stclib\ArrayUtils;
 use Zend\Stdlib\CallbackHandler;
 
 /**
@@ -95,19 +96,9 @@ class RegistryEventManager implements RegistryEventManagerInterface
         $responses = array();
 
         foreach ($entries as $entry) {
-            $managerIdentifier = '';
-            if (!isset($entry['name'])) {
-                continue;
-            }
-
             try {
-                $event = $eventPluginManager->get($entry['name'], $entry['params']);
-                if (isset($entry['identifier'])) {
-                    $managerIdentifier = $entry['identifier'];
-                } else {
-                    $managerIdentifier = $entry['name'];
-                }
-                $responses[] = $this->triggerIdentifier($managerIdentifier, $event);
+                $event = $eventPluginManager->get($entry['class'], $entry['params']);
+                $responses[] = $this->triggerIdentifier($entry['identifier'], $event);
             } catch (\Exception $ex) {
                 $exceptions[] = $ex;
                 continue;
@@ -193,9 +184,48 @@ class RegistryEventManager implements RegistryEventManagerInterface
         if (!empty($action)) {
             $name .= '.' . $action;
         }
-        $info = $this->getRegistry()->read($name);
-        if (! is_array($info)) {
+        $res = $this->getRegistry()->read($name);
+        if (! is_array($res)) {
             return;
+        }
+        $info = array();
+        foreach ($res as $key => $entry) {
+            $tmp = array(
+                'class' => '',
+                'identifier' => '',
+                'params' => array(),
+            );
+            if (isset($entry['class'])) {
+                $tmp['class'] = $entry['class'];
+                unset($entry['class']);
+            } elseif(isset($entry['name'])) {
+                $tmp['class'] = $entry['name'];
+            } else {
+                continue;
+            }
+
+            if (isset($entry['identifier'])) {
+                $tmp['identifier'] = $entry['identifier'];
+                unset($entry['identifier']);
+            } elseif(isset($entry['name'])) {
+                $tmp['identifier'] = $entry['name'];
+            } else {
+                continue;
+            }
+
+            if (isset($entry['name'])) {
+                unset($entry['name']);
+            }
+
+            if (isset($entry['params'])) {
+                $tmp['params'] = $entry['params'];
+                unset($entry['params']);
+                if (!empty($entry)) {
+                    $tmp['params'] = ArrayUtils::merge($entry, $tmp['params']);
+                }
+            }
+
+            $info[] = $tmp;
         }
         return $info;
     }
