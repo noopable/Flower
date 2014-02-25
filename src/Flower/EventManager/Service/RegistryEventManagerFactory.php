@@ -53,6 +53,11 @@ class RegistryEventManagerFactory implements FactoryInterface
                 }
             }
         }
+
+        if ($serviceLocator->has('SharedEventManager')) {
+            $eventManager = $manager->getEventManager();
+            $eventManager->setSharedManager($serviceLocator->get('SharedEventManager'));
+        }
         
         $manager->setEventPluginManager($eventPluginManager);
         $manager->setRegistry($serviceLocator->get($this->registryServiceName));

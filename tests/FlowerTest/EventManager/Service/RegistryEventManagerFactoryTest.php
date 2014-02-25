@@ -108,4 +108,20 @@ class RegistryEventManagerFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('foo' => 'bar'), $event->getParams());
         $this->assertEquals('test_target', $event->getTarget());
     }
+
+    public function testShareMvcSharedManager()
+    {
+        $serviceLocator = new ServiceManager(new ServiceManagerConfig);
+        $config = array(
+            $this->configKey => array(
+            ),
+        );
+        $sharedManager = $serviceLocator->get('SharedEventManager');
+        $registry = $this->getMock('Flower\File\Gateway\GatewayInterface');
+        $serviceLocator->setService('Config', $config);
+        $serviceLocator->setService($this->registryServiceName, $registry);
+
+        $res = $this->object->createService($serviceLocator);
+        $this->assertSame($sharedManager, $res->getSharedEventManager());
+    }
 }
