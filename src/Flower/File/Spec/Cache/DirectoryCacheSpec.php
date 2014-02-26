@@ -154,6 +154,9 @@ class DirectoryCacheSpec implements CacheSpecInterface, ListenerAggregateInterfa
 
     public function getCachePath()
     {
+        if (! isset($this->cachePath) || empty($this->cachePath)) {
+            return null;
+        }
         return rtrim($this->cachePath, '/\\') . DIRECTORY_SEPARATOR;
     }
 
@@ -274,7 +277,7 @@ class DirectoryCacheSpec implements CacheSpecInterface, ListenerAggregateInterfa
             if (is_file($filename)) {
                 unlink($filename);
             }
-            
+
             restore_error_handler();
         }
 
