@@ -19,6 +19,13 @@ use Zend\ServiceManager\AbstractPluginManager;
  */
 class EventPluginManager extends AbstractPluginManager
 {
+    /**
+     * Whether or not to share by default
+     *
+     * @var bool
+     */
+    protected $shareByDefault = false;
+
     public function validatePlugin($plugin)
     {
         if ($plugin instanceof EventInterface) {
