@@ -12,6 +12,7 @@ use Flower\EventManager\Exception\RuntimeException;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\MutableCreationOptionsInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * Description of EventAbstractFactory
