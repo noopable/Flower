@@ -14,7 +14,7 @@ use Traversable;
 use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManagerAwareTrait;
 use Zend\EventManager\ResponseCollection;
-use Zend\Stclib\ArrayUtils;
+use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\CallbackHandler;
 
 /**
