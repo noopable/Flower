@@ -124,4 +124,86 @@ class RegistryEventManagerFactoryTest extends \PHPUnit_Framework_TestCase
         $res = $this->object->createService($serviceLocator);
         $this->assertSame($sharedManager, $res->getSharedEventManager());
     }
+
+    public function testCallbacksWithClosure()
+    {
+        $serviceLocator = new ServiceManager(new ServiceManagerConfig);
+        $config = array(
+            $this->configKey => array(
+                'callbacks' => array(
+                    array(
+                        'identifier' => 'foo',
+                        'event' => 'update',
+                        'callback' => function() {return null;}
+                    ),
+                ),
+            ),
+        );
+        $registry = $this->getMock('Flower\File\Gateway\GatewayInterface');
+        $serviceLocator->setService('Config', $config);
+        $serviceLocator->setService($this->registryServiceName, $registry);
+
+        $manager = $this->object->createService($serviceLocator);
+        $this->assertInstanceOf('Flower\EventManager\RegistryEventManager', $manager);
+        $sharedEventManager = $manager->getSharedEventManager();
+        $listeners = $sharedEventManager->getListeners('foo', 'update');
+        $this->assertCount(1, $listeners);
+        $this->assertInstanceOf('Closure', $listeners->top()->getCallback());
+    }
+
+    public function testCallbacksWithCallbackServiceName()
+    {
+        $serviceLocator = new ServiceManager(new ServiceManagerConfig);
+        $config = array(
+            $this->configKey => array(
+                'callbacks' => array(
+                    array(
+                        'identifier' => 'foo',
+                        'event' => 'update',
+                        'callback' => 'closure_service'
+                    ),
+                ),
+            ),
+        );
+        $serviceLocator->setService('closure_service', function (){return;});
+        $registry = $this->getMock('Flower\File\Gateway\GatewayInterface');
+        $serviceLocator->setService('Config', $config);
+        $serviceLocator->setService($this->registryServiceName, $registry);
+
+        $manager = $this->object->createService($serviceLocator);
+        $this->assertInstanceOf('Flower\EventManager\RegistryEventManager', $manager);
+        $sharedEventManager = $manager->getSharedEventManager();
+        $listeners = $sharedEventManager->getListeners('foo', 'update');
+        $this->assertCount(1, $listeners);
+        $this->assertInstanceOf('Closure', $listeners->top()->getCallback());
+    }
+
+    public function testCallbacksWithCallbackObjectWithMethod()
+    {
+        $serviceLocator = new ServiceManager(new ServiceManagerConfig);
+        $callback = $this->getMock('stdClass', array('doSomething'));
+        $config = array(
+            $this->configKey => array(
+                'callbacks' => array(
+                    array(
+                        'identifier' => 'foo',
+                        'event' => 'update',
+                        'callback' => 'callback_service',
+                        'callback_method' => 'doSomething',
+                    ),
+                ),
+            ),
+        );
+        $serviceLocator->setService('callback_service', $callback);
+        $registry = $this->getMock('Flower\File\Gateway\GatewayInterface');
+        $serviceLocator->setService('Config', $config);
+        $serviceLocator->setService($this->registryServiceName, $registry);
+
+        $manager = $this->object->createService($serviceLocator);
+        $this->assertInstanceOf('Flower\EventManager\RegistryEventManager', $manager);
+        $sharedEventManager = $manager->getSharedEventManager();
+        $listeners = $sharedEventManager->getListeners('foo', 'update');
+        $this->assertCount(1, $listeners);
+        $this->assertInstanceOf('stdClass', $listeners->top()->getCallback()[0]);
+    }
 }
