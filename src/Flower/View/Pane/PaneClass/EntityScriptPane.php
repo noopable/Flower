@@ -18,7 +18,7 @@ use Flower\View\Pane\PaneRenderer;
  */
 class EntityScriptPane extends ViewScriptPane implements EntityAwareInterface
 {
-    use EntityAwareTrait;
+    use MutableEntityAwareTrait;
 
     protected $entityKeyInView = 'entity';
 
