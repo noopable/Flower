@@ -38,6 +38,11 @@ trait PaneCacheTrait
 
     public function preGet(PaneEvent $e)
     {
+        $params = $e->getParams();
+        if (isset($params['no_cache']) && $params['no_cache']) {
+            return;
+        }
+
         if (!$storage = $this->getStorage()) {
             return;
         }
@@ -76,10 +81,19 @@ trait PaneCacheTrait
             return;
         }
 
+        $params = $e->getParams();
+        if (isset($params['no_cache']) && $params['no_cache']) {
+            return;
+        }
+
+
         $pane = $e->getResult();
-        $paneId = $this->normalizeKey($e->getPaneId());
 
         if (!$pane instanceof PaneInterface) {
+            return;
+        }
+
+        if ($pane->getOption('no_cache')) {
             return;
         }
 
@@ -90,6 +104,8 @@ trait PaneCacheTrait
         if (!$storage = $this->getStorage()) {
             return $pane;
         }
+
+        $paneId = $this->normalizeKey($e->getPaneId());
 
         try {
             $serialized = $this->getSerializer()->serialize($pane);
