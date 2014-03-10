@@ -64,8 +64,8 @@ class EntityCollectionIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('<!-- start container pane -->', $pane->containerBegin());
         $this->assertEquals('<!-- end container pane -->', $pane->containerEnd());
         $this->assertInstanceOf('Flower\View\Pane\PaneClass\PaneInterface', $pane);
-        //Managerのレジストリ(メンバ変数)に入っているので、上記のsetCollectionがそのまま生きる。
-        $res = $this->manager->render('collection');
+        //CollectionがFlyweightされるとcollectionをキャッシュして不正な動作の原因になる
+        $res = $this->manager->renderPane($pane);
         $expected =
 '<!-- begin Renderer -->
 <!-- start container pane -->

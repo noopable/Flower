@@ -17,7 +17,7 @@ use Flower\RecursivePriorityQueue;
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  *
  */
-class Pane extends RecursivePriorityQueue implements PaneInterface
+class Pane extends RecursivePriorityQueue implements SharedPaneInterface
 {
     use PaneTrait;
 

@@ -12,6 +12,7 @@ use ArrayObject;
 use Flower\View\Pane\Builder\Builder;
 use Flower\View\Pane\Exception\RuntimeException;
 use Flower\View\Pane\PaneClass\PaneInterface;
+use Flower\View\Pane\PaneClass\SharedPaneInterface;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\ProvidesEvents;
 use Zend\View\Helper\AbstractHelper;
@@ -113,7 +114,7 @@ class PaneManager extends AbstractHelper implements EventManagerAwareInterface
             $pane = $getEvent->getResult();
         }
 
-        if ($pane instanceof PaneInterface) {
+        if ($pane instanceof SharedPaneInterface) {
             $registry->$paneId = $pane;
         }
 
