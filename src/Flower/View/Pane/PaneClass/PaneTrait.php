@@ -134,4 +134,30 @@ trait PaneTrait
         //empty() is true when '0'
         return !empty($this->var) || '0' === $this->var;
     }
+
+    /**
+     *
+     * @param PaneInterface $pane
+     * @param type $priority
+     * @return type
+     */
+    public function insert($pane, $priority = null)
+    {
+        if (! $pane instanceof PaneInterface) {
+            throw new RuntimeException('Pane accept object only PaneInterface');
+        }
+        if (null === $priority) {
+            $priority = $pane->getOrder();
+        }
+
+        if ($paneId = $pane->getPaneId()) {
+            $registry = $this->getRegistry();
+            if (!isset($registry->$paneId)) {
+                $registry->$paneId = $pane;
+            }
+        }
+
+        return parent::insert($pane, $priority);
+    }
+
 }

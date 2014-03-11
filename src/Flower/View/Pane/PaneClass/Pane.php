@@ -36,31 +36,6 @@ class Pane extends RecursivePriorityQueue implements SharedPaneInterface
         $this->var = 'content';
     }
 
-    /**
-     *
-     * @param PaneInterface $pane
-     * @param type $priority
-     * @return type
-     */
-    public function insert($pane, $priority = null)
-    {
-        if (! $pane instanceof PaneInterface) {
-            throw new RuntimeException('Pane accept object only PaneInterface');
-        }
-        if (null === $priority) {
-            $priority = $pane->getOrder();
-        }
-
-        if ($paneId = $pane->getPaneId()) {
-            $registry = $this->getRegistry();
-            if (!isset($registry->$paneId)) {
-                $registry->$paneId = $pane;
-            }
-        }
-
-        return parent::insert($pane, $priority);
-    }
-
     public function setSizeToClassFunction($sizeToClassFunction)
     {
         if (!is_callable($sizeToClassFunction)) {
