@@ -9,6 +9,8 @@
 
 namespace Flower;
 
+use Iterator;
+use IteratorAggregate;
 use Zend\Stdlib\PriorityQueue;
 
 /**
@@ -137,12 +139,21 @@ class RecursivePriorityQueue implements \RecursiveIterator
 
     public function hasChildren()
     {
-        if ($this->current() instanceof static) {
+        $current = $this->current();
+        if ($current instanceof Iterator) {
             if ($this->flag & self::HAS_CHILDREN_STRICT_CONTAINS) {
-                return $this->current()->valid();
+                return $current->valid();
             }
             return true;
         }
+
+        if ($current instanceof IteratorAggregate) {
+            if ($this->flag & self::HAS_CHILDREN_STRICT_CONTAINS) {
+                return $current->getIterator()->valid();
+            }
+            return true;
+        }
+
         return false;
     }
 
