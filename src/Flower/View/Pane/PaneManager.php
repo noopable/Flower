@@ -14,7 +14,7 @@ use Flower\View\Pane\Exception\RuntimeException;
 use Flower\View\Pane\PaneClass\PaneInterface;
 use Flower\View\Pane\PaneClass\SharedPaneInterface;
 use Zend\EventManager\EventManagerAwareInterface;
-use Zend\EventManager\ProvidesEvents;
+use Zend\EventManager\EventManagerAwareTrait;
 use Zend\View\Helper\AbstractHelper;
 use Zend\Stdlib\ArrayUtils;
 
@@ -25,7 +25,7 @@ use Zend\Stdlib\ArrayUtils;
  */
 class PaneManager extends AbstractHelper implements EventManagerAwareInterface
 {
-    use ProvidesEvents;
+    use EventManagerAwareTrait;
 
     protected $eventIdentifier = 'PaneManager';
 

@@ -10,7 +10,7 @@
 namespace Flower\File\Gateway;
 
 use Zend\EventManager\EventsCapableInterface;
-use Zend\EventManager\ProvidesEvents;
+use Zend\EventManager\EventManagerAwareTrait;
 use Flower\File\Event;
 
 /**
@@ -19,7 +19,7 @@ use Flower\File\Event;
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
 class Gateway implements GatewayInterface, EventsCapableInterface {
-    use ProvidesEvents;
+    use EventManagerAwareTrait;
 
     protected $lastEvent;
 

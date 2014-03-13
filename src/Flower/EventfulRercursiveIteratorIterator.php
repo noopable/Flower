@@ -18,13 +18,13 @@
 namespace Flower;
 
 use RecursiveIteratorIterator;
-use Zend\EventManager\ProvidesEvents;
+use Zend\EventManager\EventManagerAwareTrait;
 use Zend\EventManager\EventInterface;
 use Zend\EventManager\Event;
 
 class EventfulRecursiveIteratorIterator extends RecursiveIteratorIterator
 {
-    use ProvidesEvents;
+    use EventManagerAwareTrait;
     
     /**
      * event object 
