@@ -25,7 +25,7 @@ abstract class AbstractDbTableRepository extends AbstractResource
 {
     use ServiceLocatorAwareTrait;
     use RepositoryPluginManagerAwareTrait;
-    
+
     protected $dao;
 
     protected $mappingMethods;
@@ -67,9 +67,9 @@ abstract class AbstractDbTableRepository extends AbstractResource
         if (!isset($sl)) {
             throw new Exception\RuntimeException(__CLASS__ . ' depends on the PluginManager, but not given');
         }
-         * 
+         *
          */
-        
+
         if ($this->dao instanceof AbstractTableGateway) {
             $this->dao->initialize();
             $this->adapter = $this->dao->getAdapter();
@@ -153,12 +153,12 @@ abstract class AbstractDbTableRepository extends AbstractResource
             }
         }
     }
-    
+
     public function isInitialized()
     {
         return $this->isInitialized;
     }
-    
+
     public function setAdapter(Adapter $adapter)
     {
         $this->adapter = $adapter;
@@ -310,4 +310,18 @@ abstract class AbstractDbTableRepository extends AbstractResource
         }
     }
 
+    public function beginTransaction()
+    {
+        return $this->getAdapter()->getDriver()->getConnection()->beginTransaction();
+    }
+
+    public function commit()
+    {
+        return $this->getAdapter()->getDriver()->getConnection()->commit();
+    }
+
+    public function rollback()
+    {
+        return $this->getAdapter()->getDriver()->getConnection()->rollback();
+    }
 }
