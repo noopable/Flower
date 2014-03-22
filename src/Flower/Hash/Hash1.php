@@ -13,13 +13,13 @@ use Flower\Module;
 
 /**
  * ハッシュメソッドの１
- * 変更せずに仕様変更したいときはクラスを追加してください。
+ * 変更せずに仕様変更したいときは別クラスを追加してください。
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
 class Hash1 {
 
-    protected static $salt;
+    public static $salt;
 
     /**
      * @param int $length
