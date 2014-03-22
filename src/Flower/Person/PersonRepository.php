@@ -31,6 +31,7 @@ class PersonRepository extends AbstractDbTableRepository {
         if (! $emailValidator->isValid($mailaddress)) {
             throw new DomainException(implode("\n", $emailValidator->getMessages()));
         }
+        $emailRepository = $this->getEmailRepository();
         $person->email = $mailaddress;
         try {
             $this->beginTransaction();
@@ -38,11 +39,12 @@ class PersonRepository extends AbstractDbTableRepository {
             $personId = $this->dao->lastInsertValue;
             //valud object -> entity
             $person->setPersonId($personId);
-            $email = new Email;
+            $email = $emailRepository->create();
             $email->setIdentity($mailaddress);
             $email->setPersonId($personId);
-            $this->getEmailRepository()->save($email, true);
+            $emailRepository->save($email, true);
             $person->addEmail($email);// its inner code: $email->setPersonId
+            $this->commit();
         } catch (\Exception $ex) {
             $this->rollback();
             throw $ex;
