@@ -90,7 +90,7 @@ class Email extends AbstractEntity implements EmailInterface {
             $code = $this->activation_code . "\n" . $code;
         }
 
-        $this->activation_code = $code;
+        $this->activation_code = $code . "/" . $time;
         return $this;
     }
 }

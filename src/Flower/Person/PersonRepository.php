@@ -43,7 +43,7 @@ class PersonRepository extends AbstractDbTableRepository {
             $email->setIdentity($mailaddress);
             $email->setPersonId($personId);
             //auto generate. If you want to customize it, you can overwrite it and save.
-            $email->addActivationCode(substr(crc32(Hash1::createNewPassword(10)), 10));
+            $email->addActivationCode(substr(crc32(Hash1::createNewPassword(10)), 0, 8));
             $emailRepository->save($email, true);
             $person->addEmail($email);// its inner code: $email->setPersonId
             $this->commit();
