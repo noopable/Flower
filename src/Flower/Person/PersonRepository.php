@@ -8,8 +8,11 @@
 
 namespace Flower\Person;
 
+use Flower\Exception\DomainException;
 use Flower\Model\AbstractDbTableRepository;
+use Flower\Person\Identical\Email;
 use Flower\Person\Identical\EmailInterface;
+use Zend\Validator\EmailAddress as EmailAddressValidator;
 
 /**
  * Description of PersonRepository
@@ -20,13 +23,31 @@ class PersonRepository extends AbstractDbTableRepository {
 
     protected $emailRepository;
 
-    public function createPerson($domainId = 0)
+    public function createPerson($mailaddress, $domainId = 0)
     {
         $person = $this->create();
         $person->domain_id = (int) $domainId;
-        $this->savePerson($person, true, true);
-        $personId = $this->dao->lastInsertValue;
-        $person->setPersonId($personId);
+        $emailValidator = new EmailAddressValidator;
+        if (! $emailValidator->isValid($mailaddress)) {
+            throw new DomainException(implode("\n", $emailValidator->getMessages()));
+        }
+        $person->email = $mailaddress;
+        try {
+            $this->beginTransaction();
+            $this->save($person, true);
+            $personId = $this->dao->lastInsertValue;
+            //valud object -> entity
+            $person->setPersonId($personId);
+            $email = new Email;
+            $email->setIdentity($mailaddress);
+            $email->setPersonId($personId);
+            $this->getEmailRepository()->save($email, true);
+            $person->addEmail($email);// its inner code: $email->setPersonId
+        } catch (\Exception $ex) {
+            $this->rollback();
+            throw $ex;
+        }
+
         return $person;
     }
 
