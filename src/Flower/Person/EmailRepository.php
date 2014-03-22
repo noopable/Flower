@@ -10,6 +10,7 @@ namespace Flower\Person;
 
 use Flower\Hash\Hash1;
 use Flower\Model\AbstractDbTableRepository;
+use Flower\Model\AbstractEntity;
 
 /**
  * Description of EmailRepository
