@@ -81,4 +81,16 @@ class Email extends AbstractEntity implements EmailInterface {
         $this->roles = $roles;
     }
 
+    public function addActivationCode($code, $time = null)
+    {
+        if (null === $time) {
+            $time = time();
+        }
+        if (isset($this->activation_code) && strlen($this->activation_code)) {
+            $code = $this->activation_code . "\n" . $code;
+        }
+
+        $this->activation_code = $code;
+        return $this;
+    }
 }

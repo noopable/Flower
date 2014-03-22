@@ -9,8 +9,8 @@
 namespace Flower\Person;
 
 use Flower\Exception\DomainException;
+use Flower\Hash\Hash1;
 use Flower\Model\AbstractDbTableRepository;
-use Flower\Person\Identical\Email;
 use Flower\Person\Identical\EmailInterface;
 use Zend\Validator\EmailAddress as EmailAddressValidator;
 
@@ -42,6 +42,8 @@ class PersonRepository extends AbstractDbTableRepository {
             $email = $emailRepository->create();
             $email->setIdentity($mailaddress);
             $email->setPersonId($personId);
+            //auto generate. If you want to customize it, you can overwrite it and save.
+            $email->addActivationCode(substr(crc32(Hash1::createNewPassword(10)), 10));
             $emailRepository->save($email, true);
             $person->addEmail($email);// its inner code: $email->setPersonId
             $this->commit();
