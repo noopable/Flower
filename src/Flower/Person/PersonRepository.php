@@ -20,6 +20,16 @@ class PersonRepository extends AbstractDbTableRepository {
 
     protected $emailRepository;
 
+    public function createPerson($domainId = 0)
+    {
+        $person = $this->create();
+        $person->domain_id = (int) $domainId;
+        $this->savePerson($person, true, true);
+        $personId = $this->dao->lastInsertValue;
+        $person->setPersonId($personId);
+        return $person;
+    }
+
     public function getPerson($personId)
     {
         $person = $this->getEntity(array('person_id' => $personId));
@@ -32,7 +42,7 @@ class PersonRepository extends AbstractDbTableRepository {
         return $person;
     }
 
-    public function savePerson(PersonInterface $person)
+    public function savePerson(PersonInterface $person, $forceInsert = false, $emailForceInsert = false)
     {
         $emails = $person->getEmails();
         $emailRepository = $this->getEmailRepository();
@@ -40,12 +50,12 @@ class PersonRepository extends AbstractDbTableRepository {
         //アダプターからコネクションを取得して開始する。
         try {
             $this->beginTransaction();
-            foreach ($emails as $email) {
+            foreach ((array) $emails as $email) {
                 if ($email instanceof EmailInterface) {
-                    $emailRepository->save($email);
+                    $emailRepository->save($email, $emailForceInsert);
                 }
             }
-            $res = $this->save($person);
+            $res = $this->save($person, $forceInsert);
             $this->commit();
         } catch (\Exception $ex) {
             $this->rollback();
