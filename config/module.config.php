@@ -147,6 +147,7 @@ return array(
     ),
     'view_helpers' => array(
         'factories' => array(
+            //use in Flower\Form\View\RenderStrategyTwPane
             'pane' => 'Flower\View\Pane\Service\HelperFactory',
             'npPaneManager' => 'Flower\View\Pane\Service\ManagerFactory',
             //'npList' =>  'Flower\View\Pane\Service\ListHelperFactory',
