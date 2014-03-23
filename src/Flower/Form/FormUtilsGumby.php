@@ -28,14 +28,10 @@ class FormUtilsGumby
             $element->setLabelAttributes($labelAttributes);
 
             $class = $element->getAttribute('class');
-            if (is_string($class)) {
-                if (false === strpos('input', $class)) {
-                    if (strlen($class)) {
-                        $class .= ' input';
-                    } else {
-                        $class = 'input';
-                    }
-                }
+            if (is_string($class) && false !== strpos('input', $class)) {
+                $class .= ' input';
+            } else {
+                $class = 'input';
             }
             $element->setAttribute('class', $class);
         }
