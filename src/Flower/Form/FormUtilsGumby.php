@@ -20,10 +20,10 @@ class FormUtilsGumby
     public static function getGumbyElementPane()
     {
         return array(
-            'pane_class' => 'Flower\View\Pane\PaneClass\ListPane',
+            'classes' => array('form-row', 'row'),
             'inner' => array(
                 array(
-                    'tag' => 'dt',
+                    'classes' => array('form-label'),
                     'var' => function($p) {
                         $element = $p->getVars()->element;
                         if (! $element->getLabel()) {
@@ -52,7 +52,6 @@ class FormUtilsGumby
     public static function getGumbyElementResultPane()
     {
         return array(
-            'pane_class' => 'Flower\View\Pane\PaneClass\ListPane',
             'inner' => array(
                 array(
                     'tag' => '',
