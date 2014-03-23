@@ -27,6 +27,7 @@ class RenderStrategyGumbyPane extends RenderStrategy
     {
         $this->element = $element;
         $this->view = $view;
+        FormUtilsGumby::addAttributes($element);
         $this->element->prepare();
     }
 

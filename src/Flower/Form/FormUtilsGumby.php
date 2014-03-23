@@ -9,6 +9,38 @@ namespace Flower\Form;
 
 class FormUtilsGumby
 {
+    public static function addAttributes($form)
+    {
+        foreach ($form as $element) {
+            if ($element instanceof \Zend\Form\Fieldset) {
+                self::addAttributes($element);
+                continue;
+            }
+            $labelAttributes = $element->getLabelAttributes();
+            if (isset($labelAttributes['class'])) {
+                if (false === strpos('control-label', $labelAttributes['class'])) {
+                    $labelAttributes['class'] .= ' control-label';
+                }
+            }
+            else {
+                $labelAttributes['class'] = 'control-label';
+            }
+            $element->setLabelAttributes($labelAttributes);
+
+            $class = $element->getAttribute('class');
+            if (is_string($class)) {
+                if (false === strpos('input', $class)) {
+                    if (strlen($class)) {
+                        $class .= ' input';
+                    } else {
+                        $class = 'input';
+                    }
+                }
+            }
+            $element->setAttribute('class', $class);
+        }
+        return $form;
+    }
 
     public static function getGumbyErrorElementPane()
     {
