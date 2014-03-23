@@ -19,7 +19,7 @@ abstract class AbstractForm extends Form
         if (null === $name) {
             $name = get_called_class();
         }
-        parent::__construct($name);
+        parent::__construct($name, $options);
 
     }
 
@@ -27,14 +27,14 @@ abstract class AbstractForm extends Form
     {
         $this->build();
     }
-    
+
     abstract protected function build();
-    
+
     public function __sleep()
     {
         $object_vars = get_object_vars($this);
         unset($object_vars['factory']);
         return array_keys($object_vars);
     }
-    
+
 }
