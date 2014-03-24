@@ -89,6 +89,11 @@ class FormElement extends ZFFormElement
             return $helper($element);
         }
 
+        if ($element instanceof Element\Submit) {
+            $helper = $renderer->plugin('form_submit');
+            return $helper($element);
+        }
+
         $type = $element->getAttribute('type');
 
         if ('checkbox' == $type) {

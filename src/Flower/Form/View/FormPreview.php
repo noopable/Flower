@@ -75,6 +75,9 @@ class FormPreview extends BaseAbstractHelper
             case ($element instanceof Element\MonthSelect):
                 $helper = $renderer->plugin('form_month_select');
                 return $helper($element). 'TODO: format it';
+            case ($element instanceof Element\Submit):
+                $helper = $renderer->plugin('form_submit');
+                return $helper($element);
         }
 
         $type = $element->getAttribute('type');
