@@ -8,6 +8,8 @@ namespace Flower\Form\View;
  */
 use Flower\Form\FormUtilsGumby;
 use Zend\Form\Element\Button;
+use Zend\Form\Element\Checkbox;
+use Zend\Form\Element\Radio;
 use Zend\Form\Element\Submit;
 
 class RenderStrategyGumbyPane extends RenderStrategy
@@ -39,6 +41,8 @@ class RenderStrategyGumbyPane extends RenderStrategy
             $renderer = $this->view->pane(FormUtilsGumby::getGumbyErrorElementPane());
         } elseif ($this->showValues) {
             $renderer = $this->view->pane(FormUtilsGumby::getGumbyElementResultPane());
+        } elseif (($element instanceof Checkbox) || ($element instanceof Radio)) {
+            $renderer = $this->view->pane(FormUtilsGumby::getRowPane());
         } elseif (($element instanceof Button) || ($element instanceof Submit)) {
             $renderer = $this->view->pane(FormUtilsGumby::getGumbyButtonPane());
         } else {

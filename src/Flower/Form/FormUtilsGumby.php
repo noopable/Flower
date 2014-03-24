@@ -28,8 +28,10 @@ class FormUtilsGumby
             $element->setLabelAttributes($labelAttributes);
 
             $class = $element->getAttribute('class');
-            if (is_string($class) && false !== strpos('input', $class)) {
-                $class .= ' input';
+            if (is_string($class) && strlen($class)) {
+                if (false === strpos('input', $class)) {
+                    $class .= ' input';
+                }
             } else {
                 $class = 'input';
             }
@@ -45,17 +47,32 @@ class FormUtilsGumby
         return $pane;
     }
 
+    public static function getRowPane()
+    {
+        return array(
+            'classes' => array('form-row', 'row'),
+            'inner' => array(
+                array(
+                    'var' => function($p) {
+                        $element = $p->getVars()->element;
+                        return $p->getView()->formRow($element);
+                    },
+                ),
+            ),
+        );
+    }
+
     public static function getGumbyButtonPane()
     {
         return array(
             'classes' => array('form-row', 'row'),
             'inner' => array(
                 array(
-                    'classes' => array('form-button'),
-                    'var' => function ($p) {
+                    'tag' => 'p',
+                    'classes' => 'btn primary medium',
+                    'var' => function($p) {
                         $element = $p->getVars()->element;
-                        $res = $p->getView()->formElement($element);
-                        return $res;
+                        return $p->getView()->formRow($element);
                     },
                 ),
             ),
