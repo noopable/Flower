@@ -7,6 +7,7 @@ namespace Flower\Form\View;
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 use Flower\Form\FormUtilsGumby;
+use Zend\Form\Element\Button;
 
 class RenderStrategyGumbyPane extends RenderStrategy
 {
@@ -37,6 +38,8 @@ class RenderStrategyGumbyPane extends RenderStrategy
             $renderer = $this->view->pane(FormUtilsGumby::getGumbyErrorElementPane());
         } elseif ($this->showValues) {
             $renderer = $this->view->pane(FormUtilsGumby::getGumbyElementResultPane());
+        } elseif ($element instanceof Button) {
+            $renderer = $this->view->pane(FormUtilsGumby::getGumbyButtonPane());
         } else {
             $renderer = $this->view->pane(FormUtilsGumby::getGumbyElementPane());
         }

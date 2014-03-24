@@ -45,6 +45,23 @@ class FormUtilsGumby
         return $pane;
     }
 
+    public static function getGumbyButtonPane()
+    {
+        return array(
+            'classes' => array('form-row', 'row'),
+            'inner' => array(
+                array(
+                    'classes' => array('form-button'),
+                    'var' => function ($p) {
+                        $element = $p->getVars()->element;
+                        $res = $p->getView()->formElement($element);
+                        return $res;
+                    },
+                ),
+            ),
+        );
+    }
+
     public static function getGumbyElementPane()
     {
         return array(
