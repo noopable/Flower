@@ -8,11 +8,12 @@
 
 namespace Flower\Person;
 
-use Flower\Exception\DomainException;
+use Flower\Person\Exception\DomainException;
 use Flower\Hash\Hash1;
 use Flower\Model\AbstractDbTableRepository;
 use Flower\Person\Identical\EmailInterface;
 use Zend\Validator\EmailAddress as EmailAddressValidator;
+use Zend\Db\Adapter\Exception\InvalidQueryException as ZendInvalidQueryException;
 
 /**
  * Description of PersonRepository
@@ -21,17 +22,31 @@ use Zend\Validator\EmailAddress as EmailAddressValidator;
  */
 class PersonRepository extends AbstractDbTableRepository {
 
+    protected $minimumPasswordLength = 6;
+
+    protected $defaultPasswordLength = 8;
+    
     protected $emailRepository;
 
-    public function createPerson($mailaddress, $domainId = 0)
+    /**
+     *
+     * @param string $mailaddress
+     * @param string $password
+     * @param int $domainId
+     * @return PersonInterface
+     * @throws \Exception
+     * @throws \Flower\Person\Exception\DomainException
+     */
+    public function createPerson($name, $mailaddress, $password = null, $domainId = 0)
     {
         $person = $this->create();
         $person->domain_id = (int) $domainId;
         $emailValidator = new EmailAddressValidator;
         if (! $emailValidator->isValid($mailaddress)) {
-            throw new DomainException(implode("\n", $emailValidator->getMessages()));
+            throw new DomainException(implode("\n", $emailValidator->getMessages()), DomainException::INVALID_EMAIL);
         }
         $emailRepository = $this->getEmailRepository();
+        $person->name = (string) $name;
         $person->email = $mailaddress;
         try {
             $this->beginTransaction();
@@ -40,6 +55,17 @@ class PersonRepository extends AbstractDbTableRepository {
             //valud object -> entity
             $person->setPersonId($personId);
             $email = $emailRepository->create();
+            $email->name = $person->name;
+            if (isset($password)) {
+                if (strlen($password) < $this->minimumPasswordLength) {
+                    //サービス仕様としてはサービスレイヤーで設定すること。
+                    //6文字以上の制限は良心的配慮。不要なら修正してください。
+                    throw new DomainException('password length is too short.', DomainException::PASSWORD_TOO_SHORT);
+                }
+                $email->password = $password;
+            } else {
+                $email->password = Hash1::createNewPassword($this->defaultPasswordLength);
+            }
             $email->setIdentity($mailaddress);
             $email->setPersonId($personId);
             //auto generate. If you want to customize it, you can overwrite it and save.
@@ -47,6 +73,13 @@ class PersonRepository extends AbstractDbTableRepository {
             $emailRepository->save($email, true);
             $person->addEmail($email);// its inner code: $email->setPersonId
             $this->commit();
+        } catch (ZendInvalidQueryException $ex) {
+            $this->rollback();
+            $message = $ex->getMessage();
+            if (preg_match('/(Duplicate entry)/i', $message)) {
+                throw new DomainException('ご指定のメールアドレスは既に使用されている可能性があります。', DomainException::DUPLICATE_ENTRY, $ex);
+            }
+            throw $ex;
         } catch (\Exception $ex) {
             $this->rollback();
             throw $ex;

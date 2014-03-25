@@ -71,7 +71,6 @@ class ServiceLayerPluginManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Flower\ServiceLayer\ServiceLayerPluginManager::addServiceWrapper
-     * @todo   Implement testAddServiceWrapper().
      */
     public function testAddServiceWrapper()
     {
@@ -111,14 +110,14 @@ class ServiceLayerPluginManagerTest extends \PHPUnit_Framework_TestCase
         //no namespace pass through
         $this->object->autoAddInvokableClassByNamespace('serviceForTest');
         $this->assertEquals(array(), TestTool::getPropertyValue($this->object, 'invokableClasses'));
-        
+
         //クラスの実在をチェックされるのでMockは使えません。
         $namespace = __NAMESPACE__ . '\TestAsset';
         $this->object->setPluginNameSpace($namespace);
         $this->object->autoAddInvokableClassByNamespace('serviceForTest');
         $this->assertArrayHasKey(strtolower('serviceForTest'), TestTool::getPropertyValue($this->object, 'invokableClasses'));
     }
-    
+
     /**
      * @covers Flower\ServiceLayer\ServiceLayerPluginManager::setEventManager
      * @todo   Implement testSetEventManager().
@@ -139,5 +138,5 @@ class ServiceLayerPluginManagerTest extends \PHPUnit_Framework_TestCase
         $this->object->setEventManager($eventManager);
         $this->assertSame($eventManager, $this->object->getEventManager());
     }
-    
+
 }
