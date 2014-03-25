@@ -25,7 +25,7 @@ class PersonRepository extends AbstractDbTableRepository {
     protected $minimumPasswordLength = 6;
 
     protected $defaultPasswordLength = 8;
-    
+
     protected $emailRepository;
 
     /**
@@ -68,8 +68,10 @@ class PersonRepository extends AbstractDbTableRepository {
             }
             $email->setIdentity($mailaddress);
             $email->setPersonId($personId);
-            //auto generate. If you want to customize it, you can overwrite it and save.
-            $email->addActivationCode(substr(crc32(Hash1::createNewPassword(10)), 0, 8));
+            //auto generate. If you want to customize it, you can overwrite it or save yours at after.
+            //http://www.php.net/manual/en/function.crc32.php
+            //do you sprintf ?
+            $email->addActivationCode(substr(crc32(Hash1::createNewPassword(10)), 1, 8));
             $emailRepository->save($email, true);
             $person->addEmail($email);// its inner code: $email->setPersonId
             $this->commit();
