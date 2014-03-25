@@ -142,6 +142,19 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
 
         return $authService->getIdentity();
     }
+
+    public function logout()
+    {
+        $authService = $this->getAuthService();
+        if (! isset($authService)) {
+            throw new RuntimeException('認証サービスが設定されていません。');
+        }
+        if (! $authService->hasIdentity()) {
+            return;
+        }
+        return $authService->clearIdentity();
+    }
+
     /**
      * $authResult = $authService->authenticate() ;
      * $authResult->(isValid | getIdentity | getMessages | getCode )();
