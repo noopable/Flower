@@ -128,7 +128,7 @@ class Service implements ListenerAggregateInterface {
         if (!isset($domainName)) {
             $request = $e->getRequest();
             if ($request instanceof Request) {
-                $domainName = $request->getUri()->getHostname();
+                $domainName = $request->getUri()->getHost();
             }
         }
 
