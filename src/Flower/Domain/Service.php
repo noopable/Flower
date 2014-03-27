@@ -14,6 +14,7 @@ use Zend\Mvc\Application;
 use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
+
 /**
  * Description of Service
  *
@@ -147,12 +148,12 @@ class Service implements ListenerAggregateInterface {
                     }
                 }
             }
-            
+
             $nDomainName = strtolower($domainName);
             if (is_array($hostMap) && isset($hostMap[$nDomainName])) {
                 $domainId = $hostMap[$nDomainName];
             } else {
-                $domainId = -1;
+                $domainId = 0;
             }
         }
 
