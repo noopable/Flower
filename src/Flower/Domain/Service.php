@@ -27,7 +27,7 @@ class Service implements ListenerAggregateInterface {
 
     protected $currentDomainId;
 
-    protected $hostMap;
+    protected $hostMap = array();
 
     protected $listeners = array();
 
@@ -132,6 +132,30 @@ class Service implements ListenerAggregateInterface {
             }
         }
 
+        if (!isset($domainId)) {
+            $hostMap = $this->getHostMap();
+
+            if (!$hostMap) {
+                $application = $e->getApplication();
+                if ($application instanceof Application) {
+                    $serviceLocator = $application->getServiceManager();
+                    if ($serviceLocator->has('Config')) {
+                        $config = $serviceLocator->get('Config');
+                        if (isset($config['host_map'])) {
+                            $hostMap = $config['host_map'];
+                        }
+                    }
+                }
+            }
+            
+            $nDomainName = strtolower($domainName);
+            if (is_array($hostMap) && isset($hostMap[$nDomainName])) {
+                $domainId = $hostMap[$nDomainName];
+            } else {
+                $domainId = -1;
+            }
+        }
+
         $this->setCurrentDomainName($domainName);
         $this->setCurrentDomainId($domainId);
     }
@@ -155,4 +179,13 @@ class Service implements ListenerAggregateInterface {
         }
     }
 
+    public function setHostMap(array $hostMap)
+    {
+        $this->hostMap = $hostMap;
+    }
+
+    public function getHostMap()
+    {
+        return $this->hostMap;
+    }
 }
