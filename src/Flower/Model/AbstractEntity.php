@@ -23,6 +23,8 @@ abstract class AbstractEntity extends ArrayObject
      * @var array
      */
     protected $columns = array();
+
+    protected $maskFields = array();
     /**
      *
      * @param array $array
@@ -60,5 +62,13 @@ abstract class AbstractEntity extends ArrayObject
         }
         return parent::offsetGet($name);
     }
-    
+
+    public function getArrayCopy($safe = false)
+    {
+        $array = parent::getArrayCopy();
+        if ($safe && count($this->maskFields)) {
+            return array_diff_key($array, array_flip($this->maskFields));
+        }
+        return $array;
+    }
 }

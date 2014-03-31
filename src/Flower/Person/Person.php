@@ -20,7 +20,7 @@ class Person extends AbstractEntity implements PersonInterface {
 
     protected $identifier = array('person_id');
 
-    protected $emails;
+    protected $emails = array();
 
     public function getIdentifier()
     {
