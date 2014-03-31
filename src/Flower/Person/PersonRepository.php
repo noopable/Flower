@@ -127,6 +127,7 @@ class PersonRepository extends AbstractDbTableRepository {
 
     public function setEmailRepository(EmailRepository $emailRepository)
     {
+        $emailRepository->initialize();
         $this->emailRepository = $emailRepository;
     }
 
