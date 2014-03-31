@@ -17,7 +17,10 @@ use Flower\Model\AbstractEntity;
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
 class Email extends AbstractEntity implements EmailInterface {
+
     protected $identifier = array('email');
+
+    protected $maskFields = array('credential', 'activation_code');
 
     public function __toString()
     {
