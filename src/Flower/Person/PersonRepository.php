@@ -37,10 +37,9 @@ class PersonRepository extends AbstractDbTableRepository {
      * @throws \Exception
      * @throws \Flower\Person\Exception\DomainException
      */
-    public function createPerson($name, $mailaddress, $password = null, $domainId = 0)
+    public function createPerson($name, $mailaddress, $password = null)
     {
         $person = $this->create();
-        $person->domain_id = (int) $domainId;
         $emailValidator = new EmailAddressValidator;
         if (! $emailValidator->isValid($mailaddress)) {
             throw new DomainException(implode("\n", $emailValidator->getMessages()), DomainException::INVALID_EMAIL);
