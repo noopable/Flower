@@ -35,6 +35,9 @@ class FormUtilsGumby
             } else {
                 $class = 'input';
             }
+            if ($element instanceof \Zend\Form\Element\Textarea) {
+                $class .= ' textarea';
+            }
             $element->setAttribute('class', $class);
         }
         return $form;
