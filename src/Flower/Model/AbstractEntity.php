@@ -25,6 +25,9 @@ abstract class AbstractEntity extends ArrayObject
     protected $columns = array();
 
     protected $maskFields = array();
+
+    protected $replaceWithExchange = false;
+
     /**
      *
      * @param array $array
@@ -70,5 +73,13 @@ abstract class AbstractEntity extends ArrayObject
             return array_diff_key($array, array_flip($this->maskFields));
         }
         return $array;
+    }
+
+    public function exchangeArray($data, $resetColumns = null)
+    {
+        if (!($this->replaceWithExchange || $resetColumns)) {
+            $data = array_merge($this->getArrayCopy(), $data);
+        }
+        return parent::exchangeArray($data);
     }
 }
