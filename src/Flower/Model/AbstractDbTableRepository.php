@@ -217,6 +217,13 @@ abstract class AbstractDbTableRepository extends AbstractResource
         return $this->dao->selectWith($select);
     }
 
+    public function getCollectionWithStrategy(SelectStrategyInterface $strategy)
+    {
+        $select = $this->getSelect();// has cloned
+        $strategy->select($select);
+        return $this->dao->selectWith($select);
+    }
+
     public function create()
     {
         $prototype = $this->getEntityPrototype();
