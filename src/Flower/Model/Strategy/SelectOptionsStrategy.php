@@ -69,7 +69,7 @@ class SelectOptionsStrategy implements SelectStrategyInterface
         $optionKeys = array('group', 'where', 'limit', 'offset', 'order');
         foreach ($optionKeys as $key) {
             if (isset($this->options[$key])) {
-                $this->select->$key($this->options[$key]);
+                $select->$key($this->options[$key]);
             }
         }
     }
