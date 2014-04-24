@@ -30,13 +30,15 @@ class FormUtilsGumby
             $class = $element->getAttribute('class');
             if (is_string($class) && strlen($class)) {
                 if (false === strpos('input', $class)) {
-                    $class .= ' input';
+                    $class .= ' ';
                 }
-            } else {
-                $class = 'input';
             }
             if ($element instanceof \Zend\Form\Element\Textarea) {
-                $class .= ' textarea';
+                $class .= 'input textarea';
+            } elseif ($element instanceof \Zend\Form\Element\Select) {
+                //$class .= ' picker';
+            } else {
+                $class .= 'input';
             }
             $element->setAttribute('class', $class);
         }
