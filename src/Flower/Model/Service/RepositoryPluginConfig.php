@@ -1,20 +1,20 @@
 <?php
-namespace Flower\Model\Service;
 /*
  *
  *
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
+
+namespace Flower\Model\Service;
+
 use Flower\Model\RepositoryInterface;
-
 use Zend\ServiceManager\Config;
-
+use Zend\ServiceManager\Di\DiAbstractServiceFactory;
+use Zend\ServiceManager\Di\DiServiceInitializer;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\Di\DiAbstractServiceFactory;
-use Zend\ServiceManager\Di\DiServiceInitializer;
 
 /**
  * Description of RepositoryPluginConfig
@@ -24,7 +24,7 @@ use Zend\ServiceManager\Di\DiServiceInitializer;
 class RepositoryPluginConfig extends Config {
 
     protected $serviceLocator;
-    
+
     /**
      * Constructor
      *
@@ -38,14 +38,14 @@ class RepositoryPluginConfig extends Config {
         }
         parent::__construct($configuration);
     }
-    
+
     public function getPluginNameSpace()
     {
         if (isset($this->config['plugin_name_space'])) {
             return $this->config['plugin_name_space'];
         }
     }
-    
+
     /**
      * Configure service manager
      *
@@ -55,13 +55,13 @@ class RepositoryPluginConfig extends Config {
     public function configureServiceManager(ServiceManager $serviceManager)
     {
         parent::configureServiceManager($serviceManager);
-        
+
         if (($pluginNameSpace = $this->getPluginNameSpace()) !== null) {
             if ($serviceManager instanceof PluginNamespaceInterface) {
                 $serviceManager->setPluginNameSpace($pluginNameSpace);
             }
         }
-        
+
         if (isset($this->serviceLocator)) {
             $serviceLocator = $this->serviceLocator;
             /*
@@ -96,7 +96,7 @@ class RepositoryPluginConfig extends Config {
              * を構成することができる。
              * ただし、DIによる解決を必要としないなら、invokablesで直接、インスタンス
              * 化したほうがよい。
-             * 
+             *
              */
             if ($serviceLocator->has('Di')) {
                 $di = $serviceLocator->get('Di');
@@ -104,21 +104,21 @@ class RepositoryPluginConfig extends Config {
                  * USE_SL_AFTER_DI DIによる依存解決を期待する。 DI定義をしっかり行う。Factoryを併用してもよい。
                  * USE_SL_BEFORE_DI ServiceLocatorを経由して依存を解決する。＝＞Factoryの実装が必須になる。
                  * USE_SL_NONE DIのみによる解決を行う。
-                 * 
+                 *
                  * ServiceLocatorを通して依存を解決すると、この場合、ServiceLocatorはPluginManagerになり
                  * thisによるインスタンス化、validateが行われる可能性がある。
                  * これは、別クラスのインスタンスを抽入する際に問題になる。
-                 * 
+                 *
                  */
                 //$diAbstractServiceFactory = new DiAbstractServiceFactory($di, DiAbstractServiceFactory::USE_SL_AFTER_DI);
                 $diAbstractServiceFactory = new DiAbstractServiceFactory($di, DiAbstractServiceFactory::USE_SL_BEFORE_DI);
                 //$diAbstractServiceFactory->instanceManager()->addTypePreference('ServiceManager', $serviceLocator);
                 //$diAbstractServiceFactory->instanceManager()->addTypePreference('Zend\ServiceManager\ServiceManager', $serviceLocator);
                 $diAbstractServiceFactory->instanceManager()->addTypePreference('Zend\ServiceManager\ServiceLocatorInterface', $serviceLocator);
-                
+
                 //$diAbstractServiceFactory->instanceManager()->addTypePreference('RepositoryPluginManager', $serviceManager);
                 $diAbstractServiceFactory->instanceManager()->addTypePreference('Flower\Model\Service\RepositoryPluginManager', $serviceManager);
-                
+
                 $serviceManager->addAbstractFactory(
                     $diAbstractServiceFactory
                 );
@@ -127,7 +127,7 @@ class RepositoryPluginConfig extends Config {
                 );
             }
         }
-        
+
         $serviceManager->addInitializer(function($instance, $sm) {
             if ($instance instanceof RepositoryInterface) {
                 $instance->initialize();

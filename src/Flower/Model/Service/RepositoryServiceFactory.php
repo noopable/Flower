@@ -1,5 +1,4 @@
 <?php
-
 /*
  *
  *
@@ -49,7 +48,7 @@ class RepositoryServiceFactory implements FactoryInterface {
         } else {
             $config = array();
         }
-        
+
         if (isset($config[$this->configId])) {
             $managerConfig = $config[$this->configId];
             $managerConfig['service_locator'] = $serviceLocator;

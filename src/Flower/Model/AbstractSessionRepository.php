@@ -1,32 +1,29 @@
 <?php
-
-namespace Flower\Model;
 /*
  *
  *
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
-use Flower\Resource\AbstractResource;
 
-use Zend\Session\Container;
+namespace Flower\Model;
+
 use ArrayObject;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\Session\Container;
 
-abstract class AbstractSessionRepository extends AbstractResource
+abstract class AbstractSessionRepository extends AbstractRepository
  implements RepositoryInterface, ServiceLocatorAwareInterface, RepositoryPluginManagerAwareInterface
 {
     use ServiceLocatorAwareTrait;
     use RepositoryPluginManagerAwareTrait;
-    
+
     protected $session;
 
     protected $mappingMethods;
 
     protected $entityPrototype;
-
-    protected $isInitialized = false;
 
     /**
      *
@@ -66,11 +63,6 @@ abstract class AbstractSessionRepository extends AbstractResource
         $this->isInitialized = true;
     }
 
-    public function isInitialized()
-    {
-        return $this->isInitialized;
-    }
-    
     public function setSessionContainer(Container $session = null)
     {
         if (null !== $session) {

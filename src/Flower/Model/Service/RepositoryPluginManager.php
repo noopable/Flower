@@ -1,60 +1,61 @@
 <?php
-namespace Flower\Model\Service;
-
 /*
  *
  *
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
-use Zend\ServiceManager\AbstractPluginManager;
 
+namespace Flower\Model\Service;
+
+use Zend\ServiceManager\AbstractPluginManager;
 use Flower\Model\RepositoryInterface;
 use Flower\Model\Exception\RuntimeException;
+
 /**
  * Description of RepositoryPluginManager
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  */
-class RepositoryPluginManager extends AbstractPluginManager 
+class RepositoryPluginManager extends AbstractPluginManager
     implements PluginNamespaceInterface
 {
-    
+
     /**
      * クラスを配置する namespace as prefix
      * 他の場所のクラスを使いたいときは、直接getで取得するか、
      * 同じnamespaceにプロキシを配置する。
-     * 
-     * @var string 
+     *
+     * @var string
      */
     protected $pluginNameSpace;
-    
+
     /**
      * Repositoryは必須オプションをDiで設定してもらう必要がある。
      *
      * @var bool
      */
     protected $autoAddInvokableClass = false;
-    
+
     /**
      * ServiceLocatorなどの取得にグローバルServiceLocatorをpeeringして使う
-     * 
+     *
      * @var bool
      */
     protected $retrieveFromPeeringManagerFirst = false;
-    
+
     public function setPluginNameSpace($pluginNameSpace)
     {
         $this->pluginNameSpace = (string) $pluginNameSpace;
     }
-    
+
     public function getPluginNameSpace()
     {
         return $this->pluginNameSpace;
     }
     /**
      * autoAddするのではなく、byNameで明示的にネームスペース下のクラスにアクセスする
-     * 
+     *
      * Retrieve a service from the manager by name
      *
      * Allows passing an array of options to use when creating the instance.
@@ -71,12 +72,12 @@ class RepositoryPluginManager extends AbstractPluginManager
         if (($pluginNameSpace = $this->getPluginNameSpace()) && (strpos($pluginNameSpace, $name) !== 0)) {
             $name = $pluginNameSpace . '\\' . $name;
         }
-        
+
         return $this->get($name, $options, $usePeeringServiceManagers);
     }
-    
+
     /**
-     * 
+     *
      * @param string $name
      */
     public function autoAddInvokableClassByNamespace($name)
@@ -84,7 +85,7 @@ class RepositoryPluginManager extends AbstractPluginManager
         if (!isset($this->pluginNameSpace) || !$this->autoAddInvokableClass) {
             return;
         }
-        
+
         if (($pluginNameSpace = $this->getPluginNameSpace()) && (strpos($pluginNameSpace, $name) !== 0)) {
             $class = rtrim($pluginNameSpace, '\\') . '\\' . ucfirst($name);
             if (class_exists($class)) {
@@ -92,9 +93,9 @@ class RepositoryPluginManager extends AbstractPluginManager
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @param \Flower\Model\RepositoryInterface $plugin
      * @return type
      * @throws RuntimeException
@@ -150,7 +151,7 @@ class RepositoryPluginManager extends AbstractPluginManager
                 }
             } while($eTemp = $eTemp->getPrevious());
         }
-        
+
         return $repository;
     }
 }

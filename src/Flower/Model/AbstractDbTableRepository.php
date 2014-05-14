@@ -1,26 +1,24 @@
 <?php
-namespace Flower\Model;
 /*
  *
  *
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
-use Flower\Resource\AbstractResource;
-use Flower\Model\AbstractEntity;
-use Flower\Model\Exception;
 
+namespace Flower\Model;
+
+use Zend\Db\Adapter\Adapter;
+use Zend\Db\Sql;
 use Zend\Db\TableGateway\TableGatewayInterface;
 use Zend\Db\TableGateway\AbstractTableGateway;
-use Zend\Db\Sql;
-use Zend\Db\Adapter\Adapter;
-
+use Flower\Model\AbstractEntity;
+use Flower\Model\Exception;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-
 use Zend\Stdlib\ArrayUtils;
 
-abstract class AbstractDbTableRepository extends AbstractResource
+abstract class AbstractDbTableRepository extends AbstractRepository
  implements RepositoryInterface, ServiceLocatorAwareInterface, RepositoryPluginManagerAwareInterface
 {
     use ServiceLocatorAwareTrait;
@@ -33,8 +31,6 @@ abstract class AbstractDbTableRepository extends AbstractResource
     protected $entityPrototype;
 
     protected $select;
-
-    protected $isInitialized = false;
 
     Protected $resourceLocator;
     /**
@@ -152,11 +148,6 @@ abstract class AbstractDbTableRepository extends AbstractResource
                 $selectOptions['closure']($this->select);
             }
         }
-    }
-
-    public function isInitialized()
-    {
-        return $this->isInitialized;
     }
 
     public function setAdapter(Adapter $adapter)

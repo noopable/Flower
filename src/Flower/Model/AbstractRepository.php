@@ -1,25 +1,27 @@
 <?php
-
-namespace Flower\Resource;
 /*
  *
  *
  * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
+
+namespace Flower\Model;
+
 use Zend\Stdlib\ArrayUtils;
+
 /**
- *  リソース管理の旧版
- * ※ ただし、pageモジュールで使用しているので、Pageモジュールのリファクタリングを優先してください。
  *
  * @author Tomoaki Kosugi <kosugi at kips.gr.jp>
  *
  */
-abstract class AbstractResource implements ResourceInterface
+abstract class AbstractRepository
 {
     public $name = '';
 
     public $class;
+
+    protected $isInitialized = false;
 
     static public $_nameDelimiter = '::';
 
@@ -44,6 +46,11 @@ abstract class AbstractResource implements ResourceInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    public function isInitialized()
+    {
+        return $this->isInitialized;
     }
 
     public function setResourceClass($class)
@@ -92,7 +99,7 @@ abstract class AbstractResource implements ResourceInterface
     {
         $name = (string)$name;
         if (! array_key_exists($name, $this->options)) {
-            if (isset($this->prototype) && $this->prototype instanceof AbstractResource) {
+            if (isset($this->prototype) && $this->prototype instanceof self) {
                 return $this->prototype->getOption($name, $default);
             }
             else {
