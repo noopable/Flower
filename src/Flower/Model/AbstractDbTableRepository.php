@@ -258,17 +258,20 @@ abstract class AbstractDbTableRepository extends AbstractRepository
         }
 
         if (count($identifier) === count($w) && !$forceInsert) {
-            return $this->dao->update($set, $w);
-        }
-        else {
-            $aInsert = $set + $w;
-            if (count($aInsert) === 0) {
-                $ei = new Exception\InvalidArgumentException('insert detected but no columns');
-                $er = new Exception\RuntimeException('Invalid configuration of columns? ', 0, $ei);
-                throw $er;
+            $res = $this->dao->select($w);
+            if ($res->count()) {
+                //use REPLACE INTO ?
+                return $this->dao->update($set, $w);
             }
-            return $this->dao->insert($aInsert);
         }
+        
+        $aInsert = $set + $w;
+        if (count($aInsert) === 0) {
+            $ei = new Exception\InvalidArgumentException('insert detected but no columns');
+            $er = new Exception\RuntimeException('Invalid configuration of columns? ', 0, $ei);
+            throw $er;
+        }
+        return $this->dao->insert($aInsert);
 
     }
 
