@@ -64,6 +64,13 @@ class ServiceConfig {
             $service->setAclLoader($aclLoader);
         }
 
+        if (isset($config['acl_vars'])) {
+            if (!isset($aclLoader)) {
+                $aclLoader = $service->getAclLoader();
+            }
+            $aclLoader->setVars((array) $config['acl_vars']);
+        }
+
         if (isset($config['acl_serialized_path'])) {
             $aclSerializedPath = $config['acl_serialized_path'];
 
