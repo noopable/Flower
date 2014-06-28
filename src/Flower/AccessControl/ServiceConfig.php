@@ -25,11 +25,11 @@ use Zend\Stdlib\ArrayUtils;
  * @author tomoaki
  */
 class ServiceConfig {
-    
+
     protected $config;
-    
+
     protected $serviceLocator;
-    
+
     public function __construct(array $config)
     {
         if (isset($config['service_locator']) && ($config['service_locator'] instanceof ServiceLocatorInterface)) {
@@ -38,24 +38,24 @@ class ServiceConfig {
         }
         $this->config = $config;
     }
-    
+
     public function configure(AccessControlService $service)
     {
         $config = $this->config; //for convenient
-        
+
         if (isset($this->serviceLocator)) {
             $this->configureWithServiceLocator($service);
         }
-        
+
         if (isset($config['acl_script_path'])) {
             $config['acl_path'] = $config['acl_script_path'];
         }
-        
+
         if (isset($config['acl_path'])) {
             $aclScriptPath = $config['acl_path'];
             $service->setAclScriptPath($aclScriptPath);
         }
-        
+
         if (isset($config['acl_loader'])) {
             $aclLoader = $config['acl_loader'];
             if (is_string($aclLoader) && isset($aclScriptPath)) {
@@ -63,7 +63,32 @@ class ServiceConfig {
             }
             $service->setAclLoader($aclLoader);
         }
-        
+
+        if (isset($config['acl_serialized_path'])) {
+            $aclSerializedPath = $config['acl_serialized_path'];
+
+            if (isset($aclScriptPath)) {
+                $serialPath = $aclScriptPath . '.serial';
+                $mtime = filemtime($aclScriptPath);
+                $serial = is_file($serialPath) ? (int) file_get_contents($serialPath) : null;
+                if ($mtime === $serial) {
+                    //ctimeはfalseを返すことがある。false !== 12345
+                    //is_int($ctime) && $ctime !== $aclScriptSerial とどっちがいいか。
+                    //check ok
+                } else {
+                    $acl = $service->getAcl();
+                    file_put_contents($aclSerializedPath, serialize($acl));
+                    file_put_contents($serialPath, $mtime);
+                }
+            }
+            //指定パスが間違っていた場合や、unserialize出来なかった場合、
+            //救済する必要はないのでfatal でよいです。
+            if (!isset($acl) && is_file($aclSerializedPath)) {
+                $acl = unserialize(file_get_contents($aclSerializedPath));
+                $service->setAcl($acl);
+            }
+        }
+
         if (isset($this->config['method_privilege_maps'])) {
             if (!ArrayUtils::isHashTable($this->config['method_privilege_maps'], true)) {
                 throw new Exception\RuntimeException('method_privilege_maps should be hash array');
@@ -81,19 +106,19 @@ class ServiceConfig {
                 $service->addUnderAccessControl($name);
             }
         }
-        
+
         if (isset($this->config['auth_result_return_columns'])) {
             $service->setAuthResultReturnColumns($this->config['auth_result_return_columns']);
         }
-        
+
         if (isset($this->config['auth_result_omit_columns'])) {
             $service->setAuthResultOmitColumns($this->config['auth_result_omit_columns']);
-        }    
-            
+        }
+
         $this->combineDependencies($service);
         return $service;
     }
-    
+
     public function configureWithServiceLocator(AccessControlService $service)
     {
         if (! isset($this->serviceLocator)) {
@@ -105,7 +130,7 @@ class ServiceConfig {
         $sl = $this->serviceLocator;
         /**
          * ServiceLocatorを使ったAuthServiceのセット
-         * 
+         *
          */
         if (isset($config['auth_service'])
                 && $sl->has($config['auth_service'])) {
@@ -113,7 +138,7 @@ class ServiceConfig {
             $service->setAuthService($authService);
         }
         /**
-         * 
+         *
          * ServiceLocatorを使ったResourceManagerのセット
          * ResourceManagerは他のモジュールや機能で使用する関係で
          * ServiceLocatorにプロジェクト毎の設定で持っている可能性が高い
@@ -143,7 +168,7 @@ class ServiceConfig {
                 $service->setResourceManager($resourceManager);
             }
         }
-        
+
         if (isset($this->config['resource_plugin_manager'])) {
             $resourcePluginService = $this->config['resource_plugin_manager'];
             if ($sl->has($resourcePluginService)) {
@@ -152,7 +177,7 @@ class ServiceConfig {
             }
         }
     }
-    
+
     public function combineDependencies(AccessControlService $service)
     {
         $authService = $service->getAuthService();
@@ -166,11 +191,11 @@ class ServiceConfig {
             $resourceStorage = new ResourceStorage($service);
             $service->setResourceStorage($resourceStorage);
         }
-        
+
         $this->combileResourceManager($resourceManager, $resourceStorage, $authService, $roleMapper);
         //その他組み合わせたいものがあればメソッドを追加する
     }
-    
+
     /**
      * 共通のリソースマネージャーを使うことを目的とする
      * @param \Flower\Resource\Manager\ManagerInterface $resourceManager
@@ -194,7 +219,7 @@ class ServiceConfig {
                 $authService->setStorage($storage);
             }
         }
-        if (isset($roleMapper) 
+        if (isset($roleMapper)
             && $roleMapper instanceof ResourceStorageAwareInterface
             && isset($resourceStorage)) {
             $roleMapper->setResourceStorage($resourceStorage);

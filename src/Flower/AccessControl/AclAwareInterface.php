@@ -15,5 +15,14 @@ use Zend\Permissions\Acl\Acl;
  * @author tomoaki
  */
 interface AclAwareInterface {
+    /**
+     *
+     * @param \Zend\Permissions\Acl\Acl $acl
+     */
     public function setAcl(Acl $acl);
+
+    /**
+     * @return Acl
+     */
+    public function getAcl();
 }
