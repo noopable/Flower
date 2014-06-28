@@ -12,7 +12,7 @@ class AclLoaderTest extends \PHPUnit_Framework_TestCase
      * @var AclLoader
      */
     protected $object;
-    
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -36,10 +36,18 @@ class AclLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoad()
     {
-        
+
         $result = $this->object->load();
         $this->assertInstanceOf('Zend\Permissions\Acl\Acl', $result);
         return $result;
+    }
+
+    public function testLoadWithVars()
+    {
+        $this->object->setVars(array('foo' => 'bar'));
+        $result = $this->object->load();
+        $this->assertInstanceOf('Zend\Permissions\Acl\Acl', $result);
+        $this->assertTrue($result->hasRole('bar'));
     }
 
     /**
@@ -51,7 +59,7 @@ class AclLoaderTest extends \PHPUnit_Framework_TestCase
         $this->object->setAcl($acl);
         $this->assertSame($acl, TestTool::getPropertyValue($this->object, '__acl'));
     }
-    
+
     /**
      * @covers Flower\AccessControl\AclLoader::resetAcl
      */
@@ -69,7 +77,7 @@ class AclLoaderTest extends \PHPUnit_Framework_TestCase
     {
         //default object
         $this->assertInstanceOf('Zend\Permissions\Acl\Acl', $this->object->getAcl());
-        
+
         //set object
         $acl = new \Zend\Permissions\Acl\Acl;
         $this->object->setAcl($acl);

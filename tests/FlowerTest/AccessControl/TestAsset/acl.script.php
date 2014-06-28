@@ -5,3 +5,7 @@ $guest  = new Role\GenericRole('guest');
 $acl->addRole($guest);
 $editor = new Role\GenericRole('editor');
 $acl->addRole($editor, array($guest));
+
+if (isset($foo) && is_string($foo)) {
+    $acl->addRole($foo);
+}
