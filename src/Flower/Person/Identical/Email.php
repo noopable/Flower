@@ -47,9 +47,19 @@ class Email extends AbstractEntity implements EmailInterface {
         return $this->person_id;
     }
 
+    /**
+     * Standard role format:
+     * property-identifier.[roleIdString]
+     * プロパティ(リソース集合)を使わないプロジェクトでは、素のフォーマットでもPersonコンポーネント的には問題ない。
+     *
+     * @return array
+     */
     public function getRoles()
     {
-        return $this->roles;
+        if (is_string($this->roles) && strlen($this->roles)) {
+            return explode(',', $this->roles);
+        }
+        return array();
     }
 
     public function setCredential($credential)
@@ -81,6 +91,14 @@ class Email extends AbstractEntity implements EmailInterface {
 
     public function setRoles($roles)
     {
+        if (is_array($roles)) {
+            $roles = implode(',', $roles);
+        }
+
+        if (!is_string($roles)) {
+            throw new DomainException('invalid type of specified roles ');
+        }
+
         $this->roles = $roles;
     }
 
