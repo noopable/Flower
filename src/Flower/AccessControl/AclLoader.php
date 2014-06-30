@@ -36,6 +36,12 @@ class AclLoader {
         $this->__aclScript = $aclScript;
     }
 
+    public function setVar($key, $value)
+    {
+        $this->__isLoaded = false;
+        $this->__vars[$key] = $value;
+    }
+
     public function setVars(array $vars)
     {
         $this->__isLoaded = false;
