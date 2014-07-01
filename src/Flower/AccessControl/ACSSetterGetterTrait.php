@@ -15,26 +15,26 @@ use Zend\Authentication\AuthenticationService;
 
 
 trait ACSSetterGetterTrait {
-    
+
     /**
      *
      * @var \Zend\Authentication\AuthenticationService
      */
     protected $authService;
-    
+
     /**
      *
      * @var RoleMapper
      */
     protected $roleMapper;
-    
+
     /**
      *
      * @var AccessControlWrapper
      */
     protected $accessControlWrapper;
-    
-    
+
+
     /**
      * キー名にサービス取得名としての名前、値にPrivilegeMap配列
      *  　PrivilegeMapはメソッド名 => 権限名
@@ -43,39 +43,39 @@ trait ACSSetterGetterTrait {
      * @var array
      */
     protected $methodPrivilegeMaps;
-    
+
     /**
      * アクセス制御下におきたいサービス名＝＞サービス名のハッシュテーブル
-     * 
+     *
      * @var array
      */
     protected $underAccessControls;
-    
+
     protected $aclLoader;
-    
+
     protected $aclScriptPath;
-    
+
     protected $resourceManager;
-    
+
     protected $returnColumns;
-    
+
     protected $omitColumns;
-    
+
     public function setAuthService(AuthenticationService $authService)
     {
         $this->authService = $authService;
     }
-    
+
     public function getAuthService()
     {
         return $this->authService;
     }
-    
+
     public function setRoleMapper(RoleMapperInterface $roleMapper)
     {
         $this->roleMapper = $roleMapper;
     }
-    
+
     public function getRoleMapper()
     {
         if (!isset($this->roleMapper)) {
@@ -83,22 +83,22 @@ trait ACSSetterGetterTrait {
         }
         return $this->roleMapper;
     }
-    
+
     public function setResourceManager(ResourceManager $resourceManager)
     {
         $this->resourceManager = $resourceManager;
     }
-    
+
     public function getResourceManager()
     {
         return $this->resourceManager;
     }
-    
+
     public function setAccessControlWrapper(AccessControlWrapper $accessControlWrapper)
     {
         $this->accessControlWrapper = $accessControlWrapper;
     }
-    
+
     public function getAccessControlWrapper()
     {
         if (!isset($this->accessControlWrapper)) {
@@ -107,13 +107,13 @@ trait ACSSetterGetterTrait {
         }
         return $this->accessControlWrapper;
     }
-    
-    
+
+
     public function setMethodPrivilegeMaps(array $methodPrivilegeMaps)
     {
         $this->methodPrivilegeMaps = $methodPrivilegeMaps;
     }
-    
+
     public function addMethodPrivilegeMap($name, $methodPrivilegeMap)
     {
         if (isset($this->methodPrivilegeMaps[$name])) {
@@ -121,7 +121,7 @@ trait ACSSetterGetterTrait {
         }
         $this->methodPrivilegeMaps[$name] = $methodPrivilegeMap;
     }
-    
+
     public function getMethodPrivilegeMap($name)
     {
         if (!isset($this->methodPrivilegeMaps[$name])) {
@@ -129,7 +129,7 @@ trait ACSSetterGetterTrait {
         }
         return $this->methodPrivilegeMaps[$name];
     }
-    
+
     public function setUnderAccessControls(array $underAccessControls)
     {
         $this->underAccessControls = array();
@@ -137,37 +137,37 @@ trait ACSSetterGetterTrait {
             $this->addUnderAccessControl($name);
         }
     }
-    
+
     public function getUnderAccessControls()
     {
         return $this->underAccessControls;
     }
-    
+
     public function isUnderAccessControl($name)
     {
         $name = strtolower($name);
         return isset($this->underAccessControls[$name]);
     }
-    
+
     public function addUnderAccessControl($name)
     {
         $name = strtolower($name);
         $this->underAccessControls[$name] = $name;
     }
-    
+
     public function removeUnderAccessControl($name)
     {
         $name = strtolower($name);
-        if (isset($this->underAccessControls[$name])) { 
+        if (isset($this->underAccessControls[$name])) {
             unset($this->underAccessControls[$name]);
         }
     }
-    
+
     public function setAclLoader(AclLoader $aclLoader)
     {
         $this->aclLoader = $aclLoader;
     }
-    
+
     public function getAclLoader()
     {
         if (!isset($this->aclLoader)) {
@@ -176,24 +176,28 @@ trait ACSSetterGetterTrait {
             }
             $this->aclLoader = new AclLoader($this->aclScriptPath);
         }
+
+        if (isset($this->acl)) {
+            $this->aclLoader->setAcl($this->acl);
+        }
         return $this->aclLoader;
     }
-    
+
     public function setAclScriptPath($aclScriptPath)
     {
         $this->aclScriptPath = $aclScriptPath;
     }
-    
+
     public function getAclScriptPath()
     {
         return $this->aclScriptPath;
     }
-    
+
     public function setAuthResultReturnColumns($returnColumns)
     {
         $this->returnColumns = $returnColumns;
     }
-    
+
     public function setAuthResultOmitColumns($omitColumns)
     {
         $this->omitColumns = $omitColumns;
