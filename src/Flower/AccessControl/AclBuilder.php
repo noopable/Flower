@@ -149,7 +149,7 @@ class AclBuilder
         }
     }
 
-    public function addRules(array $rules)
+    public function addRules(array $rules, $property)
     {
         $acl = $this->acl;
         foreach ($rules as $rule) {
