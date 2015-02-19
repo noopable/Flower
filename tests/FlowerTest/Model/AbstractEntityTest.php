@@ -62,9 +62,6 @@ class AbstractEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('baz', $this->object->column('baz'));
     }
 
-    /**
-     * @covers Flower\Model\AbstractEntity::__get
-     */
     public function test__get()
     {
         //main purpose

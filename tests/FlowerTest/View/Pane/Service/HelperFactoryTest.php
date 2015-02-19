@@ -45,7 +45,7 @@ class HelperFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\HelperFactory::createService
+     * @covers Flower\View\Pane\Service\HelperFactory::createService
      */
     public function testCreateService()
     {

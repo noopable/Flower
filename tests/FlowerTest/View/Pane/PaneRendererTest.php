@@ -174,7 +174,7 @@ EOD;
     }
 
     /**
-     * @covers Flower\View\PaneRenderer::setVars
+     * @covers Flower\View\Pane\PaneRenderer::setVars
      */
     public function testSetVars()
     {
@@ -190,7 +190,7 @@ EOD;
     }
 
     /**
-     * @covers Flower\View\PaneRenderer::getVars
+     * @covers Flower\View\Pane\PaneRenderer::getVars
      */
     public function testGetVars()
     {
@@ -206,7 +206,7 @@ EOD;
     }
 
     /**
-     * @covers Flower\View\PaneRenderer::setVar
+     * @covers Flower\View\Pane\PaneRenderer::setVar
      */
     public function testSetVar()
     {
@@ -223,7 +223,7 @@ EOD;
     }
 
     /**
-     * @covers Flower\View\PaneRenderer::setView
+     * @covers Flower\View\Pane\PaneRenderer::setView
      */
     public function testSetView()
     {
@@ -236,7 +236,7 @@ EOD;
     }
 
     /**
-     * @covers Flower\View\PaneRenderer::getView
+     * @covers Flower\View\Pane\PaneRenderer::getView
      */
     public function testGetView()
     {
@@ -249,7 +249,7 @@ EOD;
     }
 
     /**
-     * @covers Flower\View\PaneRenderer::beginIteration
+     * @covers Flower\View\Pane\PaneRenderer::beginIteration
      */
     public function testBeginIteration()
     {
@@ -262,7 +262,7 @@ EOD;
     }
 
     /**
-     * @covers Flower\View\PaneRenderer::endIteration
+     * @covers Flower\View\Pane\PaneRenderer::endIteration
      */
     public function testEndIteration()
     {
@@ -275,8 +275,8 @@ EOD;
     }
 
     /**
-     * @covers Flower\View\PaneRenderer::beginChildren
-     * @covers Flower\View\PaneRenderer::endChildren
+     * @covers Flower\View\Pane\PaneRenderer::beginChildren
+     * @covers Flower\View\Pane\PaneRenderer::endChildren
      */
     public function testBeginChildrenEndChildren()
     {
@@ -290,7 +290,7 @@ EOD;
     }
 
     /**
-     * @covers Flower\View\PaneRenderer::current
+     * @covers Flower\View\Pane\PaneRenderer::current
      */
     public function testCurrentVarUndefined()
     {
@@ -316,7 +316,7 @@ EOD;
     }
 
     /**
-     * @covers Flower\View\PaneRenderer::current
+     * @covers Flower\View\Pane\PaneRenderer::current
      */
     public function testCurrentHasNoContent()
     {
@@ -339,7 +339,7 @@ EOD;
     }
 
     /**
-     * @covers Flower\View\PaneRenderer::current
+     * @covers Flower\View\Pane\PaneRenderer::current
      */
     public function testCurrentVarDefined()
     {
@@ -369,7 +369,7 @@ article
     }
 
     /**
-     * @covers Flower\View\PaneRenderer::current
+     * @covers Flower\View\Pane\PaneRenderer::current
      */
     public function testCurrentVarClosure()
     {
@@ -399,7 +399,7 @@ article
     }
 
     /**
-     * @covers Flower\View\PaneRenderer::current
+     * @covers Flower\View\Pane\PaneRenderer::current
      */
     public function testCurrentVarIsCallable()
     {
@@ -431,7 +431,7 @@ article
     }
 
     /**
-     * @covers Flower\View\PaneRenderer::__toString
+     * @covers Flower\View\Pane\PaneRenderer::__toString
      */
     public function test__toStringSimple()
     {

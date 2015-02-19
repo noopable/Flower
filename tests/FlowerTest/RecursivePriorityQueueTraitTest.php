@@ -151,7 +151,7 @@ class RecursivePriorityQueueTraitTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Flower\RecursivePriorityQueueTrrait::next
+     * @covers Flower\RecursivePriorityQueueTrait::next
      */
     public function testNext() {
         $this->objectA->insert('foo');

@@ -26,7 +26,7 @@ class GumbyTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Flower\View\Utils\Gumby::sizeToClass
+     * @covers Flower\View\Pane\Utils\Gumby::sizeToClass
      */
     public function testSizeToClass() {
         $this->assertEquals('three columns', Gumby::sizeToClass(3));

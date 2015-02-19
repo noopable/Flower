@@ -41,7 +41,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Pane::setPaneId
+     * @covers Flower\View\Pane\PaneClass\Pane::setPaneId
      */
     public function testSetPaneId()
     {
@@ -52,7 +52,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testSetPaneId
-     * @covers Flower\View\Pane\Pane::getPaneId
+     * @covers Flower\View\Pane\PaneClass\Pane::getPaneId
      */
     public function testGetPaneId()
     {
@@ -62,7 +62,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Pane::getOrder
+     * @covers Flower\View\Pane\PaneClass\Pane::getOrder
      */
     public function testGetOrder()
     {
@@ -70,7 +70,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Pane::insert
+     * @covers Flower\View\Pane\PaneClass\Pane::insert
      * @todo   Implement testInsert().
      */
     public function testInsert()
@@ -92,7 +92,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Pane::setBegin
+     * @covers Flower\View\Pane\PaneClass\Pane::setBegin
      */
     public function testSetBegin()
     {
@@ -101,7 +101,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Pane::setEnd
+     * @covers Flower\View\Pane\PaneClass\Pane::setEnd
      */
     public function testSetEnd()
     {
@@ -110,7 +110,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Pane::begin
+     * @covers Flower\View\Pane\PaneClass\Pane::begin
      */
     public function testBegin()
     {
@@ -119,7 +119,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Pane::end
+     * @covers Flower\View\Pane\PaneClass\Pane::end
      */
     public function testEnd()
     {
@@ -128,7 +128,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Pane::setOptions
+     * @covers Flower\View\Pane\PaneClass\Pane::setOptions
      */
     public function testSetOptions()
     {
@@ -139,7 +139,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Pane::setOption
+     * @covers Flower\View\Pane\PaneClass\Pane::setOption
      */
     public function testSetOption()
     {
@@ -148,7 +148,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Pane::getOption
+     * @covers Flower\View\Pane\PaneClass\Pane::getOption
      */
     public function testGetOption()
     {
@@ -157,7 +157,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Pane::getOptions
+     * @covers Flower\View\Pane\PaneClass\Pane::getOptions
      */
     public function testGetOptions()
     {
@@ -168,7 +168,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Pane::getFactoryClass
+     * @covers Flower\View\Pane\PaneClass\Pane::getFactoryClass
      */
     public function testGetFactoryClass()
     {
@@ -177,7 +177,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
 
     /**
      *
-     * @covers Flower\View\Pane\Pane::hasContent
+     * @covers Flower\View\Pane\PaneClass\Pane::hasContent
      */
     public function testHasContent()
     {
@@ -196,7 +196,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Pane::setRegistry
+     * @covers Flower\View\Pane\PaneClass\Pane::setRegistry
      */
     public function testSetRegistry()
     {
@@ -207,7 +207,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testSetRegistry
-     * @covers Flower\View\Pane\Pane::getRegistry
+     * @covers Flower\View\Pane\PaneClass\Pane::getRegistry
      */
     public function testGetRegistry()
     {
@@ -217,7 +217,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Flower\View\Pane\Pane::setSizeToClassFunction
+     * @covers Flower\View\Pane\PaneClass\Pane::setSizeToClassFunction
      */
     public function testSetSizeToClassFunction()
     {
@@ -228,7 +228,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testSetSizeToClassFunction
-     * @covers Flower\View\Pane\Pane::getSizeToClassFunction
+     * @covers Flower\View\Pane\PaneClass\Pane::getSizeToClassFunction
      */
     public function testGetSizeToClassFunction()
     {
@@ -239,7 +239,7 @@ class PaneTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testSetSizeToClassFunction
-     * @covers Flower\View\Pane\Pane::sizeToClass
+     * @covers Flower\View\Pane\PaneClass\Pane::sizeToClass
      */
     public function testSizeToClass()
     {
