@@ -66,7 +66,7 @@ class EntityScriptPaneTest extends \PHPUnit_Framework_TestCase
   <div id="foo">
   <!-- start content entity -->
 array(1) {
-  ["foo"]=>
+  \'foo\' =>
   string(3) "bar"
 }
   <!-- end content entity -->
