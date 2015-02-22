@@ -56,15 +56,15 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
 
     public function __construct(ServiceConfig $config = null)
     {
-        if (null !== $config) {
-            $config->configure($this);
-        }
-
         $this->builtInRoles = array(
             RoleMapperInterface::BUILT_IN_AUTHENTICATED_CLIENT,
             RoleMapperInterface::BUILT_IN_CURRENT_CLIENT_AGGREGATE,
             RoleMapperInterface::BUILT_IN_NOT_AUTHENTICATED_CLIENT,
         );
+
+        if (null !== $config) {
+            $config->configure($this);
+        }
     }
 
     /**
