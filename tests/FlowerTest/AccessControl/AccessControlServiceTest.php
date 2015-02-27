@@ -366,6 +366,25 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->object->isAllowed($resource, 'publish'));
     }
 
+    public function testIsAllowedInvalidRole()
+    {
+        $acl = new Acl;
+        $role = new GenericRole('guest');
+        //$acl->addRole($role);
+        $this->object->setAcl($acl);
+        /**
+         *
+         * AccessControlServiceではチェック対象のロールを自動的にAclに追加するので、
+         * Aclに明示的に追加されていないロールでも例外にならない。
+         * ZF2の標準のAclではロールがない場合に、InvalidArgumentExceptionをraiseする。
+         */
+        $this->object->setRole($role);
+        /**
+         * ロールを暗黙的に取得
+         */
+        $this->assertFalse($acl->isAllowed($role, null, null));
+    }
+
     /**
      * @covers Flower\AccessControl\AccessControlService::setAuthService
      */
