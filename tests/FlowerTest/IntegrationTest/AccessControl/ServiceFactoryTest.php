@@ -85,22 +85,6 @@ class AccessControlServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $parameters = $connection->getConnectionParameters();
         $connection->connect();
     }
-    /**
-     *
-     * @depends testStandardAccessControlService
-     */
-    public function testAuthenticate($accessControlService)
-    {
-        if (!extension_loaded('pdo_mysql')) {
-            $this->markTestSkipped(
-              'Pdo_MySQL 拡張モジュールが使用できません。'
-            );
-        }
-        $this->assertTrue($accessControlService->authenticate('bar@example.com', 'admin'));
-        $role = $accessControlService->getRole();
-        $this->assertEquals(RoleMapperInterface::BUILT_IN_CURRENT_CLIENT_AGGREGATE, $role);
-        $this->assertContains('admin', $role->getParents());
-    }
 
     /**
      * @depends testStandardAccessControlService

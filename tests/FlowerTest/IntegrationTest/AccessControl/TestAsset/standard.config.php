@@ -38,7 +38,7 @@ return array(
                             $db['identity_column'],//$identityColumn = null,
                             $db['credential_column'],//$credentialColumn = null,
                             function($dbCredential, $feedCredential) {
-                                return ($dbCredential === \Flower\Hash\Hash1::hash($feedCredential, 'FlowerTest'));
+                                return ($dbCredential === \Flower\Hash\Hash1::hash($feedCredential/*, 'FlowerTest'*/));
                             }
                         );
                 return $authAdapter;
@@ -53,9 +53,9 @@ return array(
         'driver' => include(__DIR__ . '/sandbox.db.php'),
         'table_name' => 'email',
         'identity_column' => 'email',
-        'credential_column' => 'password',
+        'credential_column' => 'credential',
         //sha1は既に安全ではありません。
-        'credential_treatment' => 'SHA1(?)',
+        //'credential_treatment' => 'SHA1(?)',
     ),
     'flower_access_control' => array(
         'auth_service' => $authServiceName,
