@@ -74,7 +74,7 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
     public function authenticate($identity = null, $credential = null)
     {
         if ($this->isAuthenticated) {
-            return;
+            return $this->isValidClient;
         }
 
         $authService = $this->getAuthService();
@@ -104,6 +104,22 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
             $this->isLoggedIn = true;
             $role = $this->getRoleMapper()->getRole($identity);
         } else {
+            /**
+             * @see Zend\Authentication\Result
+             *
+             * Failure due to identity not being found.
+             *  FAILURE_IDENTITY_NOT_FOUND     = -1;
+             *
+             * Failure due to identity being ambiguous.
+             *  FAILURE_IDENTITY_AMBIGUOUS     = -2;
+             *
+             * Failure due to invalid credential being supplied.
+             *  FAILURE_CREDENTIAL_INVALID     = -3;
+             *
+             * Failure due to uncategorized reasons.
+             *  FAILURE_UNCATEGORIZED          = -4;
+             */
+            
             $role = $this->getRoleMapper()->getRole(null);
         }
 
