@@ -119,8 +119,13 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
              * Failure due to uncategorized reasons.
              *  FAILURE_UNCATEGORIZED          = -4;
              */
-            
+
             $role = $this->getRoleMapper()->getRole(null);
+        }
+
+        if ($role->getRoleId() === RoleMapperInterface::BUILT_IN_CURRENT_CLIENT_AGGREGATE
+                && $this->getAcl()->hasRole($role)) {
+            $this->getAcl()->removeRole($role);
         }
 
         $this->setRole($role);
@@ -275,6 +280,11 @@ class AccessControlService implements ServiceWrapperInterface, ResourceStorageAw
             return $acl;
         }
         foreach ($this->builtInRoles as $role) {
+            if ($role === RoleMapperInterface::BUILT_IN_CURRENT_CLIENT_AGGREGATE) {
+                //ログイン後に登録する必要がある。
+                //常にランタイムで継承するロールを変更する必要がある。
+                continue;
+            }
             if (! $acl->hasRole($role)) {
                 $acl->addRole($role);
             }

@@ -214,12 +214,14 @@ class AclBuilder
         $property = strlen($property) ? rtrim($property, '.') . '.' : '';
         $acl = $this->acl;
         foreach ($rules as $rule) {
+            //roleの確認
             if (is_string($rule[1])) {
                 $rule[1] = $property . $rule[1];
                 if (!$acl->hasRole($rule[1])) {
                     continue;
                 }
             }
+            //リソースの確認
             if (is_string($rule[2])) {
                 $rule[2] = (array) $rule[2];
             }
@@ -237,8 +239,10 @@ class AclBuilder
                 $rule[2] = rtrim($property, '.');
             }
 
-
+            //ルールの追加を指定
             array_unshift($rule, $acl::OP_ADD);
+
+            //ルールの追加を実行
             call_user_func_array(array($acl, 'setRule'), $rule);
         }
     }
