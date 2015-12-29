@@ -86,7 +86,7 @@ array(0) {
   <!-- start content entity -->
 entity.phtml
 array(1) {
-  \'foo\' =>
+  ["foo"]=>
   string(3) "bar"
 }
   <!-- end content entity -->
