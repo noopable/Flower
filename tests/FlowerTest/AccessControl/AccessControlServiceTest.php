@@ -226,15 +226,17 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
     {
         $roles = array(
             RoleMapperInterface::BUILT_IN_AUTHENTICATED_CLIENT,
-            RoleMapperInterface::BUILT_IN_CURRENT_CLIENT_AGGREGATE,
+            //BuiltInRolesではあるが、動的にroleをバインドするため認証後に個別にセットされる
+            //キャッシュもされない。
+            //RoleMapperInterface::BUILT_IN_CURRENT_CLIENT_AGGREGATE,
             RoleMapperInterface::BUILT_IN_NOT_AUTHENTICATED_CLIENT,
         );
         $acl = $this->getMock('Zend\Permissions\Acl\Acl');
-        $acl->expects($this->exactly(3))
+        $acl->expects($this->exactly(2))
                 ->method('hasRole')
                 ->with($this->callback(function ($param) use ($roles) { return in_array($param, $roles);}))
                 ->will($this->returnValue(false));
-        $acl->expects($this->exactly(3))
+        $acl->expects($this->exactly(2))
                 ->method('addRole')
                 ->with($this->callback(function ($param) use ($roles) { return in_array($param, $roles);}));
         $this->object->injectBuiltInRoles($acl);
@@ -248,15 +250,17 @@ class AccessControlServiceTest extends \PHPUnit_Framework_TestCase
     {
         $roles = array(
             RoleMapperInterface::BUILT_IN_AUTHENTICATED_CLIENT,
-            RoleMapperInterface::BUILT_IN_CURRENT_CLIENT_AGGREGATE,
+            //BuiltInRolesではあるが、動的にroleをバインドするため認証後に個別にセットされる
+            //キャッシュもされない。
+            //RoleMapperInterface::BUILT_IN_CURRENT_CLIENT_AGGREGATE,
             RoleMapperInterface::BUILT_IN_NOT_AUTHENTICATED_CLIENT,
         );
         $acl = $this->getMock('Zend\Permissions\Acl\Acl');
-        $acl->expects($this->exactly(3))
+        $acl->expects($this->exactly(2))
                 ->method('hasRole')
                 ->with($this->callback(function ($param) use ($roles) { return in_array($param, $roles);}))
                 ->will($this->returnValue(false));
-        $acl->expects($this->exactly(3))
+        $acl->expects($this->exactly(2))
                 ->method('addRole')
                 ->with($this->callback(function ($param) use ($roles) { return in_array($param, $roles);}));
         $this->object->setAcl($acl);

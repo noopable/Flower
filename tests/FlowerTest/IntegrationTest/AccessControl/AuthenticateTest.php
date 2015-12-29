@@ -89,7 +89,7 @@ class AuthenticateTest extends \PHPUnit_Framework_TestCase
             $email = $emailRepository->create();
             $email->setIdentity($mailAddress);
         }
-        $email->roles = 'admin,visitor';
+        $email->roles = 'admin,guest';
         $email->password = $password;
 
         $emailRepository->save($email);
