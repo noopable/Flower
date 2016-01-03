@@ -25,9 +25,9 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
      * @var Gateway
      */
     protected $object;
-    
+
     protected $fileName;
-    
+
     protected $configKey = 'test_flower_file';
 
     protected $multi = Array (
@@ -56,13 +56,15 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
                 'name' => 'level2.ini',
             ),
         );
-    
-    
+
+
     protected $cachePath;
-    
+
     protected $dataPath;
-    
+
     protected $cacheExtension = '.cache.php';
+
+    protected $defaultExtension = '.default.php';
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -75,7 +77,7 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $property = $reflection->getProperty('configKey');
         $property->setAccessible(true);
         $property->setValue($factory, $this->configKey);
-        
+
         $this->object = $factory->createService($serviceManager);
         $this->config = include dirname(dirname(dirname(__DIR__))) . '/config/autoload/file.config.php';
         $this->fileName = realpath(__DIR__ . '/../TestAsset/data/sample.php');
@@ -100,13 +102,25 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
                 unlink($entry->getPathname());
             }
         }
+
+
+        $directoryIterator = new \RecursiveDirectoryIterator($this->dataPath);
+        $rii = new \RecursiveIteratorIterator($directoryIterator);
+
+        $cacheExtension = $this->defaultExtension;
+
+        foreach ($rii as $entry) {
+            if ($entry->isFile() && strpos($entry->getFilename(), $cacheExtension)) {
+                unlink($entry->getPathname());
+            }
+        }
     }
 
     public function testFactory()
     {
         $this->assertInstanceof('Flower\File\Gateway\Gateway', $this->object);
     }
-    
+
     /**
      * @covers Flower\File\Gateway\Gateway::resolveAll
      * @todo   Implement testResolveAll().
@@ -148,7 +162,7 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($found);
         return $object;
     }
-        
+
     public function testIssetDirectoryCacheSpec()
     {
         $events = $this->object->getEventManager();
@@ -180,11 +194,11 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
         return $object;
     }
-    
 
-    
+
+
     /**
-     * 
+     *
      * @depends testIssetTreeResolveSpec
      * @param type $listener
      */
@@ -195,7 +209,7 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
         return $resolver;
     }
         /**
-     * 
+     *
      * @depends testIssetAggregateResolverInSpec
      * @param type $aggregateResolver
      */
@@ -213,9 +227,9 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($found);
         return $resolver;
     }
-    
+
     /**
-     * 
+     *
      * @depends testAggregateResolverHasPathStackResolverInSpec
      * @param type $resolver
      */
@@ -227,36 +241,36 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $expected = $this->pathStackPath;
         $this->assertEquals($expected, $path);
     }
-    
+
     /**
-     * 
+     *
      * @covers Flower\File\Gateway\Gateway::resolve
      */
     public function testResolveWidthEvent()
     {
         $event = $this->object->getEvent('sample');
         $events = $this->object->getEventManager();
-        
+
         $res = $this->object->resolve($event, Event::RESOLVE_READ);
 
         $namedFiles = $event->getNamedFiles();
-        
+
         /**
          * メソッドのレスポンスとイベント内namedFilesは同一インスタンス
          */
         $this->assertSame($res, $namedFiles);
-        
+
         $this->assertNotEquals(0, $namedFiles->count());
-        
+
 
         $fileInfo = $namedFiles->getFile();
-        
+
         $this->assertEquals($this->fileName, $fileInfo->getRealPath());
         return $fileInfo->getRealPath();
     }
-    
+
     /**
-     * 
+     *
      * @covers Flower\File\Gateway\Gateway::resolve
      */
     public function testResolveWidthName()
@@ -265,18 +279,18 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceof('Flower\File\NamedFiles', $res);
         $fileInfo = $res->getFile();
-        
+
         $this->assertEquals($this->fileName, $fileInfo->getRealPath());
         return $fileInfo->getRealPath();
     }
-    
+
     public function testNoexistsRead()
     {
         $data = $this->object->read('no_exists');
         $this->assertNull($data);
     }
     /**
-     * 
+     *
      * @covers Flower\File\Gateway\Gateway::read
      */
     public function testRead()
@@ -285,13 +299,13 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $data = $this->object->read('sample');
         $this->assertEquals($fileData, $data);
     }
-    
+
     public function testMultiRead()
     {
         $data = $this->object->read('multi');
         $this->assertEquals($this->multi, $data);
     }
-    
+
     public function testIsMadeCache()
     {
         $this->object->read('multi');
@@ -312,7 +326,7 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $data = $this->object->read('level1/level2');
         $this->assertEquals($this->level1_level2, $data);
     }
-    
+
     public function testHierarchicalMadeCache()
     {
         $this->object->read('level1/level2');
@@ -321,7 +335,7 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($cacheFile1);
         $this->assertFileExists($cacheFile2);
     }
-    
+
     public function testHierarchicalRefreshLeafOnly()
     {
         $this->object->read('level1/level2');
@@ -333,7 +347,7 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($cacheFile1);
         $this->assertFileNotExists($cacheFile2);
     }
-            
+
     public function testHierarchicalRefreshRecursive()
     {
         $this->object->read('level1/level2');
@@ -344,26 +358,6 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $this->object->refresh('level1');
         $this->assertFileNotExists($cacheFile1);
         $this->assertFileNotExists($cacheFile2);
-    }
-    
-    /**
-     * @covers Flower\File\Gateway\Gateway::write
-     */
-    public function testWrite()
-    {
-        // Remove the following lines when you implement this test.
-        $this->object->write('tmp',['foo' => 'bar']);
-        $this->assertFileExists($this->dataPath . '/tmp.default.php');
-    }
-    
-        /**
-     * @covers Flower\File\Gateway\Gateway::write
-     */
-    public function testWriteHierarchical()
-    {
-        // Remove the following lines when you implement this test.
-        $this->object->write('tmp/tmp2',['foo' => 'bar']);
-        $this->assertFileExists($this->dataPath . '/tmp/tmp2.default.php');
     }
 
     /**
@@ -406,7 +400,7 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * 存在しない名前のキャッシュをクリアする命令
-     * 
+     *
      */
     public function testNoExistsRefresh()
     {
@@ -415,7 +409,7 @@ class GatewayServiceFactoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->object->refresh('foo');
     }
-    
+
     /**
      * Don't write this method in tearDown because this test has unlink method
      * if settings are wrong, this method causes a terrible result.
