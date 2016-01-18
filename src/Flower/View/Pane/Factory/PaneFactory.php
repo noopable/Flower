@@ -2,7 +2,7 @@
 
 /**
  *
- * @copyright Copyright (c) 2013-2014 KipsProduction (http://www.kips.gr.jp)
+ * @copyright Copyright (c) 2013-2016 KipsProduction (http://www.kips.gr.jp)
  * @license   http://www.kips.gr.jp/newbsd/LICENSE.txt New BSD License
  */
 
@@ -75,8 +75,14 @@ class PaneFactory implements PaneFactoryInterface
                     $pane->$k = (string) $v;
                     break;
                 case "order":
-                case "size":
                     $pane->$k = (int) $v;
+                    break;
+                case "size":
+                    if (is_array($v)) {
+                        $pane->$k = $v;
+                    } else {
+                        $pane->$k = (int) $v;
+                    }
                     break;
                 case "var":
                     if ($v instanceof \Closure || is_string($v) || is_callable($v)) {
