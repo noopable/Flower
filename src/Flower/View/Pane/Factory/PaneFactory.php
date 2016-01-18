@@ -78,11 +78,7 @@ class PaneFactory implements PaneFactoryInterface
                     $pane->$k = (int) $v;
                     break;
                 case "size":
-                    if (is_array($v)) {
-                        $pane->$k = $v;
-                    } else {
-                        $pane->$k = (int) $v;
-                    }
+                    $pane->$k = $v;
                     break;
                 case "var":
                     if ($v instanceof \Closure || is_string($v) || is_callable($v)) {

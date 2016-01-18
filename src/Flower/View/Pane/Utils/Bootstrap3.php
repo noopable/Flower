@@ -39,6 +39,10 @@ class Bootstrap3
             'lg' => null
         ];
 
+        if (is_string($size)) {
+            $size = explode(',', $size);
+        }
+
         if (!is_array($size)) {
             $size = [intval($size)];
         }
