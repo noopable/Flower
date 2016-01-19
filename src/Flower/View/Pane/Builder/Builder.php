@@ -103,24 +103,8 @@ class Builder
      */
     public function build(array $config, PaneInterface $parent = null)
     {
-        if (isset($config['pages'])) {
-            $innerConfig = $config['pages'];
-            unset($config['pages']);
-        }
-
         if (isset($config['inner'])) {
-            if (isset($innerConfig)) {
-                if (ArrayUtils::isHashTable($innerConfig)) {
-                    $innerConfig = array($innerConfig);
-                }
-                if (ArrayUtils::isHashTable($config['inner'])) {
-                    $innerConfig[] = $config['inner'];
-                } else {
-                    $innerConfig = array_merge($innerConfig, $config['inner']);
-                }
-            } else {
-                $innerConfig = $config['inner'];
-            }
+            $innerConfig = $config['inner'];
             unset($config['inner']);
         }
 
@@ -159,13 +143,12 @@ class Builder
         }
 
         if (!empty($innerConfig)) {
-            if (ArrayUtils::isList($innerConfig)) {
-                foreach ($innerConfig as $c) {
-                    $child = $this->build($c, $current);
+            foreach ($innerConfig as $k => $c) {
+                if (!isset($c['pane_id']) && is_string($k)) {
+                   $c['pane_id'] = $k;
                 }
-            }
-            elseif(is_array($innerConfig)) {
-                $child = $this->build($innerConfig, $current);
+                $child = $this->build($c, $current);
+                //$child will be inserted to $current
             }
         }
 
