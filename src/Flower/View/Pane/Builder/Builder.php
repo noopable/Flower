@@ -145,7 +145,7 @@ class Builder
         if (!empty($innerConfig)) {
             foreach ($innerConfig as $k => $c) {
                 if (!isset($c['pane_id']) && is_string($k)) {
-                   $c['pane_id'] = $k;
+                   $c['pane_id'] = $current->getPaneId() . '-innner-' . $k;
                 }
                 $child = $this->build($c, $current);
                 //$child will be inserted to $current
