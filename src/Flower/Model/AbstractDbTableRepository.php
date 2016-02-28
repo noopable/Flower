@@ -8,6 +8,7 @@
 
 namespace Flower\Model;
 
+use ArrayObject;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql;
 use Zend\Db\TableGateway\TableGatewayInterface;
@@ -75,7 +76,8 @@ abstract class AbstractDbTableRepository extends AbstractRepository
             throw new \RuntimeException('todo: fix exception: missing adapter');
         }
 
-        if ($prototype = $this->getEntityPrototype()) {
+        if (($prototype = $this->getEntityPrototype())
+                && ($prototype instanceof ArrayObject || method_exists($prototype, 'getArrayCopy'))) {
             $this->dao->getResultSetPrototype()
                 ->setArrayObjectPrototype($prototype);
         }
