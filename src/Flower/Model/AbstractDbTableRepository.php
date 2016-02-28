@@ -261,10 +261,13 @@ abstract class AbstractDbTableRepository extends AbstractRepository
             $res = $this->dao->select($w);
             if ($res->count()) {
                 //use REPLACE INTO ?
+                if (count($set) === 0) {
+                    throw new Exception\InvalidArgumentException('update? no update columns');
+                }
                 return $this->dao->update($set, $w);
             }
         }
-        
+
         $aInsert = $set + $w;
         if (count($aInsert) === 0) {
             $ei = new Exception\InvalidArgumentException('insert detected but no columns');
