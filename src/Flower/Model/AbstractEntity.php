@@ -9,6 +9,7 @@
 namespace Flower\Model;
 
 use ArrayObject;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  *
@@ -57,6 +58,18 @@ abstract class AbstractEntity extends ArrayObject
             return $this->columns[$key];
         }
         return $key;
+    }
+
+    public function populate($data, $columnCheck = true)
+    {
+        foreach ($data as $key => $val) {
+            if ($columnCheck) {
+                if (!isset($this->columns[$key])) {
+                    continue;
+                }
+            }
+            $this->offsetSet($key, $val);
+        }
     }
 
     public function offsetGet($name)
