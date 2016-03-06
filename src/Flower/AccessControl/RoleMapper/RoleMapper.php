@@ -47,11 +47,11 @@ class RoleMapper implements RoleMapperInterface, ResourceStorageAwareInterface {
                 $role = $data->role;
                 $role->addParents(RoleMapperInterface::BUILT_IN_AUTHENTICATED_CLIENT);
                 return $role;
-            } elseif ($data->role instanceof RoleInterface || is_string($data->role)) {
+            } elseif ($data->role instanceof RoleInterface || (is_string($data->role) && strlen($data->roles))) {
                 $roles = array($data->role);
             }
         } elseif (isset($data->roles)) {
-            if (is_string($data->roles)) {
+            if (is_string($data->roles) && strlen($data->roles)) {
                 $roles =array_merge($roles, explode(',', $data->roles));
             } elseif (is_array($data->roles)) {
                 $roles = array_merge($roles, $data->roles);
