@@ -229,6 +229,9 @@ class AclBuilder
             if (is_array($rule[2])) {
                 $resources = array_map(
                     function($resource) use ($property) {
+                        if (null === $resource) {
+                            return rtrim($property, '.');
+                        }
                         return $property . $resource;
                     },
                     $rule[2]
