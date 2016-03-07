@@ -105,7 +105,7 @@ class AclBuilderTest extends \PHPUnit_Framework_TestCase
              * 上位プロパティの管理者がオカシナことをしなければ問題は生じない。
              * つまり、プロパティとリソースはリソースクラス内のコンポジットパターンになっている点に留意すること。
              */
-            'compe.score' => 'compe',
+            'compe_score' => 'compe',
         );
         $expects = Array (
             'foo.compe',
@@ -113,7 +113,7 @@ class AclBuilderTest extends \PHPUnit_Framework_TestCase
             'foo.bar',
             'foo.bar.document',
             'foo.bar.compe',
-            'foo.bar.compe.score',
+            'foo.bar.compe_score',
             'foo.school',
             'foo.bar.school',
             'foo.document',
@@ -129,19 +129,40 @@ class AclBuilderTest extends \PHPUnit_Framework_TestCase
         $this->object->addResources($resources, $property);
         //垂直継承
         $acl->addResource('foo.school', 'foo');
-        //foo.bar.schoolをfoo.schoolを継承して追加したい。
-        $this->object->addResources(array('school'), $property, true);
+
 
         //垂直継承の指定によるリソース追加だが、事前に水平継承されているので垂直継承の指定は無視されます。
         $acl->addResource('foo.document', 'foo');
         $this->object->addResources(array('document'), $property, true);
 
-        $this->assertEquals($expects, $acl->getResources());
+        /**
+         * デフォルトは垂直継承
+         * プロパティのリソースはそのままでは、プロパティを継承しない。
+         * プロパティはフォルダ的役割であってリソースではない。
+         */
+        $this->assertFalse($acl->inheritsResource('foo.bar.compe', 'foo.bar'));
+        /**
+         * foo.compeへのアクセス権は、下部プロパティのfoo.bar.compeにも同一の権限を持つ。
+         * 困る場合は、denyルールを設定する権利が、下部プロパティ権限者にあればよい。
+         */
+        $this->assertTrue($acl->inheritsResource('foo.bar.compe', 'foo.compe'));
 
-        $this->assertTrue($acl->inheritsResource('foo.bar.compe', 'foo.bar'));
-        $this->assertTrue($acl->inheritsResource('foo.bar.compe.score', 'foo.bar.compe'));
-        $this->assertTrue($acl->inheritsResource('foo.bar.school', 'foo.school'));
-        $this->assertFalse($acl->inheritsResource('foo.bar.document', 'foo.document'));
+        /**
+         * 水平継承
+         * foo.bar.schoolをfoo.schoolを継承して追加したい。
+         */
+        $this->object->addResources(array('school'), $property, false);
+
+        //プロパティ内の継承は、配列のkey valueで行われる。
+        $this->assertTrue($acl->inheritsResource('foo.bar.compe_score', 'foo.bar.compe'));
+        //垂直方向の継承はない
+        $this->assertFalse($acl->inheritsResource('foo.bar.school', 'foo.school'));
+
+        //リソース一覧を確認
+        sort($expects);
+        $storedResources = $acl->getResources();
+        sort($storedResources);
+        $this->assertEquals($expects, $storedResources);
     }
 
     /**
@@ -223,11 +244,166 @@ class AclBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Flower\AccessControl\AclBuilder::build
+     *
+     * public function build($property, $roles, $resources, $rules, $resourceInheritVertical = true)
+     *
+     * public function setRule(
+        $operation,
+        $type,
+        $roles = null,
+        $resources = null,
+        $privileges = null,
+        Assertion\AssertionInterface $assert = null
+    )
      */
     public function testBuild()
     {
-        $this->markTestSkipped(
-          'buildはaddRoles addResources addRulesへの仲介を行うのみなのでテストを省略中。必要に応じて追加してください。'
-        );
+        $acl = new ZendAcl;
+        $this->object->setAcl($acl);
+        $parentProperty = 'foo';
+        $property = 'foo.bar';
+        $brother = 'foo.baz';
+        $roles = ['admin', 'user'];
+        $resources = ['site', 'document'];
+        $rules = [
+            [
+                'TYPE_ALLOW',
+                'admin',
+                //リソースそのものへの全権を与えたい場合、nullと全リソースの両方を指定する。
+                array_merge([null], $resources),
+                null,
+            ],
+            [
+                'TYPE_ALLOW',
+                'user',
+                'document',
+                'create',
+                null,
+                'usage',
+            ],
+        ];
+
+        $this->object->build('', $roles, $resources, $rules);
+        $this->object->build($parentProperty, $roles, $resources, $rules);
+        $this->object->build($property, $roles, $resources, $rules);
+        $this->object->build($brother, $roles, $resources, $rules);
+
+        /**
+         * addResource test
+         */
+        //foo.barはfooを継承している。
+        $this->assertTrue($acl->inheritsResource('foo.bar', 'foo'));
+        //デフォルトは垂直継承
+        $this->assertTrue($acl->inheritsResource('foo.document', 'document'));
+        $this->assertTrue($acl->inheritsResource('foo.bar.document', 'foo.document'));
+
+        //自動的にプロパティ上のroleが作成される。
+        $this->assertTrue($acl->hasRole('user'));
+        $this->assertTrue($acl->hasRole('foo.user'));
+        $this->assertTrue($acl->hasRole('foo.bar.user'));
+
+        //userはcreate権限がある
+        $this->assertTrue($acl->isAllowed('user', 'document', 'create'));
+        //foo.adminは、foo.documentに全権を持っている
+        $this->assertTrue($acl->isAllowed('foo.admin', 'foo', 'special'));
+        //foo.adminは、foo.documentに全権を持っている
+        $this->assertTrue($acl->isAllowed('foo.admin', 'foo.document', 'special'));
+        //foo.adminは、foo.bar.adminと同等
+        $this->assertTrue($acl->isAllowed('foo.admin', 'foo.bar.document', 'special'));
+        $this->assertTrue($acl->isAllowed('foo.admin', 'foo.baz.document', 'special'));
+        //foo.adminでも上位リソースへのアクセス権はない。
+        $this->assertFalse($acl->isAllowed('foo.admin', 'document', 'special'));
+        //foo.userはfoo.documentへのcreate権がある。
+        $this->assertTrue($acl->isAllowed('foo.user', 'foo.document', 'create'));
+        //foo.userはfoo.siteへのmanage権がない。
+        $this->assertFalse($acl->isAllowed('foo.user', 'foo.site', 'manage'));
+        //foo.userはfooプロパティへのusage権がある
+        $this->assertTrue($acl->isAllowed('foo.user', 'foo', 'usage'));
+    }
+
+    /**
+     * @covers Flower\AccessControl\AclBuilder::propTreeBuild
+     *
+     * public function build($property, $roles, $resources, $rules, $resourceInheritVertical = true)
+     *
+     * public function setRule(
+        $operation,
+        $type,
+        $roles = null,
+        $resources = null,
+        $privileges = null,
+        Assertion\AssertionInterface $assert = null
+    )
+     */
+    public function testPropTreeBuild()
+    {
+        $acl = new ZendAcl;
+        $this->object->setAcl($acl);
+        $property = 'foo.bar';
+        $brother = 'foo.baz';
+        $roles = ['admin', 'user'];
+        $resources = ['site', 'document'];
+        $rules = [
+            [
+                'TYPE_ALLOW',
+                'admin',
+                //リソースそのものへの全権を与えたい場合、nullと全リソースの両方を指定する。
+                array_merge([null], $resources),
+                null,
+            ],
+            [
+                'TYPE_ALLOW',
+                'user',
+                'document',
+                'create',
+                null,
+                'usage',
+            ],
+        ];
+
+        //true,trueがデフォルト
+        $this->object->propTreeBuild([$property, $brother], $roles, $resources, $rules, true, true);
+
+        /**
+         * addResource test
+         */
+        //foo.barはfooを継承している。
+        $this->assertTrue($acl->inheritsResource('foo.bar', 'foo'));
+        //デフォルトは垂直継承
+        $this->assertTrue($acl->inheritsResource('foo.document', 'document'));
+        $this->assertTrue($acl->inheritsResource('foo.bar.document', 'foo.document'));
+
+        //自動的にプロパティ上のroleが作成される。
+        $this->assertTrue($acl->hasRole('user'));
+        $this->assertTrue($acl->hasRole('foo.user'));
+        $this->assertTrue($acl->hasRole('foo.bar.user'));
+
+        //userはcreate権限がある
+        $this->assertTrue($acl->isAllowed('user', 'document', 'create'));
+        //foo.adminは、foo.documentに全権を持っている
+        $this->assertTrue($acl->isAllowed('foo.admin', 'foo', 'special'));
+        //foo.adminは、foo.documentに全権を持っている
+        $this->assertTrue($acl->isAllowed('foo.admin', 'foo.document', 'special'));
+        //foo.adminは、foo.bar.adminと同等
+        $this->assertTrue($acl->isAllowed('foo.admin', 'foo.bar.document', 'special'));
+        $this->assertTrue($acl->isAllowed('foo.admin', 'foo.baz.document', 'special'));
+        //foo.adminでも上位リソースへのアクセス権はない。
+        $this->assertFalse($acl->isAllowed('foo.admin', 'document', 'special'));
+        //foo.userはfoo.documentへのcreate権がある。
+        $this->assertTrue($acl->isAllowed('foo.user', 'foo.document', 'create'));
+        //foo.userはdocumentへのcreate権がない。
+        $this->assertFalse($acl->isAllowed('foo.user', 'document', 'create'));
+        //foo.userはfoo.siteへのmanage権がない。
+        $this->assertFalse($acl->isAllowed('foo.user', 'foo.site', 'manage'));
+        //foo.userはfooプロパティへのusage権がある
+        $this->assertTrue($acl->isAllowed('foo.user', 'foo', 'usage'));
+        //foo.bar.userはfooプロパティへのusage権がある
+        $this->assertTrue($acl->isAllowed('foo.bar.user', 'foo', 'usage'));
+        //foo.bar.userはfoo.bar.documentへのcreate権がある
+        $this->assertTrue($acl->isAllowed('foo.bar.user', 'foo.bar.document', 'create'));
+        //foo.bar.userは兄弟リソースへのcreate権がない
+        $this->assertFalse($acl->isAllowed('foo.bar.user', 'foo.baz.document', 'create'));
+        //foo.bar.userは上位リソースのdocumentへのcreate権がない
+        $this->assertFalse($acl->isAllowed('foo.bar.user', 'foo.document', 'create'));
     }
 }

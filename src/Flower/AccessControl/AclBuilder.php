@@ -69,16 +69,38 @@ class AclBuilder
         $this->genericRules = $genericRules;
     }
 
-    public function build($property, $roles, $resources, $rules)
+    public function propTreeBuild ($leafProperties, $roles, $resources, $rules, $resourceInheritVertical = true, $rootIsNullString = true)
     {
-        $this->addResources($resources, $property);
+        if ($rootIsNullString) {
+            $this->build('', $roles, $resources, $rules, $resourceInheritVertical);
+        }
+
+        $loadedProperties = [];
+        foreach ($leafProperties as $v) {
+            $property = '';
+            $tree = explode('.', $v);
+            do {
+                $property .= array_shift($tree);
+                if (isset($loadedProperties[$property])) {
+                    continue;
+                }
+                $loadedProperties[$property] = $property;
+                $this->build($property, $roles, $resources, $rules, $resourceInheritVertical);
+
+            } while(count($tree) && $property .= '.');
+        }
+    }
+
+    public function build($property, $roles, $resources, $rules, $resourceInheritVertical = true)
+    {
+        $this->addResources($resources, $property, $resourceInheritVertical);
 
         $this->addRoles($roles, $property);
 
         $this->addRules($rules, $property);
     }
 
-    public function addResources(array $resources, $property, $inheritVertical = false)
+    public function addResources(array $resources, $property, $inheritVertical = true)
     {
         $this->addPropertyResource($property);
         $acl = $this->acl;
@@ -116,7 +138,7 @@ class AclBuilder
             } else {
                 //同一プロパティ内で継承する
                 $resourceName = $property . $k;
-                $parentResource = $property . $v;
+                $parentResource = strlen($v) ? $property . $v : rtrim($property, '.');
             }
             if ($acl->hasResource($resourceName)) {
                 continue;
@@ -214,19 +236,26 @@ class AclBuilder
         $property = strlen($property) ? rtrim($property, '.') . '.' : '';
         $acl = $this->acl;
         foreach ($rules as $rule) {
+            //ルールの追加を指定
+            //$rule[0] add
+            array_unshift($rule, $acl::OP_ADD);
+            //$rule[1]
+            // allow or deny
+            //フィルタする？
+
             //roleの確認
-            if (is_string($rule[1])) {
-                $rule[1] = $property . $rule[1];
-                if (!$acl->hasRole($rule[1])) {
+            if (is_string($rule[2])) {
+                $rule[2] = $property . $rule[2];
+                if (!$acl->hasRole($rule[2])) {
                     continue;
                 }
             }
             //リソースの確認
-            if (is_string($rule[2])) {
-                $rule[2] = (array) $rule[2];
+            if (is_string($rule[3])) {
+                $rule[3] = (array) $rule[3];
             }
 
-            if (is_array($rule[2])) {
+            if (is_array($rule[3])) {
                 $resources = array_map(
                     function($resource) use ($property) {
                         if (null === $resource) {
@@ -234,19 +263,45 @@ class AclBuilder
                         }
                         return $property . $resource;
                     },
-                    $rule[2]
+                    $rule[3]
                 );
 
-                $rule[2] = $resources;
-            } elseif (null === $rule[2] && strlen($property) > 0) {
-                $rule[2] = rtrim($property, '.');
+                $rule[3] = $resources;
+            } elseif (null === $rule[3] && strlen($property) > 0) {
+                $rule[3] = rtrim($property, '.');
             }
 
-            //ルールの追加を指定
-            array_unshift($rule, $acl::OP_ADD);
+            //$rule[4] privileges
+            //
+
+            //$rule[5] assertion
+            /**
+             * AssertionInterface
+             * assertionはaddRule時に評価される。
+             * aclをキャッシュするとassertionは作成時のデータが利用される。
+             */
+            $bubbleUp = null;
+            if (isset($rule[6])) {
+                $bubbleUp = $rule[6];
+            }
 
             //ルールの追加を実行
             call_user_func_array(array($acl, 'setRule'), $rule);
+
+            // $rule[6] special bubble up to property usage
+            if (null !== $bubbleUp) {
+                if (is_string($bubbleUp)) {
+                    $bubbleUp = [$bubbleUp];
+                }
+                $rule[4] = $bubbleUp;
+                $props = explode('.', rtrim($property, '.'));
+                $rule[3] = [];
+                do {
+                    $rule[3][] = implode('.', $props);
+                    array_pop($props);
+                } while(count($props));
+                call_user_func_array(array($acl, 'setRule'), $rule);
+            }
         }
     }
 }
