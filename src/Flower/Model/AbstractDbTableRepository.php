@@ -183,8 +183,14 @@ abstract class AbstractDbTableRepository extends AbstractRepository
             //get from abstract factory;
             $this->select = $this->getTableGateway()->getSql()->select();
         }
-        return clone $this->select;
+        
+        if ($clone) {
+            return clone $this->select;
+        } else {
+            return $this->select;
+        }
     }
+
     public function getEntity($where = null)
     {
         $select = $this->getSelect();
